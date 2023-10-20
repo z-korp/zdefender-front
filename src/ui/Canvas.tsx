@@ -19,7 +19,7 @@ interface CanvasProps {
 const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const {
     setup: {
-      systemCalls: {},
+      systemCalls: { create },
       network: { graphSdk },
     },
     account: { account },
@@ -54,17 +54,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     }
 
     const pseudoFelt = shortString.encodeShortString(pseudo);
-    /*create(
-      account,
-      ip,
-      1000,
-      pseudoFelt,
-      add_hole,
-      set_size,
-      reset_holes,
-      set_hit_mob,
-      set_turn
-    );*/
+    create(account, ip.toString(), 1000, pseudoFelt);
   };
 
   useEffect(() => {

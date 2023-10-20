@@ -12,21 +12,22 @@ interface MapProps {
 const SCALE = 4;
 
 const Map: React.FC<MapProps> = ({ hoveredTile }) => {
-  console.log('Map component rendered');
-
   const generatedGrid: GridElement[][] = [];
+  const groundArray = [2, 3, 28, 29, 30, 55, 56, 57];
 
   for (let y = 0; y < mapData.height; y++) {
     const row = [];
     for (let x = 0; x < mapData.width; x++) {
       const tileIndex = y * mapData.width + x;
       const tileId = mapData.layers[0].data[tileIndex];
+      const isGround = groundArray.includes(tileId);
+      const type = isGround ? 'ground' : 'road';
       row.push({
         x,
         y,
         tileId,
         layer: 'base' as Layer, // type assertion for layer
-        type: 'ground' as ElementType, // type assertion for type
+        type: type as ElementType, // type assertion for type
       });
     }
     generatedGrid.push(row);

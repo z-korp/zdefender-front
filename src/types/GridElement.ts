@@ -5,7 +5,7 @@ export type Coordinate = {
 
 export type Layer = "base" | "object";
 
-export type ElementType = "water" | "ground";
+export type ElementType = "road" | "ground";
 
 export type GridElement = Coordinate & {
   layer: Layer;
