@@ -30,6 +30,8 @@ export const getFramesFromType = (
   direction: Direction,
   resource: any
 ): Texture[] => {
+  console.log('mob_name', mob_name, 'type', type);
+
   const frames = Object.keys(resource.data.frames);
   let filtered = [];
   if (type === Animation.Idle) {
@@ -66,6 +68,7 @@ export const getFramesFromType = (
     throw new Error('Invalid AnimationType');
   }
   console.log('FILTERED', filtered);
+
   if (direction === Direction.SE) {
     filtered = filtered.filter((e) => /-SE-/.test(e));
   } else if (direction === Direction.SW) {
@@ -83,7 +86,6 @@ export const getFramesFromType = (
   } else if (direction === Direction.W) {
     filtered = filtered.filter((e) => /-W-/.test(e) && !/-SW-/.test(e) && !/-NW-/.test(e));
   }
-
   console.log(filtered);
 
   return filtered.map((frame: any) => {

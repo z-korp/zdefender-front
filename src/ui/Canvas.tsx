@@ -8,6 +8,7 @@ import { useComponentStates } from '../hooks/useComponentState';
 import useIp from '../hooks/useIp';
 import { HEIGHT, WIDTH, areCoordsEqual, to_grid_coordinate } from '../utils/grid';
 import { useElementStore } from '../utils/store';
+import Animal from './Animal';
 import GameOverModal from './GameOverModal'; // importez le composant
 import Gold from './Gold';
 import Life from './Life';
@@ -67,6 +68,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   }, [game.over]);
 
   const [gold, setGold] = useState<number>(100);
+  const [chickenPosition, setChickenPosition] = useState<Coordinate>({ x: 2, y: 2 });
 
   return (
     <div style={{ position: 'relative' }}>
@@ -86,16 +88,14 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               y: e.nativeEvent.offsetY,
             });
           }
-          console.log('tileCoords', tileCoords);
           const grid_coordinate = to_grid_coordinate({
             x: absolutePosition ? absolutePosition.x : 0,
             y: absolutePosition ? absolutePosition.y : 0,
           });
-          console.log('grid_coordinate', grid_coordinate);
-          console.log('onPointerMove');
         }}
         onPointerDown={(e) => {
           console.log('onPointerDown');
+          setChickenPosition((prev) => ({ x: prev.x, y: prev.y + 1 }));
         }}
       >
         <Container sortableChildren={true}>
@@ -134,6 +134,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           <Tower type="knight" targetPosition={{ x: 1, y: 1 }} isHovered={false} isHitter={false} />
           <Gold number={gold} />
           <Life health={10} />
+          <Animal type={'chicken'} targetPosition={chickenPosition} health={70} />
         </Container>
       </Stage>
 
