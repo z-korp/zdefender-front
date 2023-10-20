@@ -10,6 +10,7 @@ import { HEIGHT, WIDTH, areCoordsEqual, to_grid_coordinate } from '../utils/grid
 import { useElementStore } from '../utils/store';
 import GameOverModal from './GameOverModal'; // importez le composant
 import Gold from './Gold';
+import Life from './Life';
 import Map from './Map';
 import NewGame from './NewGame';
 import Tower from './Tower';
@@ -64,6 +65,8 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
       setIsGameOver(true);
     }
   }, [game.over]);
+
+  const [gold, setGold] = useState<number>(100);
 
   return (
     <div style={{ position: 'relative' }}>
@@ -129,7 +132,8 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           </>
 
           <Tower type="knight" targetPosition={{ x: 1, y: 1 }} isHovered={false} isHitter={false} />
-          <Gold number={100} />
+          <Gold number={gold} />
+          <Life health={10} />
         </Container>
       </Stage>
 
