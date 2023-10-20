@@ -27,13 +27,22 @@ interface GameOverModalProps {
   onClose: () => void;
 }
 
-const GameOverModal: React.FC<GameOverModalProps> = ({ score, isOpen, onClose }) => {
+const GameOverModal: React.FC<GameOverModalProps> = ({
+  score,
+  isOpen,
+  onClose,
+}) => {
   if (!isOpen) {
     return null;
   }
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={onClose} style={modalStyle} ariaHideApp={false}>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      style={modalStyle}
+      ariaHideApp={false}
+    >
       <div className="relative">
         <button onClick={onClose} className="absolute top-[-10px] right-0 p-2">
           <div className="relative w-6 h-6">
@@ -46,11 +55,13 @@ const GameOverModal: React.FC<GameOverModalProps> = ({ score, isOpen, onClose })
         <hr className="my-4 border-2" />
         <div className="flex flex-col items-center justify-between mt-20">
           <h3 className="text-black">Score: {score}</h3>
-          <h3 className="text-black mt-10">Click on 'new game' on the main screen to start over!</h3>
+          <h3 className="text-black mt-10">
+            Click on 'new game' on the main screen to start over!
+          </h3>
           <div className="bg-blue-500 text-white px-4 py-2 rounded-md">
             <TwitterShareButton
-              url="https://app.zknight.xyz/"
-              title={`🎉 I scored ${score} points in zKnight, the new onchain game on Starknet 🔥 Do you think you can beat me? @zkorp_`}
+              url="https://app.zdefender.xyz/"
+              title={`🎉 I scored ${score} points in zDefender, the new onchain game on Starknet 🔥 Do you think you can beat me? @zkorp_`}
             >
               Share on Twitter
             </TwitterShareButton>

@@ -49,8 +49,8 @@ function App() {
     <div className="flex flex-col min-h-screen w-full">
       <div className="flex justify-between space p-2">
         <LeaderBoardButton onClick={toggleLeaderBoardModal}></LeaderBoardButton>
-        <div className="flex justify-center items-center text-8xl text">
-          zKnight
+        <div className="flex justify-center items-center text-7xl text">
+          zDefender
         </div>
         <button
           className="bg-blue-500 hover:bg-blue-700 mx-10 my-10 text-white font-bold py-2 px-4 rounded"

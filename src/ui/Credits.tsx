@@ -16,7 +16,12 @@ const Credits = () => {
               { name: 'Cheelax', link: 'https://twitter.com/Cheelax_' },
             ].map(({ name, link }) => (
               <li className="mb-2 flex items-center" key={name}>
-                <a href={link} target="_blank" rel="noopener noreferrer" className="flex items-center text-black">
+                <a
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center text-black"
+                >
                   <img
                     src={twitterPixelIcon}
                     alt="Twitter"
@@ -31,8 +36,6 @@ const Credits = () => {
         </div>
 
         <div className="flex flex-col items-start card">
-          <hr className="my-5 border-2" />
-
           <h2 className="text-black mb-2">Resources Used :</h2>
           <ul>
             <li>
@@ -46,12 +49,22 @@ const Credits = () => {
               </a>
             </li>
             <li>
-              <a href="https://pixijs.io/" target="_blank" rel="noopener noreferrer" className="text-black">
+              <a
+                href="https://pixijs.io/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-black"
+              >
                 Pixijs
               </a>
             </li>
             <li>
-              <a href="https://www.zapsplat.com/" target="_blank" rel="noopener noreferrer" className="text-black">
+              <a
+                href="https://www.zapsplat.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-black"
+              >
                 Sound from Zapsplat.com
               </a>
             </li>
