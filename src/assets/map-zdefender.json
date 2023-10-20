@@ -1,0 +1,39 @@
+{ "compressionlevel":-1,
+ "height":8,
+ "infinite":false,
+ "layers":[
+        {
+         "data":[28, 55, 57, 2, 29, 28, 56, 30,
+            56, 2, 5, 87, 87, 7, 28, 55,
+            57, 5, 61, 29, 57, 59, 7, 57,
+            30, 31, 30, 57, 29, 3, 31, 28,
+            28, 59, 7, 30, 2, 5, 61, 29,
+            56, 30, 31, 29, 55, 31, 55, 57,
+            87, 87, 61, 56, 57, 59, 87, 87,
+            28, 2, 55, 57, 3, 30, 56, 28],
+         "height":8,
+         "id":1,
+         "name":"Calque de Tuiles 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":8,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":2,
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tiledversion":"1.10.2",
+ "tileheight":16,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "source":"..\/Downloads\/PUNY_WORLD_v1\/Tiled\/punyworld-overworld-tileset.tsx"
+        }],
+ "tilewidth":16,
+ "type":"map",
+ "version":"1.10",
+ "width":8
+}
