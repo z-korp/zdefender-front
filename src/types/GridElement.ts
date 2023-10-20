@@ -3,11 +3,12 @@ export type Coordinate = {
   y: number;
 };
 
-export type Layer = 'base' | 'object';
+export type Layer = "base" | "object";
 
-export type ElementType = 'water' | 'ground';
+export type ElementType = "water" | "ground";
 
 export type GridElement = Coordinate & {
   layer: Layer;
   type: ElementType;
+  tileId: number;
 };

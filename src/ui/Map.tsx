@@ -1,120 +1,72 @@
-import { Sprite } from '@pixi/react';
-import { SCALE_MODES, Texture } from 'pixi.js';
-import { useEffect, useState } from 'react';
-import groundTile from '../assets/tilesets/0_1.png';
-import waterTile4 from '../assets/tilesets/water_full.png';
-import waterTile2 from '../assets/tilesets/water_left.png';
-import waterTile1 from '../assets/tilesets/water_middle.png';
-import waterTile3 from '../assets/tilesets/water_right.png';
-import { Coordinate, GridElement } from '../type/GridElement';
-import { H_OFFSET, WIDTH, generateGrid, to_screen_coordinate } from '../utils/grid';
-import { useElementStore } from '../utils/store';
+import React, { useEffect, useState } from "react";
+import { Sprite } from "@pixi/react";
+import { SCALE_MODES, Texture } from "pixi.js";
+import mapData from "../assets/map-zdefender.json";
+import {
+  Coordinate,
+  ElementType,
+  GridElement,
+  Layer,
+} from "../types/GridElement";
+import tile from "../assets/tilesets/1.png";
 
 interface MapProps {
-  hoveredTile?: Coordinate;
+  hoveredTile?: Coordinate; // Make sure Coordinate type is defined somewhere in your code
 }
 
 const Map: React.FC<MapProps> = ({ hoveredTile }) => {
-  const [grid, setGrid] = useState<GridElement[][]>([]);
+  // const [grid, setGrid] = useState<GridElement[][]>([]);
+  console.log("Map component rendered");
 
-  const { map } = useElementStore((state) => state);
+  const generatedGrid: GridElement[][] = [];
 
-  useEffect(() => {
-    setGrid(generateGrid(map));
-  }, [map]);
+  for (let y = 0; y < mapData.height; y++) {
+    const row = [];
+    for (let x = 0; x < mapData.width; x++) {
+      const tileIndex = y * mapData.width + x;
+      const tileId = mapData.layers[0].data[tileIndex];
+      row.push({
+        x,
+        y,
+        tileId,
+        layer: "base" as Layer, // type assertion for layer
+        type: "ground" as ElementType, // type assertion for type
+      });
+    }
+    // console.log("row", row);
+    generatedGrid.push(row);
+  }
+  const grid = generatedGrid;
 
-  if (!map.size) return null;
+  // console.log(mapData);
+  // console.log("grid", grid);
+  // useEffect(() => {
+  //   console.log("Generating grid");
+  //   // Generate the grid based on the map data
+  // }, []);
+  Texture.from(tile).baseTexture.scaleMode = SCALE_MODES.NEAREST;
 
-  //console.log(grid);
-
-  const newGrid = [
-    [
-      { x: -2, y: 0, layer: 'base', type: 'water' },
-      { x: -2, y: 1, layer: 'base', type: 'water' },
-      { x: -2, y: 2, layer: 'base', type: 'water' },
-      { x: -2, y: 3, layer: 'base', type: 'water' },
-      { x: -2, y: 4, layer: 'base', type: 'water' },
-      { x: -2, y: 5, layer: 'base', type: 'water' },
-      { x: -2, y: 6, layer: 'base', type: 'water' },
-      { x: -2, y: 7, layer: 'base', type: 'water' },
-    ],
-    [
-      { x: -1, y: 0, layer: 'base', type: 'water' },
-      { x: -1, y: 1, layer: 'base', type: 'water' },
-      { x: -1, y: 2, layer: 'base', type: 'water' },
-      { x: -1, y: 3, layer: 'base', type: 'water' },
-      { x: -1, y: 4, layer: 'base', type: 'water' },
-      { x: -1, y: 5, layer: 'base', type: 'water' },
-      { x: -1, y: 6, layer: 'base', type: 'water' },
-      { x: -1, y: 7, layer: 'base', type: 'water' },
-    ],
-    ...grid,
-    [
-      { x: 8, y: 0, layer: 'base', type: 'water' },
-      { x: 8, y: 1, layer: 'base', type: 'water' },
-      { x: 8, y: 2, layer: 'base', type: 'water' },
-      { x: 8, y: 3, layer: 'base', type: 'water' },
-      { x: 8, y: 4, layer: 'base', type: 'water' },
-      { x: 8, y: 5, layer: 'base', type: 'water' },
-      { x: 8, y: 6, layer: 'base', type: 'water' },
-      { x: 8, y: 7, layer: 'base', type: 'water' },
-    ],
-    [
-      { x: 9, y: 0, layer: 'base', type: 'water' },
-      { x: 9, y: 1, layer: 'base', type: 'water' },
-      { x: 9, y: 2, layer: 'base', type: 'water' },
-      { x: 9, y: 3, layer: 'base', type: 'water' },
-      { x: 9, y: 4, layer: 'base', type: 'water' },
-      { x: 9, y: 5, layer: 'base', type: 'water' },
-      { x: 9, y: 6, layer: 'base', type: 'water' },
-      { x: 9, y: 7, layer: 'base', type: 'water' },
-    ],
-  ];
-
-  //console.log(newGrid);
-
-  return newGrid.map((row: any, i) => {
-    const newRow = [
-      { x: i - 2, y: -2, layer: 'base', type: 'water' },
-      { x: i - 2, y: -1, layer: 'base', type: 'water' },
-      ...row,
-      { x: i - 2, y: 8, layer: 'base', type: 'water' },
-      { x: i - 2, y: 9, layer: 'base', type: 'water' },
-    ];
-    return newRow.map((tile: any) => {
-      const screenPos = to_screen_coordinate(tile);
-      const adjustment =
-        hoveredTile && hoveredTile.x === tile.x && hoveredTile.y === tile.y && tile.type === 'ground' ? 5 : 0;
-
-      // Use water tile for border and your original tile for inside
-      let tileImage = groundTile;
-      let adj = 0;
-      if (tile.type === 'water') {
-        tileImage = waterTile1;
-        if (tile.x === 17 && tile.y === 17) {
-          tileImage = waterTile4;
-          adj = -12;
-        } else if (tile.y === 17) {
-          tileImage = waterTile2;
-          adj = -12;
-        } else if (tile.x === 17) {
-          tileImage = waterTile3;
-          adj = -12;
-        }
-      }
-      Texture.from(tileImage).baseTexture.scaleMode = SCALE_MODES.NEAREST;
-      return (
-        <Sprite
-          key={`${tile.x}-${tile.y}`}
-          image={tileImage}
-          anchor={0.5}
-          scale={2}
-          x={screenPos.x + WIDTH / 2}
-          y={screenPos.y + H_OFFSET - adjustment - adj}
-        />
-      );
-    });
-  });
+  return (
+    <>
+      {grid.map((row, rowIndex) => (
+        <>
+          {row.map((cell, cellIndex) => {
+            console.log(cell);
+            console.log("tile", tile);
+            return (
+              <Sprite
+                key={cellIndex}
+                image={"./tilesets/" + cell.tileId + ".png"}
+                scale={1}
+                x={cell.x * mapData.tilewidth}
+                y={cell.y * mapData.tileheight}
+              />
+            );
+          })}
+        </>
+      ))}
+    </>
+  );
 };
 
 export default Map;
