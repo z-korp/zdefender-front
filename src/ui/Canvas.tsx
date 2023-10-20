@@ -140,7 +140,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           <Tower
             type="knight"
             targetPosition={{ x: 1, y: 1 }}
-            isHovered={areCoordsEqual({ x: 1, y: 1 }, hoveredTile)}
+            isHovered={hoveredTile ? areCoordsEqual({ x: 1, y: 1 }, hoveredTile) : false}
             isHitter={false}
           />
           <Gold number={100} x={20} y={20} />
