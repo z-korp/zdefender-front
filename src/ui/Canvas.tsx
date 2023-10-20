@@ -1,16 +1,16 @@
-import { Container, Sprite, Stage, Text } from "@pixi/react";
-import * as PIXI from "pixi.js";
-import { useEffect, useState } from "react";
-import { shortString } from "starknet";
-import { useComponentStates } from "../hooks/useComponentState";
-import useIp from "../hooks/useIp";
-import { HEIGHT, WIDTH } from "../utils/grid";
-import { useElementStore } from "../utils/store";
-import GameOverModal from "./GameOverModal"; // importez le composant
-import NewGame from "./NewGame";
-import Map from "./Map";
-import { useDojo } from "@/DojoContext";
-import { Coordinate } from "@/types/GridElement";
+import { useDojo } from '@/DojoContext';
+import { Coordinate } from '@/types/GridElement';
+import { Container, Stage, Text } from '@pixi/react';
+import * as PIXI from 'pixi.js';
+import { useEffect, useState } from 'react';
+import { shortString } from 'starknet';
+import { useComponentStates } from '../hooks/useComponentState';
+import useIp from '../hooks/useIp';
+import { HEIGHT, WIDTH } from '../utils/grid';
+import { useElementStore } from '../utils/store';
+import GameOverModal from './GameOverModal'; // importez le composant
+import Map from './Map';
+import NewGame from './NewGame';
 
 interface CanvasProps {
   setMusicPlaying: (bool: boolean) => void;
@@ -30,14 +30,12 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
   const [score, setScore] = useState<number>(0);
   const [level, setLevel] = useState<number>(0);
-  const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(
-    undefined
-  );
+  const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(undefined);
   const [isGameOver, setIsGameOver] = useState(false);
 
   const { set_ip } = useElementStore((state) => state);
 
-  const [pseudo, setPseudo] = useState("");
+  const [pseudo, setPseudo] = useState('');
   const { ip, loading, error } = useIp();
   useEffect(() => {
     if (!loading && ip) {
@@ -48,7 +46,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
   const generateNewGame = async () => {
     setScore(0);
-    const storedIsMusicPlaying = localStorage.getItem("isMusicPlaying");
+    const storedIsMusicPlaying = localStorage.getItem('isMusicPlaying');
     if (storedIsMusicPlaying === null) {
       setMusicPlaying(true);
     } else {
@@ -78,18 +76,18 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   //PIXI.Texture.from(heart).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: 'relative' }}>
       <Stage
         width={WIDTH}
         height={HEIGHT}
-        options={{ backgroundColor: "#242424" }}
+        options={{ backgroundColor: '#242424' }}
         onPointerMove={(e) => {
           //e.nativeEvent.offsetX
           //e.nativeEvent.offsetY
-          console.log("onPointerMove");
+          console.log('onPointerMove');
         }}
         onPointerDown={(e) => {
-          console.log("onPointerDown");
+          console.log('onPointerDown');
         }}
       >
         <Container sortableChildren={true}>
@@ -101,11 +99,11 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               y={50}
               style={
                 new PIXI.TextStyle({
-                  align: "center",
+                  align: 'center',
                   fontFamily: '"Press Start 2P", Helvetica, sans-serif',
                   fontSize: 20,
-                  fontWeight: "400",
-                  fill: "#ffffff",
+                  fontWeight: '400',
+                  fill: '#ffffff',
                 })
               }
             />
@@ -115,11 +113,11 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               y={85}
               style={
                 new PIXI.TextStyle({
-                  align: "center",
+                  align: 'center',
                   fontFamily: '"Press Start 2P", Helvetica, sans-serif',
                   fontSize: 20,
-                  fontWeight: "400",
-                  fill: "#ffffff",
+                  fontWeight: '400',
+                  fill: '#ffffff',
                 })
               }
             />
@@ -129,11 +127,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
       <NewGame onClick={generateNewGame} onPseudoChange={setPseudo} />
 
-      <GameOverModal
-        score={score}
-        isOpen={isGameOver}
-        onClose={() => setIsGameOver(false)}
-      />
+      <GameOverModal score={score} isOpen={isGameOver} onClose={() => setIsGameOver(false)} />
     </div>
   );
 };

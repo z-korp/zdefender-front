@@ -1,21 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Sprite } from "@pixi/react";
-import { SCALE_MODES, Texture } from "pixi.js";
-import mapData from "../assets/map-zdefender.json";
-import {
-  Coordinate,
-  ElementType,
-  GridElement,
-  Layer,
-} from "../types/GridElement";
+import { H_OFFSET } from '@/utils/grid';
+import { Sprite } from '@pixi/react';
+import { SCALE_MODES, Texture } from 'pixi.js';
+import React from 'react';
+import mapData from '../assets/map-zdefender.json';
+import { Coordinate, ElementType, GridElement, Layer } from '../types/GridElement';
 
 interface MapProps {
   hoveredTile?: Coordinate; // Make sure Coordinate type is defined somewhere in your code
 }
 
+const SCALE = 4;
+
 const Map: React.FC<MapProps> = ({ hoveredTile }) => {
-  // const [grid, setGrid] = useState<GridElement[][]>([]);
-  console.log("Map component rendered");
+  console.log('Map component rendered');
 
   const generatedGrid: GridElement[][] = [];
 
@@ -28,37 +25,28 @@ const Map: React.FC<MapProps> = ({ hoveredTile }) => {
         x,
         y,
         tileId,
-        layer: "base" as Layer, // type assertion for layer
-        type: "ground" as ElementType, // type assertion for type
+        layer: 'base' as Layer, // type assertion for layer
+        type: 'ground' as ElementType, // type assertion for type
       });
     }
-    // console.log("row", row);
     generatedGrid.push(row);
   }
   const grid = generatedGrid;
-
-  // console.log(mapData);
-  // console.log("grid", grid);
-  // useEffect(() => {
-  //   console.log("Generating grid");
-  //   // Generate the grid based on the map data
-  // }, []);
-  Texture.from(tile).baseTexture.scaleMode = SCALE_MODES.NEAREST;
 
   return (
     <>
       {grid.map((row, rowIndex) => (
         <>
           {row.map((cell, cellIndex) => {
-            console.log(cell);
-            console.log("tile", tile);
+            const tile = './tilesets/' + cell.tileId + '.png';
+            Texture.from(tile).baseTexture.scaleMode = SCALE_MODES.NEAREST;
             return (
               <Sprite
                 key={cellIndex}
-                image={"./tilesets/" + cell.tileId + ".png"}
-                scale={1}
-                x={cell.x * mapData.tilewidth}
-                y={cell.y * mapData.tileheight}
+                image={tile}
+                scale={SCALE} // Change the scale here
+                x={H_OFFSET + cell.x * mapData.tilewidth * SCALE} // Adjust the x position
+                y={cell.y * mapData.tileheight * SCALE} // Adjust the y position
               />
             );
           })}
