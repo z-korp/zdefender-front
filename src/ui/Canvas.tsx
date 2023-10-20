@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { shortString } from 'starknet';
 import { useComponentStates } from '../hooks/useComponentState';
 import useIp from '../hooks/useIp';
-import { HEIGHT, WIDTH } from '../utils/grid';
+import { HEIGHT, WIDTH, areCoordsEqual, to_grid_coordinate } from '../utils/grid';
 import { useElementStore } from '../utils/store';
 import GameOverModal from './GameOverModal'; // importez le composant
 import Map from './Map';
@@ -32,7 +32,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const [level, setLevel] = useState<number>(0);
   const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(undefined);
   const [isGameOver, setIsGameOver] = useState(false);
-
+  const [absolutePosition, setAbsolutePosition] = useState<Coordinate | undefined>(undefined);
   const { set_ip } = useElementStore((state) => state);
 
   const [pseudo, setPseudo] = useState('');
@@ -72,8 +72,23 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
         height={HEIGHT}
         options={{ backgroundColor: '#242424' }}
         onPointerMove={(e) => {
-          //e.nativeEvent.offsetX
-          //e.nativeEvent.offsetY
+          const tileX = Math.round(e.nativeEvent.offsetX);
+          const tileY = Math.round(e.nativeEvent.offsetY);
+
+          const tileCoords = { x: tileX, y: tileY };
+          if (hoveredTile === undefined || !areCoordsEqual(hoveredTile, tileCoords)) {
+            setHoveredTile(tileCoords);
+            setAbsolutePosition({
+              x: e.nativeEvent.offsetX,
+              y: e.nativeEvent.offsetY,
+            });
+          }
+          console.log('tileCoords', tileCoords);
+          let grid_coordinate = to_grid_coordinate({
+            x: absolutePosition ? absolutePosition.x : 0,
+            y: absolutePosition ? absolutePosition.y : 0,
+          });
+          console.log('grid_coordinate', grid_coordinate);
           console.log('onPointerMove');
         }}
         onPointerDown={(e) => {

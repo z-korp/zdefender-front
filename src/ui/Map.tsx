@@ -1,7 +1,7 @@
 import { H_OFFSET } from '@/utils/grid';
 import { Sprite } from '@pixi/react';
 import { SCALE_MODES, Texture } from 'pixi.js';
-import React from 'react';
+import React, { useState } from 'react';
 import mapData from '../assets/map-zdefender.json';
 import { Coordinate, ElementType, GridElement, Layer } from '../types/GridElement';
 
@@ -9,11 +9,12 @@ interface MapProps {
   hoveredTile?: Coordinate; // Make sure Coordinate type is defined somewhere in your code
 }
 
-const SCALE = 4;
+export const SCALE = 4;
 
 const Map: React.FC<MapProps> = ({ hoveredTile }) => {
   const generatedGrid: GridElement[][] = [];
   const groundArray = [2, 3, 28, 29, 30, 55, 56, 57];
+  const [selectedTile, setSelectedTile] = useState<Coordinate | null>(null);
 
   for (let y = 0; y < mapData.height; y++) {
     const row = [];
@@ -34,6 +35,18 @@ const Map: React.FC<MapProps> = ({ hoveredTile }) => {
   }
   const grid = generatedGrid;
 
+  const renderSelectionMenu = () => {
+    if (!selectedTile) return null;
+    return (
+      <div style={{ position: 'absolute', left: selectedTile.x, top: selectedTile.y }}>
+        {/* Votre liste d'options ici */}
+        <button onClick={() => {}}>Option 1</button>
+        <button onClick={() => {}}>Option 2</button>
+        {/* ... */}
+      </div>
+    );
+  };
+
   return (
     <>
       {grid.map((row, rowIndex) => (
@@ -51,6 +64,7 @@ const Map: React.FC<MapProps> = ({ hoveredTile }) => {
               />
             );
           })}
+          {renderSelectionMenu()}
         </>
       ))}
     </>
