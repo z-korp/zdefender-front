@@ -6,15 +6,16 @@ import mapData from '../assets/map-zdefender.json';
 import { Coordinate, ElementType, GridElement, Layer } from '../types/GridElement';
 
 interface MapProps {
-  hoveredTile?: Coordinate; // Make sure Coordinate type is defined somewhere in your code
+  hoveredTile?: Coordinate;
+  selectedTile?: Coordinate;
 }
 
 export const SCALE = 4;
 
-const Map: React.FC<MapProps> = ({ hoveredTile }) => {
+const Map: React.FC<MapProps> = ({ hoveredTile, selectedTile }) => {
   const generatedGrid: GridElement[][] = [];
   const groundArray = [2, 3, 28, 29, 30, 55, 56, 57];
-  const [selectedTile, setSelectedTile] = useState<Coordinate | null>(null);
+  // const [selectedTile, setSelectedTile] = useState<Coordinate | null>(null);
 
   for (let y = 0; y < mapData.height; y++) {
     const row = [];
@@ -35,17 +36,17 @@ const Map: React.FC<MapProps> = ({ hoveredTile }) => {
   }
   const grid = generatedGrid;
 
-  const renderSelectionMenu = () => {
-    if (!selectedTile) return null;
-    return (
-      <div style={{ position: 'absolute', left: selectedTile.x, top: selectedTile.y }}>
-        {/* Votre liste d'options ici */}
-        <button onClick={() => {}}>Option 1</button>
-        <button onClick={() => {}}>Option 2</button>
-        {/* ... */}
-      </div>
-    );
-  };
+  // const renderSelectionMenu = () => {
+  //   if (!selectedTile) return null;
+  //   return (
+  //     <>
+  //       {/* Votre liste d'options ici */}
+  //       <button onClick={() => {}}>Option 1</button>
+  //       <button onClick={() => {}}>Option 2</button>
+  //       {/* ... */}
+  //     </>
+  //   );
+  // };
 
   return (
     <>
@@ -65,7 +66,6 @@ const Map: React.FC<MapProps> = ({ hoveredTile }) => {
               />
             );
           })}
-          {renderSelectionMenu()}
         </>
       ))}
     </>

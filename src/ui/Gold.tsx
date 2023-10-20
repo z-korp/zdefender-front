@@ -5,9 +5,11 @@ import gold from '../assets/gold.png';
 
 interface GoldProps {
   number: number;
+  x: number;
+  y: number;
 }
 
-const Gold: React.FC<GoldProps> = ({ number }) => {
+const Gold: React.FC<GoldProps> = ({ number, x, y }) => {
   const [displayedNumber, setDisplayedNumber] = useState<number>(number);
 
   useEffect(() => {
@@ -31,8 +33,6 @@ const Gold: React.FC<GoldProps> = ({ number }) => {
   }, [number]);
 
   PIXI.Texture.from(gold).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-  const x = 20;
-  const y = 20;
 
   return (
     <>

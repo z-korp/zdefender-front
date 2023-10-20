@@ -9,6 +9,7 @@ import useIp from '../hooks/useIp';
 import { HEIGHT, WIDTH, areCoordsEqual, to_grid_coordinate } from '../utils/grid';
 import { useElementStore } from '../utils/store';
 import Animal from './Animal';
+import { BottomMenu } from './BottomMenu';
 import GameOverModal from './GameOverModal'; // importez le composant
 import Gold from './Gold';
 import Life from './Life';
@@ -35,6 +36,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const [score, setScore] = useState<number>(0);
   const [level, setLevel] = useState<number>(0);
   const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(undefined);
+  const [selectedTile, setSelectedTile] = useState<Coordinate | undefined>(undefined);
   const [isGameOver, setIsGameOver] = useState(false);
   const [absolutePosition, setAbsolutePosition] = useState<Coordinate | undefined>(undefined);
   const { set_ip } = useElementStore((state) => state);
@@ -88,18 +90,27 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               y: e.nativeEvent.offsetY,
             });
           }
+          // console.log('tileCoords', tileCoords);
           const grid_coordinate = to_grid_coordinate({
             x: absolutePosition ? absolutePosition.x : 0,
             y: absolutePosition ? absolutePosition.y : 0,
           });
+          // maybe needs to be in absolute position
+          setHoveredTile(grid_coordinate);
+
+          // console.log('grid_coordinate', grid_coordinate);
+          // console.log('onPointerMove');
         }}
         onPointerDown={(e) => {
           console.log('onPointerDown');
-          setChickenPosition((prev) => ({ x: prev.x, y: prev.y + 1 }));
+          setSelectedTile(hoveredTile ? hoveredTile : undefined);
         }}
       >
         <Container sortableChildren={true}>
-          <Map hoveredTile={hoveredTile} />
+          <>
+            <Map hoveredTile={hoveredTile} selectedTile={selectedTile} />
+            <BottomMenu selectedTile={selectedTile} />
+          </>
           <>
             <Text
               text={`STAGE: ${level}`}
@@ -132,7 +143,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           </>
 
           <Tower type="knight" targetPosition={{ x: 1, y: 1 }} isHovered={false} isHitter={false} />
-          <Gold number={gold} />
+          <Gold number={100} x={20} y={20} />
           <Life health={10} />
           <Animal type={'chicken'} targetPosition={chickenPosition} health={70} />
         </Container>
