@@ -9,6 +9,7 @@ import useIp from '../hooks/useIp';
 import { HEIGHT, WIDTH, areCoordsEqual, to_grid_coordinate } from '../utils/grid';
 import { useElementStore } from '../utils/store';
 import GameOverModal from './GameOverModal'; // importez le composant
+import Gold from './Gold';
 import Map from './Map';
 import NewGame from './NewGame';
 import Tower from './Tower';
@@ -99,7 +100,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           <>
             <Text
               text={`STAGE: ${level}`}
-              x={20}
+              x={10}
               y={50}
               style={
                 new PIXI.TextStyle({
@@ -113,7 +114,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             />
             <Text
               text={`SCORE: ${score}`}
-              x={20}
+              x={10}
               y={85}
               style={
                 new PIXI.TextStyle({
@@ -128,6 +129,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           </>
 
           <Tower type="knight" targetPosition={{ x: 1, y: 1 }} isHovered={false} isHitter={false} />
+          <Gold number={100} />
         </Container>
       </Stage>
 
