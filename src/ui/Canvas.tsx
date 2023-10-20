@@ -18,6 +18,9 @@ import NewGame from './NewGame';
 import NextWaveButton from './NextWaveButton';
 import Tower from './Tower';
 import Wave from './Wave';
+import { getRange } from '@/utils/range';
+import TileMarker from './TileMarker';
+import { MobType } from './Mob';
 
 interface CanvasProps {
   setMusicPlaying: (bool: boolean) => void;
@@ -31,11 +34,13 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     },
     account: { account },
   } = useDojo();
+  const { map } = useElementStore((state) => state);
 
   const contractState = useComponentStates();
   const { game } = contractState;
 
   const [score, setScore] = useState<number>(0);
+  const [selectedType, setSelectedType] = useState<MobType>('knight');
   const [level, setLevel] = useState<number>(0);
   const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(undefined);
   const [selectedTile, setSelectedTile] = useState<Coordinate | undefined>(undefined);
@@ -71,6 +76,19 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     }
   }, [game]);
 
+  const [range, setRange] = useState<Coordinate[]>([]);
+  useEffect(() => {
+    if (hoveredTile) {
+      const newRange = getRange(selectedType, hoveredTile, map);
+      setRange(newRange);
+    } else {
+      setRange([]); // clear range if no tile is hovered
+    }
+  }, [hoveredTile, selectedType]);
+
+  useEffect(() => {
+    console.log('hoveredTile', hoveredTile);
+  }, [hoveredTile]);
   const handleTileClick = (tile: Coordinate) => {
     setSelectedTile(tile);
   };
@@ -108,10 +126,10 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             console.log('onPointerDown');
             setSelectedTile(undefined);
           }
-          if (hoveredTile!.x > 7 || hoveredTile!.y > 7 || hoveredTile!.x < 0 || hoveredTile!.y < 0) {
-            console.log('OUT OF THE MAP');
-            // setSelectedTile(undefined);
-          } else {
+          // if (hoveredTile!.x > 7 || hoveredTile!.y > 7 || hoveredTile!.x < 0 || hoveredTile!.y < 0) {
+          //   // setSelectedTile(undefined);
+          // }
+          else {
             console.log('hoveredTile', hoveredTile);
             setSelectedTile(hoveredTile ? hoveredTile : undefined);
           }
@@ -121,7 +139,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           <Container sortableChildren={true}>
             <>
               <Map />
-              <BottomMenu selectedTile={selectedTile} onClose={handleMenuClose} />
+              <BottomMenu selectedTile={selectedTile} setSelectedType={setSelectedType} onClose={handleMenuClose} />
             </>
 
             <Tower
@@ -135,6 +153,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             <Gold number={game.gold} x={20} y={20} />
             <Life health={game.health} x={140} y={20} />
             <Animal type={'chicken'} targetPosition={{ x: 2, y: 2 }} health={70} />
+            {selectedTile && range.map((r, index) => <TileMarker key={index} x={r.x} y={r.y} color="cyan" />)}
           </Container>
         )}
       </Stage>
