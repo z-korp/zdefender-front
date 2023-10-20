@@ -72,6 +72,14 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   useEffect(() => {
     console.log('hoveredTile', hoveredTile);
   }, [hoveredTile]);
+  const handleTileClick = (tile: Coordinate) => {
+    setSelectedTile(tile);
+  };
+
+  const handleMenuClose = () => {
+    console.log('handleMenuClose');
+    setSelectedTile(undefined);
+  };
 
   return (
     <div style={{ position: 'relative' }}>
@@ -97,14 +105,18 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           // console.log('onPointerMove');
         }}
         onPointerDown={(e) => {
-          console.log('onPointerDown');
-          setSelectedTile(hoveredTile ? hoveredTile : undefined);
+          if (absolutePosition && absolutePosition.x > 760 && absolutePosition.y < 55) {
+            setSelectedTile(undefined);
+          } else {
+            console.log('hoveredTile', hoveredTile);
+            setSelectedTile(hoveredTile ? hoveredTile : undefined);
+          }
         }}
       >
         <Container sortableChildren={true}>
           <>
             <Map hoveredTile={hoveredTile} selectedTile={selectedTile} />
-            <BottomMenu selectedTile={selectedTile} />
+            <BottomMenu selectedTile={selectedTile} onClose={handleMenuClose} />
           </>
           <>
             <Text
