@@ -10,7 +10,7 @@ interface NewGameProps {
 }
 
 const NewGame: React.FC<NewGameProps> = ({ onClick, onPseudoChange }) => {
-  const [username, setUsername] = useState('MAtthias');
+  const [username, setUsername] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
