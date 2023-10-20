@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { shortString } from 'starknet';
 import { useComponentStates } from '../hooks/useComponentState';
 import useIp from '../hooks/useIp';
-import { HEIGHT, WIDTH, areCoordsEqual, to_grid_coordinate } from '../utils/grid';
+import { HEIGHT, WIDTH, areCoordsEqual, to_absolute_coordinate, to_grid_coordinate } from '../utils/grid';
 import { useElementStore } from '../utils/store';
 import Animal from './Animal';
 import { BottomMenu } from './BottomMenu';
@@ -21,6 +21,7 @@ import Wave from './Wave';
 import { getRange } from '@/utils/range';
 import TileMarker from './TileMarker';
 import { MobType } from './Mob';
+import { TowerButton } from './TowerButton';
 
 interface CanvasProps {
   setMusicPlaying: (bool: boolean) => void;
@@ -38,7 +39,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
   const contractState = useComponentStates();
   const { game } = contractState;
-
+  const [currentAbsoluteTilePosition, setCurrentAbsoluteTilePosition] = useState<Coordinate | undefined>();
   const [score, setScore] = useState<number>(0);
   const [selectedType, setSelectedType] = useState<MobType>('knight');
   const [level, setLevel] = useState<number>(0);
@@ -112,6 +113,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           const tileGridCoords = to_grid_coordinate(tileCoords);
           if (hoveredTile === undefined || !areCoordsEqual(hoveredTile, tileGridCoords)) {
             setHoveredTile(tileGridCoords);
+            setCurrentAbsoluteTilePosition(to_absolute_coordinate(tileGridCoords));
             setAbsolutePosition({
               x: e.nativeEvent.offsetX,
               y: e.nativeEvent.offsetY,
@@ -153,7 +155,26 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             <Gold number={game.gold} x={20} y={20} />
             <Life health={game.health} x={140} y={20} />
             <Animal type={'chicken'} targetPosition={{ x: 2, y: 2 }} health={70} />
-            {selectedTile && range.map((r, index) => <TileMarker key={index} x={r.x} y={r.y} color="cyan" />)}
+
+            {selectedTile && currentAbsoluteTilePosition && (
+              <>
+                {range.map((r, index) => (
+                  <>
+                    {hoveredTile &&
+                      to_grid_coordinate(currentAbsoluteTilePosition).x === hoveredTile.x &&
+                      to_grid_coordinate(currentAbsoluteTilePosition).y === hoveredTile.y && (
+                        <TowerButton
+                          key={index}
+                          x={currentAbsoluteTilePosition.x}
+                          y={currentAbsoluteTilePosition.y + 20}
+                          onClick={() => {}}
+                        />
+                      )}
+                    <TileMarker key={index} x={r.x} y={r.y} color="cyan" hasTowerButton={true} />
+                  </>
+                ))}
+              </>
+            )}
           </Container>
         )}
       </Stage>
