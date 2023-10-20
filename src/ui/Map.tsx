@@ -8,7 +8,6 @@ import {
   GridElement,
   Layer,
 } from "../types/GridElement";
-import tile from "../assets/tilesets/1.png";
 
 interface MapProps {
   hoveredTile?: Coordinate; // Make sure Coordinate type is defined somewhere in your code
