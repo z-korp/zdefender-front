@@ -16,12 +16,14 @@ interface BottomMenuProps {
 export const BottomMenu: React.FC<BottomMenuProps> = ({ hoveredTile, selectedTile, setSelectedType, onClose }) => {
   const [isOpen, setIsOpen] = useState<boolean>(selectedTile !== undefined);
 
-  const mobTypes = ['knight', 'bowman', 'wizard'] as MobType[];
+  const mobTypes = ['knight', 'bowman', 'wizard', 'barbarian'] as MobType[];
 
   const handleClick = (index: number) => {
-    console.log(selectedTile);
+    console.log('===================');
+    console.log(mobTypes);
+    console.log(index);
     setSelectedType(mobTypes[index]);
-    console.log('Button clicked!');
+    console.log('Button Change Build idem!');
   };
   useEffect(() => {
     console.log('selectedTile', selectedTile);

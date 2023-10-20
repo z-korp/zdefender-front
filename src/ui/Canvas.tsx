@@ -164,13 +164,12 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                       to_grid_coordinate(currentAbsoluteTilePosition).x === hoveredTile.x &&
                       to_grid_coordinate(currentAbsoluteTilePosition).y === hoveredTile.y && (
                         <TowerButton
-                          key={index}
                           x={currentAbsoluteTilePosition.x}
                           y={currentAbsoluteTilePosition.y + 20}
                           onClick={() => {}}
                         />
                       )}
-                    <TileMarker key={index} x={r.x} y={r.y} color="cyan" hasTowerButton={true} />
+                    <TileMarker key={index} x={r.x} y={r.y} color="cyan" />
                   </>
                 ))}
               </>
