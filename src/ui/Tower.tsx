@@ -1,9 +1,8 @@
-import { H_OFFSET } from '@/utils/grid';
+import { H_OFFSET, SCALE } from '@/utils/grid';
 import { Sprite } from '@pixi/react';
 import * as PIXI from 'pixi.js';
 import tower from '../assets/tower.png';
 import { Coordinate } from '../types/GridElement';
-import { SCALE } from './Map';
 import Mob, { MobType } from './Mob';
 
 interface TowerProps {
@@ -20,6 +19,7 @@ const Tower: React.FC<TowerProps> = ({ type, targetPosition, isHovered, isHitter
   return (
     <>
       <Sprite
+        zIndex={targetPosition.x + targetPosition.y - 1}
         image={tower}
         scale={SCALE}
         anchor={0.5}

@@ -1,8 +1,9 @@
-import { SCALE } from '@/ui/Map';
 import { Coordinate } from '../types/GridElement';
 
 export const WIDTH = 1200;
 export const HEIGHT = 600;
+
+export const SCALE = 4;
 
 const NUMBER_TILES = 8;
 const h = 16;

@@ -1,13 +1,12 @@
-import React from 'react';
-import * as PIXI from 'pixi.js';
 import { Sprite, Text } from '@pixi/react';
-import tower from '../assets/tower.png';
-import knight from '../assets/knight.png';
-import { SCALE } from './Map';
+import * as PIXI from 'pixi.js';
+import React from 'react';
 import barbarian_transparent from '../assets/barbarian_transparent.png';
 import bowman_transparent from '../assets/bowman_transparent.png';
+import tower from '../assets/tower.png';
 import wizard_transparent from '../assets/wizard_transparent.png';
 import Gold from './Gold';
+import { SCALE } from '@/utils/grid';
 
 interface ButtonProps {
   onClick: () => void;
@@ -64,7 +63,7 @@ const Button: React.FC<ButtonProps> = ({ onClick, x, y, index, price }) => {
           })
         }
       />
-      <Gold number={100} x={x + 85} y={y + 40} />
+      <Gold number={10} x={x + 90} y={y + 40} />
     </>
   );
 };

@@ -3,8 +3,7 @@ import { Assets, Texture } from 'pixi.js';
 import { useEffect, useState } from 'react';
 import { Coordinate } from '../types/GridElement';
 import { Animation, Direction, getFramesFromType } from '../utils/animation';
-import { to_absolute_coordinate, to_grid_coordinate } from '../utils/grid';
-import { SCALE } from './Map';
+import { SCALE, to_absolute_coordinate, to_grid_coordinate } from '../utils/grid';
 
 export type AnimalType = 'chicken';
 

@@ -1,10 +1,12 @@
+import { getRange } from '@/utils/range';
+import { useElementStore } from '@/utils/store';
 import { AnimatedSprite, useTick } from '@pixi/react';
 import { Assets, Texture } from 'pixi.js';
 import { useEffect, useState } from 'react';
 import { Coordinate } from '../types/GridElement';
 import { Animation, Direction, getFramesFromType } from '../utils/animation';
-import { to_absolute_coordinate, to_grid_coordinate } from '../utils/grid';
-import { SCALE } from './Map';
+import { SCALE, to_absolute_coordinate, to_grid_coordinate } from '../utils/grid';
+import TileMarker from './TileMarker';
 
 export type MobType = 'bowman' | 'barbarian' | 'knight' | 'wizard';
 
@@ -51,6 +53,8 @@ const Mob: React.FC<MobProps> = ({
   knightPosition,
   hitPosition,
 }) => {
+  const { map } = useElementStore((state) => state);
+
   const [animation, setAnimation] = useState<Animation>(Animation.Idle);
   const [counterAnim, setCounterAnim] = useState(0);
 
@@ -60,6 +64,12 @@ const Mob: React.FC<MobProps> = ({
   const [currentFrame, setCurrentFrame] = useState(0);
 
   const [isMoving, setIsMoving] = useState(false);
+
+  const [range, setRange] = useState<Coordinate[]>([]);
+
+  useEffect(() => {
+    setRange(getRange(type, targetPosition, map));
+  }, [targetPosition]);
 
   useEffect(() => {
     if (resource) {
@@ -225,13 +235,7 @@ const Mob: React.FC<MobProps> = ({
         initialFrame={currentFrame}
       />
 
-      {/*{!isMoving &&
-        isHovered &&
-        health !== 0 &&
-        neighbors &&
-        neighbors.map((move, index) => (
-          <TileMarker key={index} x={move.tile.x} y={move.tile.y} color={move.action === 'walk' ? 'blue' : 'yellow'} />
-        ))}*/}
+      {isHovered && range && range.map((r, index) => <TileMarker key={index} x={r.x} y={r.y} color="cyan" />)}
     </>
   );
 };

@@ -69,8 +69,9 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     }
   }, [game.over]);
 
-  const [gold, setGold] = useState<number>(100);
-  const [chickenPosition, setChickenPosition] = useState<Coordinate>({ x: 2, y: 2 });
+  useEffect(() => {
+    console.log('hoveredTile', hoveredTile);
+  }, [hoveredTile]);
 
   return (
     <div style={{ position: 'relative' }}>
@@ -83,20 +84,14 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           const tileY = Math.round(e.nativeEvent.offsetY);
 
           const tileCoords = { x: tileX, y: tileY };
-          if (hoveredTile === undefined || !areCoordsEqual(hoveredTile, tileCoords)) {
-            setHoveredTile(tileCoords);
+          const tileGridCoords = to_grid_coordinate(tileCoords);
+          if (hoveredTile === undefined || !areCoordsEqual(hoveredTile, tileGridCoords)) {
+            setHoveredTile(tileGridCoords);
             setAbsolutePosition({
               x: e.nativeEvent.offsetX,
               y: e.nativeEvent.offsetY,
             });
           }
-          // console.log('tileCoords', tileCoords);
-          const grid_coordinate = to_grid_coordinate({
-            x: absolutePosition ? absolutePosition.x : 0,
-            y: absolutePosition ? absolutePosition.y : 0,
-          });
-          // maybe needs to be in absolute position
-          setHoveredTile(grid_coordinate);
 
           // console.log('grid_coordinate', grid_coordinate);
           // console.log('onPointerMove');
@@ -142,10 +137,15 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             />
           </>
 
-          <Tower type="knight" targetPosition={{ x: 1, y: 1 }} isHovered={false} isHitter={false} />
+          <Tower
+            type="knight"
+            targetPosition={{ x: 1, y: 1 }}
+            isHovered={areCoordsEqual({ x: 1, y: 1 }, hoveredTile)}
+            isHitter={false}
+          />
           <Gold number={100} x={20} y={20} />
           <Life health={10} />
-          <Animal type={'chicken'} targetPosition={chickenPosition} health={70} />
+          <Animal type={'chicken'} targetPosition={{ x: 2, y: 2 }} health={70} />
         </Container>
       </Stage>
 

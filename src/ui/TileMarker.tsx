@@ -1,20 +1,29 @@
+import { SCALE, to_absolute_coordinate } from '@/utils/grid';
 import { Sprite } from '@pixi/react';
-import overlay_blue from '../assets/tilesets/overlay_blue.png';
-import overlay_yellow from '../assets/tilesets/overlay_yellow.png';
-import { to_center, to_screen_coordinate } from '../utils/grid';
+import overlay_cyan from '../assets/hover/cyan.png';
+import overlay_gray from '../assets/hover/gray.png';
+import overlay_green from '../assets/hover/green.png';
+import overlay_red from '../assets/hover/red.png';
+import overlay_yellow from '../assets/hover/yellow.png';
 
 interface TileMarkerProps {
   x: number;
   y: number;
-  color: 'blue' | 'yellow';
+  color: 'cyan' | 'gray' | 'green' | 'red' | 'yellow';
 }
 
-const image = { blue: overlay_blue, yellow: overlay_yellow };
+const image = {
+  cyan: overlay_cyan,
+  yellow: overlay_yellow,
+  gray: overlay_gray,
+  green: overlay_green,
+  red: overlay_red,
+};
 
 const TileMarker: React.FC<TileMarkerProps> = ({ x, y, color }) => {
-  const { x: finalX, y: finalY } = to_center(to_screen_coordinate({ x, y }));
+  const { x: finalX, y: finalY } = to_absolute_coordinate({ x, y });
 
-  return <Sprite zIndex={4} image={image[color]} anchor={0.5} scale={2} x={finalX} y={finalY} />;
+  return <Sprite zIndex={0} image={image[color]} anchor={0.5} scale={SCALE} x={finalX} y={finalY} />;
 };
 
 export default TileMarker;
