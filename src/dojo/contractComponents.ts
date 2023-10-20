@@ -18,6 +18,7 @@ export function defineContractComponents(world: World) {
           mob_remaining: RecsType.Number,
           wave: RecsType.Number,
           gold: RecsType.Number,
+          health: RecsType.Number,
         },
         {
           metadata: {
@@ -35,6 +36,7 @@ export function defineContractComponents(world: World) {
           health: RecsType.Number,
           speed: RecsType.Number,
           defence: RecsType.Number,
+          reward: RecsType.Number,
         },
         {
           metadata: {
@@ -50,10 +52,12 @@ export function defineContractComponents(world: World) {
         {
           index: RecsType.Number,
           category: RecsType.Number,
-          speed: RecsType.Number,
+          cooldown: RecsType.Number,
           attack: RecsType.Number,
           range: RecsType.Number,
           level: RecsType.Number,
+          cost: RecsType.Number,
+          idle: RecsType.Number,
         },
         {
           metadata: {

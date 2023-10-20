@@ -115,6 +115,7 @@ type GameEvent = ComponentData & {
   mob_remaining: number;
   wave: number;
   gold: number;
+  health: number;
 };
 
 function handleGameEvent(
@@ -122,11 +123,11 @@ function handleGameEvent(
   values: string[]
 ): Omit<GameEvent, 'component' | 'componentValues' | 'entityIndex'> {
   const [game_id, id] = keys.map((k) => Number(k));
-  const [_, seed, overNumber, tower_count, mob_count, mob_remaining, wave, gold] = values.map((v) => Number(v));
+  const [_, seed, overNumber, tower_count, mob_count, mob_remaining, wave, gold, health] = values.map((v) => Number(v));
   const over = overNumber === 1;
   const name = shortString.decodeShortString(values[0]);
   console.log(
-    `[Game: KEYS: (game_id: ${game_id}, id: ${id}) - VALUES: (name: ${name}, seed: ${seed}, overNumber: ${overNumber}, tower_count: ${tower_count}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, wave: ${wave}, gold: ${gold})]`
+    `[Game: KEYS: (game_id: ${game_id}, id: ${id}) - VALUES: (name: ${name}, seed: ${seed}, overNumber: ${overNumber}, tower_count: ${tower_count}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, wave: ${wave}, gold: ${gold}, health: ${health})]`
   );
   return {
     type: 'Game',
@@ -139,6 +140,7 @@ function handleGameEvent(
     mob_remaining,
     wave,
     gold,
+    health,
   };
 }
 
@@ -178,6 +180,7 @@ type MobEvent = ComponentData & {
   health: number;
   speed: number;
   defence: number;
+  reward: number;
 };
 
 function handleMobEvent(
@@ -185,10 +188,10 @@ function handleMobEvent(
   values: string[]
 ): Omit<MobEvent, 'component' | 'componentValues' | 'entityIndex'> {
   const [game_id, id] = keys.map((k) => Number(k));
-  const [index, health, speed, defence] = values.map((v) => Number(v));
+  const [index, health, speed, defence, reward] = values.map((v) => Number(v));
 
   console.log(
-    `[Mob: KEYS: (game_id: ${game_id}, id: ${id}) - VALUES: (index: ${index}, health: ${health}, speed: ${speed}, defence: ${defence})]`
+    `[Mob: KEYS: (game_id: ${game_id}, id: ${id}) - VALUES: (index: ${index}, health: ${health}, speed: ${speed}, defence: ${defence}, reward: ${reward})]`
   );
   return {
     type: 'Mob',
@@ -198,6 +201,7 @@ function handleMobEvent(
     health,
     speed,
     defence,
+    reward,
   };
 }
 
