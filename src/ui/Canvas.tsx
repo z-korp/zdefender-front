@@ -106,7 +106,12 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
         }}
         onPointerDown={(e) => {
           if (absolutePosition && absolutePosition.x > 760 && absolutePosition.y < 55) {
+            console.log('onPointerDown');
             setSelectedTile(undefined);
+          }
+          if (hoveredTile!.x > 7 || hoveredTile!.y > 7 || hoveredTile!.x < 0 || hoveredTile!.y < 0) {
+            console.log('OUT OF THE MAP');
+            // setSelectedTile(undefined);
           } else {
             console.log('hoveredTile', hoveredTile);
             setSelectedTile(hoveredTile ? hoveredTile : undefined);
