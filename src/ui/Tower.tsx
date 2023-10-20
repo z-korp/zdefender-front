@@ -18,8 +18,6 @@ interface TowerProps {
 const Tower: React.FC<TowerProps> = ({ type, targetPosition, isHovered, isHitter, knightPosition, hitPosition }) => {
   PIXI.Texture.from(tower).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
-  console.log(targetPosition);
-
   return (
     <>
       <Sprite

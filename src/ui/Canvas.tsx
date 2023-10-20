@@ -13,6 +13,7 @@ import Gold from './Gold';
 import Map from './Map';
 import NewGame from './NewGame';
 import Tower from './Tower';
+import { BottomMenu } from './BottomMenu';
 
 interface CanvasProps {
   setMusicPlaying: (bool: boolean) => void;
@@ -33,6 +34,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const [score, setScore] = useState<number>(0);
   const [level, setLevel] = useState<number>(0);
   const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(undefined);
+  const [selectedTile, setSelectedTile] = useState<Coordinate | undefined>(undefined);
   const [isGameOver, setIsGameOver] = useState(false);
   const [absolutePosition, setAbsolutePosition] = useState<Coordinate | undefined>(undefined);
   const { set_ip } = useElementStore((state) => state);
@@ -83,20 +85,27 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               y: e.nativeEvent.offsetY,
             });
           }
-          console.log('tileCoords', tileCoords);
-          const grid_coordinate = to_grid_coordinate({
+          // console.log('tileCoords', tileCoords);
+          let grid_coordinate = to_grid_coordinate({
             x: absolutePosition ? absolutePosition.x : 0,
             y: absolutePosition ? absolutePosition.y : 0,
           });
-          console.log('grid_coordinate', grid_coordinate);
-          console.log('onPointerMove');
+          // maybe needs to be in absolute position
+          setHoveredTile(grid_coordinate);
+
+          // console.log('grid_coordinate', grid_coordinate);
+          // console.log('onPointerMove');
         }}
         onPointerDown={(e) => {
           console.log('onPointerDown');
+          setSelectedTile(hoveredTile ? hoveredTile : undefined);
         }}
       >
         <Container sortableChildren={true}>
-          <Map hoveredTile={hoveredTile} />
+          <>
+            <Map hoveredTile={hoveredTile} selectedTile={selectedTile} />
+            <BottomMenu selectedTile={selectedTile} />
+          </>
           <>
             <Text
               text={`STAGE: ${level}`}
