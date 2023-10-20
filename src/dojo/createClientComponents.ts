@@ -3,13 +3,12 @@ import { SetupNetworkResult } from './setupNetwork';
 
 export type ClientComponents = ReturnType<typeof createClientComponents>;
 
-export function createClientComponents({
-  contractComponents,
-}: SetupNetworkResult) {
+export function createClientComponents({ contractComponents }: SetupNetworkResult) {
   return {
     ...contractComponents,
     Game: overridableComponent(contractComponents.Game),
-    Player: overridableComponent(contractComponents.Player),
+    Mob: overridableComponent(contractComponents.Mob),
     Tile: overridableComponent(contractComponents.Tile),
+    Tower: overridableComponent(contractComponents.Tower),
   };
 }
