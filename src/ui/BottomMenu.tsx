@@ -17,10 +17,9 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({ hoveredTile, selectedTil
   return (
     selectedTile && (
       <Container>
-        {/* Render your other menu components here */}
-        <Button x={800} y={85} onClick={handleClick} />
-        <Button x={800} y={85 * 2} onClick={handleClick} />
-        <Button x={800} y={85 * 3} onClick={handleClick} />
+        <Button x={800} y={85} onClick={handleClick} index={0} />
+        <Button x={800} y={85 * 2} onClick={handleClick} index={1} />
+        <Button x={800} y={85 * 3} onClick={handleClick} index={2} />
       </Container>
     )
   );
