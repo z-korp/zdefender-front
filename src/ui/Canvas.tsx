@@ -11,7 +11,6 @@ import NewGame from "./NewGame";
 import Map from "./Map";
 import { useDojo } from "@/DojoContext";
 import { Coordinate } from "@/types/GridElement";
-import tileImage from "../assets/tilesets/1.png";
 
 interface CanvasProps {
   setMusicPlaying: (bool: boolean) => void;
@@ -95,15 +94,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
       >
         <Container sortableChildren={true}>
           <Map hoveredTile={hoveredTile} />
-          {/* <Sprite
-            key={"a"}
-            image={tileImage}
-            anchor={0.5}
-            scale={2}
-            x={0}
-            y={0}
-          /> */}
-
           <>
             <Text
               text={`STAGE: ${level}`}
