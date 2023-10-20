@@ -149,7 +149,7 @@ const Mob: React.FC<MobProps> = ({
   // Only at init
   useEffect(() => {
     const load = async () => {
-      const resource = await Assets.load(`assets/${type}/${type}.json`);
+      const resource = await Assets.load(`assets/towers/${type}/${type}.json`);
       setResource(resource);
     };
     load();

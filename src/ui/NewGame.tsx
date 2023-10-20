@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import NewGameButton from './NewGameButton';
 import Modal from 'react-modal';
 import Credits from './Credits';
 import CreditsButton from './CreditsButton';
+import NewGameButton from './NewGameButton';
 
 interface NewGameProps {
   onClick: () => void;
@@ -10,7 +10,7 @@ interface NewGameProps {
 }
 
 const NewGame: React.FC<NewGameProps> = ({ onClick, onPseudoChange }) => {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState('MAtthias');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
