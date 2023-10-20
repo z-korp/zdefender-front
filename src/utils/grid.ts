@@ -15,6 +15,13 @@ export function to_grid_coordinate(screen: { x: number; y: number }) {
   };
 }
 
+export function to_absolute_coordinate(grid: { x: number; y: number }) {
+  return {
+    x: grid.x * 16 * SCALE + H_OFFSET,
+    y: grid.y * 16 * SCALE,
+  };
+}
+
 export const areCoordsEqual = (c1: Coordinate, c2: Coordinate) => {
   return c1.x === c2.x && c1.y === c2.y;
 };

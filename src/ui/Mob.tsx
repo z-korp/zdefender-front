@@ -1,11 +1,10 @@
 import { AnimatedSprite, useTick } from '@pixi/react';
 import { Assets, Texture } from 'pixi.js';
 import { useEffect, useState } from 'react';
-import { ActionableTile } from '../hooks/useGrid';
-import { Coordinate } from '../type/GridElement';
-import { to_center, to_grid_coordinate, to_screen_coordinate } from '../utils/grid';
-import TileMarker from './TileMarker';
-import { Direction, getFramesFromType, Animation } from '../utils/animation';
+import { Coordinate } from '../types/GridElement';
+import { Animation, Direction, getFramesFromType } from '../utils/animation';
+import { to_absolute_coordinate, to_grid_coordinate } from '../utils/grid';
+import { SCALE } from './Map';
 
 export type MobType = 'bowman' | 'barbarian' | 'knight' | 'wizard';
 
@@ -17,7 +16,6 @@ interface MobProps {
   isHitter: boolean;
   knightPosition?: Coordinate;
   hitPosition?: Coordinate;
-  neighbors?: ActionableTile[];
 }
 
 function lerp(start: number, end: number, t: number) {
@@ -52,7 +50,6 @@ const Mob: React.FC<MobProps> = ({
   isHitter,
   knightPosition,
   hitPosition,
-  neighbors,
 }) => {
   const [animation, setAnimation] = useState<Animation>(Animation.Idle);
   const [counterAnim, setCounterAnim] = useState(0);
@@ -134,9 +131,9 @@ const Mob: React.FC<MobProps> = ({
 
   // current position absolute during movement
   // will be changing during the movement, towards the absoluteTargetPosition
-  const [absolutePosition, setAbsolutePosition] = useState<Coordinate>(to_center(to_screen_coordinate(targetPosition)));
+  const [absolutePosition, setAbsolutePosition] = useState<Coordinate>(to_absolute_coordinate(targetPosition));
   const [absoluteTargetPosition, setAbsolutetargetPosition] = useState<Coordinate>(
-    to_center(to_screen_coordinate(targetPosition))
+    to_absolute_coordinate(targetPosition)
   );
 
   // Only at init
@@ -147,12 +144,12 @@ const Mob: React.FC<MobProps> = ({
     };
     load();
     // init position
-    setAbsolutePosition(to_center(to_screen_coordinate(targetPosition)));
+    setAbsolutePosition(to_absolute_coordinate(targetPosition));
   }, []);
 
   // If we receive a new targetPosition from props, we transform it into absolute pixel pos and work on it for the move
   useEffect(() => {
-    setAbsolutetargetPosition(to_center(to_screen_coordinate(targetPosition)));
+    setAbsolutetargetPosition(to_absolute_coordinate(targetPosition));
   }, [targetPosition]);
 
   // Here we work only in absolute positions
@@ -222,19 +219,19 @@ const Mob: React.FC<MobProps> = ({
         x={isDead ? -100 /*lol*/ : absolutePosition.x}
         y={isDead ? -100 /*lol*/ : absolutePosition.y - 36}
         anchor={0.5}
-        scale={2}
+        scale={SCALE - 1}
         isPlaying={false}
         textures={frames}
         initialFrame={currentFrame}
       />
 
-      {!isMoving &&
+      {/*{!isMoving &&
         isHovered &&
         health !== 0 &&
         neighbors &&
         neighbors.map((move, index) => (
           <TileMarker key={index} x={move.tile.x} y={move.tile.y} color={move.action === 'walk' ? 'blue' : 'yellow'} />
-        ))}
+        ))}*/}
     </>
   );
 };
