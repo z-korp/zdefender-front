@@ -1,3 +1,4 @@
+import { TowerCategory } from '@/types/Tower';
 import { Component, Components, EntityIndex, Schema, Type, setComponent } from '@latticexyz/recs';
 import { poseidonHashMany } from 'micro-starknet';
 import { Account, Call, Event, InvokeTransactionReceiptResponse, shortString } from 'starknet';
@@ -11,13 +12,137 @@ export function createSystemCalls(
   { Game, Mob, Tower, Tile }: ClientComponents
 ) {
   //account: felt252, seed: felt252, name: felt252, player_count: u8
-  const create = async (signer: Account, account: string, seed: number, name: string) => {
+  const create = async (signer: Account, player: string, seed: number, name: string) => {
     try {
       const calls: Call[] = [
         {
           contractAddress: import.meta.env.VITE_PUBLIC_ACTIONS_ADDRESS || '',
           entrypoint: 'create',
-          calldata: [import.meta.env.VITE_PUBLIC_WORLD_ADDRESS, account, seed, name],
+          calldata: [import.meta.env.VITE_PUBLIC_WORLD_ADDRESS, player, seed, name],
+        },
+      ];
+
+      const tx = await execute(signer, calls);
+
+      console.log(tx);
+      const receipt = (await signer.waitForTransaction(tx.transaction_hash, {
+        retryInterval: 100,
+      })) as InvokeTransactionReceiptResponse;
+      console.log(receipt.events);
+
+      const events = receipt.events;
+
+      if (events) {
+        const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
+        await executeEvents(eventsTransformed);
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      console.log('');
+    }
+  };
+
+  const build = async (signer: Account, player: string, x: number, y: string, tower: TowerCategory) => {
+    try {
+      const calls: Call[] = [
+        {
+          contractAddress: import.meta.env.VITE_PUBLIC_ACTIONS_ADDRESS || '',
+          entrypoint: 'build',
+          calldata: [import.meta.env.VITE_PUBLIC_WORLD_ADDRESS, player, x, y, tower],
+        },
+      ];
+
+      const tx = await execute(signer, calls);
+
+      console.log(tx);
+      const receipt = (await signer.waitForTransaction(tx.transaction_hash, {
+        retryInterval: 100,
+      })) as InvokeTransactionReceiptResponse;
+      console.log(receipt.events);
+
+      const events = receipt.events;
+
+      if (events) {
+        const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
+        await executeEvents(eventsTransformed);
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      console.log('');
+    }
+  };
+
+  const upgrade = async (signer: Account, player: string, towerId: number) => {
+    try {
+      const calls: Call[] = [
+        {
+          contractAddress: import.meta.env.VITE_PUBLIC_ACTIONS_ADDRESS || '',
+          entrypoint: 'upgrade',
+          calldata: [import.meta.env.VITE_PUBLIC_WORLD_ADDRESS, player, towerId],
+        },
+      ];
+
+      const tx = await execute(signer, calls);
+
+      console.log(tx);
+      const receipt = (await signer.waitForTransaction(tx.transaction_hash, {
+        retryInterval: 100,
+      })) as InvokeTransactionReceiptResponse;
+      console.log(receipt.events);
+
+      const events = receipt.events;
+
+      if (events) {
+        const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
+        await executeEvents(eventsTransformed);
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      console.log('');
+    }
+  };
+
+  const sell = async (signer: Account, player: string, towerId: number) => {
+    try {
+      const calls: Call[] = [
+        {
+          contractAddress: import.meta.env.VITE_PUBLIC_ACTIONS_ADDRESS || '',
+          entrypoint: 'sell',
+          calldata: [import.meta.env.VITE_PUBLIC_WORLD_ADDRESS, player, towerId],
+        },
+      ];
+
+      const tx = await execute(signer, calls);
+
+      console.log(tx);
+      const receipt = (await signer.waitForTransaction(tx.transaction_hash, {
+        retryInterval: 100,
+      })) as InvokeTransactionReceiptResponse;
+      console.log(receipt.events);
+
+      const events = receipt.events;
+
+      if (events) {
+        const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
+        await executeEvents(eventsTransformed);
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      console.log('');
+    }
+  };
+
+  const run = async (signer: Account, player: string) => {
+    try {
+      const calls: Call[] = [
+        {
+          contractAddress: import.meta.env.VITE_PUBLIC_ACTIONS_ADDRESS || '',
+          entrypoint: 'run',
+          calldata: [import.meta.env.VITE_PUBLIC_WORLD_ADDRESS, player],
         },
       ];
 
@@ -44,6 +169,10 @@ export function createSystemCalls(
 
   return {
     create,
+    run,
+    build,
+    upgrade,
+    sell,
   };
 }
 
@@ -122,12 +251,14 @@ function handleGameEvent(
   keys: bigint[],
   values: string[]
 ): Omit<GameEvent, 'component' | 'componentValues' | 'entityIndex'> {
-  const [game_id, id] = keys.map((k) => Number(k));
-  const [_, seed, overNumber, tower_count, mob_count, mob_remaining, wave, gold, health] = values.map((v) => Number(v));
+  const [game_id] = keys.map((k) => Number(k));
+  const [id, _, seed, overNumber, tower_count, mob_count, mob_remaining, wave, gold, health] = values.map((v) =>
+    Number(v)
+  );
   const over = overNumber === 1;
   const name = shortString.decodeShortString(values[0]);
   console.log(
-    `[Game: KEYS: (game_id: ${game_id}, id: ${id}) - VALUES: (name: ${name}, seed: ${seed}, overNumber: ${overNumber}, tower_count: ${tower_count}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, wave: ${wave}, gold: ${gold}, health: ${health})]`
+    `[Game: KEYS: (game_id: ${game_id}) - VALUES: (id: ${id}, name: ${name}, seed: ${seed}, overNumber: ${overNumber}, tower_count: ${tower_count}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, wave: ${wave}, gold: ${gold}, health: ${health})]`
   );
   return {
     type: 'Game',

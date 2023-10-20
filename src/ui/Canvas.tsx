@@ -1,7 +1,6 @@
 import { useDojo } from '@/DojoContext';
 import { Coordinate } from '@/types/GridElement';
-import { Container, Stage, Text } from '@pixi/react';
-import * as PIXI from 'pixi.js';
+import { Container, Stage } from '@pixi/react';
 import { useEffect, useState } from 'react';
 import { shortString } from 'starknet';
 import { useComponentStates } from '../hooks/useComponentState';
@@ -14,8 +13,11 @@ import GameOverModal from './GameOverModal'; // importez le composant
 import Gold from './Gold';
 import Life from './Life';
 import Map from './Map';
+import MobsRemaining from './MobsRemaining';
 import NewGame from './NewGame';
+import NextWaveButton from './NextWaveButton';
 import Tower from './Tower';
+import Wave from './Wave';
 
 interface CanvasProps {
   setMusicPlaying: (bool: boolean) => void;
@@ -24,7 +26,7 @@ interface CanvasProps {
 const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const {
     setup: {
-      systemCalls: { create },
+      systemCalls: { create, run },
       network: { graphSdk },
     },
     account: { account },
@@ -64,14 +66,11 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   };
 
   useEffect(() => {
-    if (game.over === 1) {
+    if (game && game.over === 1) {
       setIsGameOver(true);
     }
-  }, [game.over]);
+  }, [game]);
 
-  useEffect(() => {
-    console.log('hoveredTile', hoveredTile);
-  }, [hoveredTile]);
   const handleTileClick = (tile: Coordinate) => {
     setSelectedTile(tile);
   };
@@ -118,55 +117,30 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           }
         }}
       >
-        <Container sortableChildren={true}>
-          <>
-            <Map hoveredTile={hoveredTile} selectedTile={selectedTile} />
-            <BottomMenu selectedTile={selectedTile} onClose={handleMenuClose} />
-          </>
-          <>
-            <Text
-              text={`STAGE: ${level}`}
-              x={10}
-              y={50}
-              style={
-                new PIXI.TextStyle({
-                  align: 'center',
-                  fontFamily: '"Press Start 2P", Helvetica, sans-serif',
-                  fontSize: 20,
-                  fontWeight: '400',
-                  fill: '#ffffff',
-                })
-              }
-            />
-            <Text
-              text={`SCORE: ${score}`}
-              x={10}
-              y={85}
-              style={
-                new PIXI.TextStyle({
-                  align: 'center',
-                  fontFamily: '"Press Start 2P", Helvetica, sans-serif',
-                  fontSize: 20,
-                  fontWeight: '400',
-                  fill: '#ffffff',
-                })
-              }
-            />
-          </>
+        {game !== undefined && (
+          <Container sortableChildren={true}>
+            <>
+              <Map />
+              <BottomMenu selectedTile={selectedTile} onClose={handleMenuClose} />
+            </>
 
-          <Tower
-            type="knight"
-            targetPosition={{ x: 1, y: 1 }}
-            isHovered={hoveredTile ? areCoordsEqual({ x: 1, y: 1 }, hoveredTile) : false}
-            isHitter={false}
-          />
-          <Gold number={100} x={20} y={20} />
-          <Life health={10} />
-          <Animal type={'chicken'} targetPosition={{ x: 2, y: 2 }} health={70} />
-        </Container>
+            <Tower
+              type="knight"
+              targetPosition={{ x: 1, y: 1 }}
+              isHovered={hoveredTile ? areCoordsEqual({ x: 1, y: 1 }, hoveredTile) : false}
+              isHitter={false}
+            />
+            <Wave wave={game.wave} x={10} y={50} />
+            <MobsRemaining remaining={game.mob_remaining} x={10} y={80} />
+            <Gold number={game.gold} x={20} y={20} />
+            <Life health={game.health} x={140} y={20} />
+            <Animal type={'chicken'} targetPosition={{ x: 2, y: 2 }} health={70} />
+          </Container>
+        )}
       </Stage>
+      {game !== undefined && <NextWaveButton onClick={() => run(account, ip.toString())} />}
 
-      <NewGame onClick={generateNewGame} onPseudoChange={setPseudo} />
+      {game === undefined && <NewGame onClick={generateNewGame} onPseudoChange={setPseudo} />}
 
       <GameOverModal score={score} isOpen={isGameOver} onClose={() => setIsGameOver(false)} />
     </div>

@@ -4,14 +4,9 @@ import { Sprite } from '@pixi/react';
 import { SCALE_MODES, Texture } from 'pixi.js';
 import React, { useEffect } from 'react';
 import mapData from '../assets/map-zdefender.json';
-import { Coordinate, ElementType, GridElement, Layer } from '../types/GridElement';
+import { ElementType, GridElement, Layer } from '../types/GridElement';
 
-interface MapProps {
-  hoveredTile?: Coordinate;
-  selectedTile?: Coordinate;
-}
-
-const Map: React.FC<MapProps> = ({ hoveredTile, selectedTile }) => {
+const Map: React.FC = () => {
   const { set_map, map } = useElementStore((state) => state);
 
   useEffect(() => {

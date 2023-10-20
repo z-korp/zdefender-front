@@ -81,8 +81,6 @@ const Animal: React.FC<AnimalProps> = ({ type, targetPosition, health }) => {
 
   // If we receive a new targetPosition from props, we transform it into absolute pixel pos and work on it for the move
   useEffect(() => {
-    console.log('absolutePosition', absolutePosition);
-    console.log('to_absolute_coordinate(targetPosition)', to_absolute_coordinate(targetPosition));
     const or = getDirection(
       to_grid_coordinate(absolutePosition),
       to_grid_coordinate(to_absolute_coordinate(targetPosition)),
