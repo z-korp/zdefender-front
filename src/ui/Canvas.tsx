@@ -138,7 +138,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           </>
 
           <Tower type="knight" targetPosition={{ x: 1, y: 1 }} isHovered={false} isHitter={false} />
-          <Gold number={100} />
+          <Gold number={100} x={20} y={20} />
         </Container>
       </Stage>
 

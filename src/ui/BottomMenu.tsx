@@ -17,9 +17,9 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({ hoveredTile, selectedTil
   return (
     selectedTile && (
       <Container>
-        <Button x={800} y={85} onClick={handleClick} index={0} />
-        <Button x={800} y={85 * 2} onClick={handleClick} index={1} />
-        <Button x={800} y={85 * 3} onClick={handleClick} index={2} />
+        <Button x={800} y={85} onClick={handleClick} index={0} price={50} />
+        <Button x={800} y={85 * 2} onClick={handleClick} index={1} price={50} />
+        <Button x={800} y={85 * 3} onClick={handleClick} index={2} price={50} />
       </Container>
     )
   );
