@@ -1,4 +1,4 @@
-import { H_OFFSET } from '@/utils/grid';
+import { H_OFFSET, SCALE } from '@/utils/grid';
 import { useElementStore } from '@/utils/store';
 import { Sprite } from '@pixi/react';
 import { SCALE_MODES, Texture } from 'pixi.js';
@@ -10,8 +10,6 @@ interface MapProps {
   hoveredTile?: Coordinate;
   selectedTile?: Coordinate;
 }
-
-export const SCALE = 4;
 
 const Map: React.FC<MapProps> = ({ hoveredTile, selectedTile }) => {
   const { set_map, map } = useElementStore((state) => state);
