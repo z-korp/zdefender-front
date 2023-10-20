@@ -2,13 +2,13 @@ import { Component, Components, EntityIndex, Schema, Type, setComponent } from '
 import { poseidonHashMany } from 'micro-starknet';
 import { Account, Call, Event, InvokeTransactionReceiptResponse, shortString } from 'starknet';
 import { ClientComponents } from './createClientComponents';
-import { SetupNetworkResult, getContractByName } from './setupNetwork';
+import { SetupNetworkResult } from './setupNetwork';
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
   { execute, contractComponents }: SetupNetworkResult,
-  { Game, Player, Tile }: ClientComponents
+  { Game, Mob, Tower, Tile }: ClientComponents
 ) {
   //account: felt252, seed: felt252, name: felt252, player_count: u8
   const create = async (signer: Account, account: string, seed: number, name: string) => {
@@ -42,209 +42,8 @@ export function createSystemCalls(
     }
   };
 
-  const attack = async (
-    signer: Account,
-    account: string,
-    attacker_index: number,
-    defender_index: number,
-    dispatched: number
-  ) => {
-    try {
-      const calls: Call[] = [
-        {
-          contractAddress: getContractByName('actions')?.address || '',
-          entrypoint: 'attack',
-          calldata: [import.meta.env.VITE_PUBLIC_WORLD_ADDRESS, account, attacker_index, defender_index, dispatched],
-        },
-      ];
-
-      const tx = await execute(signer, calls);
-
-      console.log(tx);
-      const receipt = (await signer.waitForTransaction(tx.transaction_hash, {
-        retryInterval: 100,
-      })) as InvokeTransactionReceiptResponse;
-      console.log(receipt.events);
-
-      const events = receipt.events;
-
-      if (events) {
-        const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
-        await executeEvents(eventsTransformed);
-      }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      console.log('');
-    }
-  };
-
-  const defend = async (signer: Account, account: string, attacker_index: number, defender_index: number) => {
-    try {
-      const calls: Call[] = [
-        {
-          contractAddress: getContractByName('actions')?.address || '',
-          entrypoint: 'defend',
-          calldata: [import.meta.env.VITE_PUBLIC_WORLD_ADDRESS, account, attacker_index, defender_index],
-        },
-      ];
-
-      const tx = await execute(signer, calls);
-
-      console.log(tx);
-      const receipt = (await signer.waitForTransaction(tx.transaction_hash, {
-        retryInterval: 100,
-      })) as InvokeTransactionReceiptResponse;
-      console.log(receipt.events);
-
-      const events = receipt.events;
-
-      if (events) {
-        const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
-        await executeEvents(eventsTransformed);
-      }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      console.log('');
-    }
-  };
-
-  const discard = async (signer: Account, account: string, card_one: number, card_two: number, card_three: number) => {
-    try {
-      const calls: Call[] = [
-        {
-          contractAddress: getContractByName('actions')?.address || '',
-          entrypoint: 'discard',
-          calldata: [import.meta.env.VITE_PUBLIC_WORLD_ADDRESS, account, card_one, card_two, card_three],
-        },
-      ];
-
-      const tx = await execute(signer, calls);
-
-      console.log(tx);
-      const receipt = (await signer.waitForTransaction(tx.transaction_hash, {
-        retryInterval: 100,
-      })) as InvokeTransactionReceiptResponse;
-      console.log(receipt.events);
-
-      const events = receipt.events;
-
-      if (events) {
-        const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
-        await executeEvents(eventsTransformed);
-      }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      console.log('');
-    }
-  };
-
-  const finish = async (signer: Account, account: string) => {
-    try {
-      const calls: Call[] = [
-        {
-          contractAddress: getContractByName('actions')?.address || '',
-          entrypoint: 'finish',
-          calldata: [import.meta.env.VITE_PUBLIC_WORLD_ADDRESS, account],
-        },
-      ];
-
-      const tx = await execute(signer, calls);
-
-      console.log(tx);
-      const receipt = (await signer.waitForTransaction(tx.transaction_hash, {
-        retryInterval: 100,
-      })) as InvokeTransactionReceiptResponse;
-      console.log(receipt.events);
-
-      const events = receipt.events;
-
-      if (events) {
-        const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
-        await executeEvents(eventsTransformed);
-      }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      console.log('');
-    }
-  };
-
-  const transfer = async (
-    signer: Account,
-    account: string,
-    source_index: number,
-    target_index: number,
-    army: number
-  ) => {
-    try {
-      const calls: Call[] = [
-        {
-          contractAddress: getContractByName('actions')?.address || '',
-          entrypoint: 'transfer',
-          calldata: [import.meta.env.VITE_PUBLIC_WORLD_ADDRESS, account, source_index, target_index, army],
-        },
-      ];
-
-      const tx = await execute(signer, calls);
-
-      console.log(tx);
-      const receipt = (await signer.waitForTransaction(tx.transaction_hash, {
-        retryInterval: 100,
-      })) as InvokeTransactionReceiptResponse;
-      console.log(receipt.events);
-
-      const events = receipt.events;
-
-      if (events) {
-        const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
-        await executeEvents(eventsTransformed);
-      }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      console.log('');
-    }
-  };
-
-  const supply = async (signer: Account, account: string, tile_index: number, supply: number) => {
-    try {
-      const call: Call = {
-        contractAddress: getContractByName('actions')?.address || '',
-        entrypoint: 'supply',
-        calldata: [import.meta.env.VITE_PUBLIC_WORLD_ADDRESS, account, tile_index, supply],
-      };
-
-      const tx = await execute(signer, call);
-      console.log(tx);
-      const receipt = (await signer.waitForTransaction(tx.transaction_hash, {
-        retryInterval: 100,
-      })) as InvokeTransactionReceiptResponse;
-      console.log(receipt.events);
-
-      const events = receipt.events;
-
-      if (events) {
-        const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
-        await executeEvents(eventsTransformed);
-      }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      console.log('');
-    }
-  };
-
   return {
     create,
-    attack,
-    defend,
-    discard,
-    finish,
-    transfer,
-    supply,
   };
 }
 
@@ -307,32 +106,39 @@ export function getEntityIdFromKeys(keys: bigint[]): EntityIndex {
 
 type GameEvent = ComponentData & {
   type: 'Game';
-  account: number;
+  game_id: number;
   id: number;
+  name: string;
   over: boolean;
-  seed: number;
-  player_count: number;
-  nonce: number;
+  tower_count: number;
+  mob_count: number;
+  mob_remaining: number;
+  wave: number;
+  gold: number;
 };
 
 function handleGameEvent(
   keys: bigint[],
   values: string[]
 ): Omit<GameEvent, 'component' | 'componentValues' | 'entityIndex'> {
-  const [account] = keys.map((k) => Number(k));
-  const [id, overNumber, seed, player_count, nonce] = values.map((v) => Number(v));
+  const [game_id, id] = keys.map((k) => Number(k));
+  const [_, seed, overNumber, tower_count, mob_count, mob_remaining, wave, gold] = values.map((v) => Number(v));
   const over = overNumber === 1;
+  const name = shortString.decodeShortString(values[0]);
   console.log(
-    `[Game: KEYS: (account: ${account}) - VALUES: (game_id: ${id}, over: ${over}, seed: ${seed}, player_count: ${player_count}, nonce: ${nonce})]`
+    `[Game: KEYS: (game_id: ${game_id}, id: ${id}) - VALUES: (name: ${name}, seed: ${seed}, overNumber: ${overNumber}, tower_count: ${tower_count}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, wave: ${wave}, gold: ${gold})]`
   );
   return {
     type: 'Game',
-    account,
+    game_id,
     id,
+    name,
     over,
-    seed,
-    player_count,
-    nonce,
+    tower_count,
+    mob_count,
+    mob_remaining,
+    wave,
+    gold,
   };
 }
 
@@ -364,36 +170,69 @@ function handleTileEvent(
   };
 }
 
-type PlayerEvent = ComponentData & {
-  type: 'Player';
+type MobEvent = ComponentData & {
+  type: 'Mob';
   game_id: number;
-  order: number;
-  address: string;
-  name: string;
-  supply: number;
+  id: number;
+  index: number;
+  health: number;
+  speed: number;
+  defence: number;
 };
 
-function handlePlayerEvent(
+function handleMobEvent(
   keys: bigint[],
   values: string[]
-): Omit<PlayerEvent, 'component' | 'componentValues' | 'entityIndex'> {
-  const [game_id, order] = keys.map((k) => Number(k));
-  const [addressRaw, nameRaw, supplyRaw] = values;
-
-  const address = addressRaw;
-  const name = shortString.decodeShortString(nameRaw);
-  const supply = Number(supplyRaw);
+): Omit<MobEvent, 'component' | 'componentValues' | 'entityIndex'> {
+  const [game_id, id] = keys.map((k) => Number(k));
+  const [index, health, speed, defence] = values.map((v) => Number(v));
 
   console.log(
-    `[Player: KEYS: (game_id: ${game_id}, order: ${order}) - VALUES: (address: ${address}, name: ${name}, supply: ${supply})]`
+    `[Mob: KEYS: (game_id: ${game_id}, id: ${id}) - VALUES: (index: ${index}, health: ${health}, speed: ${speed}, defence: ${defence})]`
   );
   return {
-    type: 'Player',
+    type: 'Mob',
     game_id,
-    order,
-    address,
-    name,
-    supply,
+    id,
+    index,
+    health,
+    speed,
+    defence,
+  };
+}
+
+type TowerEvent = ComponentData & {
+  type: 'Tower';
+  game_id: number;
+  id: number;
+  index: number;
+  category: number;
+  speed: number;
+  attack: number;
+  range: number;
+  level: number;
+};
+
+function handleTowerEvent(
+  keys: bigint[],
+  values: string[]
+): Omit<TowerEvent, 'component' | 'componentValues' | 'entityIndex'> {
+  const [game_id, id] = keys.map((k) => Number(k));
+  const [index, category, speed, attack, range, level] = values.map((v) => Number(v));
+
+  console.log(
+    `[Mob: KEYS: (game_id: ${game_id}, id: ${id}) - VALUES: (index: ${index}, category: ${category}, speed: ${speed}, attack: ${attack}, range: ${range}, level: ${level})]`
+  );
+  return {
+    type: 'Tower',
+    game_id,
+    id,
+    index,
+    category,
+    speed,
+    attack,
+    range,
+    level,
   };
 }
 
@@ -403,7 +242,7 @@ type ComponentData = {
   entityIndex: EntityIndex;
 };
 
-type TransformedEvent = GameEvent | TileEvent | PlayerEvent;
+type TransformedEvent = GameEvent | TileEvent | MobEvent | TowerEvent;
 
 export async function setComponentsFromEvents(components: Components, events: Event[]): Promise<TransformedEvent[]> {
   const transformedEvents = [];
@@ -446,9 +285,15 @@ export async function setComponentsFromEvents(components: Components, events: Ev
           ...baseEventData,
         });
         break;
-      case 'Player':
+      case 'Mob':
         transformedEvents.push({
-          ...handlePlayerEvent(keys, values),
+          ...handleMobEvent(keys, values),
+          ...baseEventData,
+        });
+        break;
+      case 'Tower':
+        transformedEvents.push({
+          ...handleTowerEvent(keys, values),
           ...baseEventData,
         });
         break;

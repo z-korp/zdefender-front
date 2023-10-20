@@ -10,10 +10,14 @@ export function defineContractComponents(world: World) {
         world,
         {
           id: RecsType.Number,
-          over: RecsType.Number,
+          name: RecsType.String,
           seed: RecsType.Number, // felt252
-          player_count: RecsType.Number,
-          nonce: RecsType.Number,
+          over: RecsType.Boolean,
+          tower_count: RecsType.Number,
+          mob_count: RecsType.Number,
+          mob_remaining: RecsType.Number,
+          wave: RecsType.Number,
+          gold: RecsType.Number,
         },
         {
           metadata: {
@@ -22,16 +26,34 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
-    Player: (() => {
-      const name = 'Player';
+    Mob: (() => {
+      const name = 'Mob';
       return defineComponent(
         world,
         {
-          address: RecsType.Number, // ContractAddress
-          name: RecsType.String,
-          supply: RecsType.Number,
-          card: RecsType.Number,
-          conqueror: RecsType.Boolean,
+          index: RecsType.Number,
+          health: RecsType.Number,
+          speed: RecsType.Number,
+          defence: RecsType.Number,
+        },
+        {
+          metadata: {
+            name: name,
+          },
+        }
+      );
+    })(),
+    Tower: (() => {
+      const name = 'Tower';
+      return defineComponent(
+        world,
+        {
+          index: RecsType.Number,
+          category: RecsType.Number,
+          speed: RecsType.Number,
+          attack: RecsType.Number,
+          range: RecsType.Number,
+          level: RecsType.Number,
         },
         {
           metadata: {
