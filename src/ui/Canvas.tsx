@@ -1,18 +1,17 @@
 import { useDojo } from '@/DojoContext';
 import { Coordinate } from '@/types/GridElement';
-import { Container, Sprite, Stage, Text } from '@pixi/react';
+import { Container, Stage, Text } from '@pixi/react';
 import * as PIXI from 'pixi.js';
 import { useEffect, useState } from 'react';
 import { shortString } from 'starknet';
-import tower from '../assets/tower.png';
 import { useComponentStates } from '../hooks/useComponentState';
 import useIp from '../hooks/useIp';
-import { HEIGHT, H_OFFSET, WIDTH, areCoordsEqual, to_grid_coordinate } from '../utils/grid';
+import { HEIGHT, WIDTH, areCoordsEqual, to_grid_coordinate } from '../utils/grid';
 import { useElementStore } from '../utils/store';
 import GameOverModal from './GameOverModal'; // importez le composant
-import Map, { SCALE } from './Map';
-import Mob from './Mob';
+import Map from './Map';
 import NewGame from './NewGame';
+import Tower from './Tower';
 
 interface CanvasProps {
   setMusicPlaying: (bool: boolean) => void;
@@ -64,8 +63,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
       setIsGameOver(true);
     }
   }, [game.over]);
-
-  PIXI.Texture.from(tower).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
   return (
     <div style={{ position: 'relative' }}>
@@ -129,21 +126,8 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               }
             />
           </>
-          <Mob
-            type="knight"
-            targetPosition={{ x: 1, y: 1 }}
-            isHovered={false}
-            health={10}
-            isHitter={false}
-            knightPosition={{ x: 1, y: 1 }}
-            hitPosition={{ x: 1, y: 1 }}
-          />
-          <Sprite
-            image={tower}
-            scale={SCALE} // Change the scale here
-            x={H_OFFSET + 1 * 16 * SCALE} // Adjust the x position
-            y={1 * 16 * SCALE} // Adjust the y position
-          />
+
+          <Tower type="knight" targetPosition={{ x: 1, y: 1 }} isHovered={false} isHitter={false} />
         </Container>
       </Stage>
 

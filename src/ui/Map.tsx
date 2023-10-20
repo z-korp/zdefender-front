@@ -59,6 +59,7 @@ const Map: React.FC<MapProps> = ({ hoveredTile }) => {
                 key={cellIndex}
                 image={tile}
                 scale={SCALE} // Change the scale here
+                anchor={0.5}
                 x={H_OFFSET + cell.x * mapData.tilewidth * SCALE} // Adjust the x position
                 y={cell.y * mapData.tileheight * SCALE} // Adjust the y position
               />
