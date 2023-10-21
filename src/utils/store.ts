@@ -1,4 +1,5 @@
 import { GridElement } from '@/types/GridElement';
+import { MobType } from '@/ui/Mob';
 import { create } from 'zustand';
 
 interface State {
@@ -10,6 +11,8 @@ interface State {
   set_map: (map: GridElement[][]) => void;
   build_menu: boolean;
   set_build_menu: (build_menu: boolean) => void;
+  selectedType: MobType;
+  setSelectedType: (selectedType: MobType) => void;
 }
 
 export const useElementStore = create<State>((set) => ({
@@ -22,4 +25,6 @@ export const useElementStore = create<State>((set) => ({
   set_map: (map: GridElement[][]) => set(() => ({ map })),
   build_menu: false,
   set_build_menu: (build_menu: boolean) => set(() => ({ build_menu })),
+  selectedType: 'knight',
+  setSelectedType: (selectedType: MobType) => set(() => ({ selectedType })),
 }));

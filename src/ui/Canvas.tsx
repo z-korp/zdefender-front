@@ -55,16 +55,15 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const [currentAbsoluteTilePosition, setCurrentAbsoluteTilePosition] = useState<Coordinate | undefined>();
 
   const [score, setScore] = useState<number>(0);
-  const [selectedType, setSelectedType] = useState<DefenderType>('knight');
   const [level, setLevel] = useState<number>(0);
   const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(undefined);
   const [hoveredTileAbsolute, setHoveredTileAbsolute] = useState<Coordinate | undefined>(undefined);
-
+  const [showGhost, setShowGhost] = useState<boolean>(false);
   const [selectedTile, setSelectedTile] = useState<Coordinate | undefined>(undefined);
   const [isGameOver, setIsGameOver] = useState(false);
   const [absolutePosition, setAbsolutePosition] = useState<Coordinate | undefined>(undefined);
   const [isBuying, setIsBuying] = useState(false);
-  const { set_ip } = useElementStore((state) => state);
+  const { selectedType, setSelectedType, set_ip } = useElementStore((state) => state);
 
   const [pseudo, setPseudo] = useState('');
   const { ip, loading, error } = useIp();
@@ -96,7 +95,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
   const [range, setRange] = useState<Coordinate[]>([]);
   useEffect(() => {
-    if (hoveredTile) {
+    if (hoveredTile && selectedType) {
       const newRange = getRange(selectedType, hoveredTile, map);
       setRange(newRange);
     } else {
@@ -175,6 +174,12 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               y: e.nativeEvent.offsetY,
             });
           }
+          if (hoveredTile!.x > 7 || hoveredTile!.y > 7 || hoveredTile!.x < 0 || hoveredTile!.y < 0) {
+            setShowGhost(false);
+            // setSelectedTile(undefined);
+          } else {
+            setShowGhost(true);
+          }
         }}
         onPointerDown={(e) => {
           if (hoveredTile!.x > 7 || hoveredTile!.y > 7 || hoveredTile!.x < 0 || hoveredTile!.y < 0) {
@@ -202,13 +207,19 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               <Map />
               <BottomMenu
                 selectedTile={selectedTile}
-                setSelectedType={setSelectedType}
                 isBuying={isBuying}
                 onClose={() => setSelectedTile(undefined)}
                 onBuy={handleBuy}
               />
             </>
-
+            {selectedType && (
+              <TowerBuilding
+                type={selectedType}
+                targetPosition={{ x: 1, y: 1 }}
+                isHovered={hoveredTile ? areCoordsEqual({ x: 1, y: 1 }, hoveredTile) : false}
+                isHitter={false}
+              />
+            )}
             <Wave wave={wave} x={10} y={50} />
             <MobsRemaining remaining={mob_remaining} x={10} y={80} />
             <Gold number={gold} x={20} y={20} />
@@ -232,7 +243,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               />
             ))}
 
-            {selectedTile && currentAbsoluteTilePosition && (
+            {showGhost && selectedTile && currentAbsoluteTilePosition && (
               <>
                 {range.map((r, index) => (
                   <>

@@ -4,6 +4,7 @@ import * as PIXI from 'pixi.js';
 import tower from '../assets/tower.png';
 import { Coordinate } from '../types/GridElement';
 import Mob, { MobType } from './Mob';
+import { useEffect } from 'react';
 
 interface TowerProps {
   type: MobType;
@@ -16,6 +17,7 @@ interface TowerProps {
 
 const Tower: React.FC<TowerProps> = ({ type, targetPosition, isHovered, isHitter, knightPosition, hitPosition }) => {
   PIXI.Texture.from(tower).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+
   return (
     <>
       <Sprite

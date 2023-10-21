@@ -5,28 +5,24 @@ import Button from './Button';
 import { BuyButton } from './BuyButton';
 import { CloseButton } from './CloseButton';
 import { DefenderType } from './Defender';
+import { useElementStore } from '@/utils/store';
 
 interface BottomMenuProps {
   hoveredTile?: Coordinate;
   selectedTile?: Coordinate;
-  setSelectedType: Dispatch<SetStateAction<DefenderType>>;
   isBuying: boolean;
   onClose: () => void;
   onBuy: (towerType: DefenderType, x: number, y: number) => void;
 }
 
-export const BottomMenu: React.FC<BottomMenuProps> = ({ hoveredTile, selectedTile, onClose, isBuying, onBuy }) => {
+export const BottomMenu: React.FC<BottomMenuProps> = ({ selectedTile, onClose, isBuying, onBuy }) => {
   const [isOpen, setIsOpen] = useState<boolean>(selectedTile !== undefined);
+  const { selectedType, setSelectedType } = useElementStore((state) => state);
 
-  const [selectedType, setSelectedType] = useState<DefenderType>('knight');
-  const mobTypes = ['knight', 'bowman', 'wizard', 'barbarian'] as DefenderType[];
+  const defenderTypes = ['barbarian', 'bowman', 'wizard'] as DefenderType[];
 
   const handleClick = (index: number) => {
-    console.log('===================');
-    console.log(mobTypes);
-    console.log(index);
-    setSelectedType(mobTypes[index]);
-    console.log('Button Change Build idem!');
+    setSelectedType(defenderTypes[index]);
   };
   useEffect(() => {
     setIsOpen(selectedTile !== undefined);
@@ -42,7 +38,7 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({ hoveredTile, selectedTil
   return (
     isOpen && (
       <Container>
-        {isBuying && selectedTile && (
+        {isBuying && selectedTile && selectedType && (
           <BuyButton x={1000} y={85} onClick={() => onBuy(selectedType, selectedTile?.x, selectedTile?.y)} />
         )}
         <CloseButton x={900} y={85} onClick={handleClose} />
