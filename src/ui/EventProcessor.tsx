@@ -1,4 +1,5 @@
 import { useEventsStore } from '@/utils/eventsStore';
+import { SPEED } from '@/utils/speed';
 import { setComponent } from '@latticexyz/recs';
 import { useEffect, useState } from 'react';
 
@@ -32,7 +33,7 @@ function EventProcessor() {
     };
 
     // Set up the interval
-    const intervalId = setInterval(processEventsForTick, 1000);
+    const intervalId = setInterval(processEventsForTick, 1000 / SPEED);
 
     // Clear the interval when the component is unmounted
     return () => clearInterval(intervalId);

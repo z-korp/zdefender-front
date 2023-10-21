@@ -10,10 +10,7 @@ function EventProcessor2() {
 
   // Process events for a given tick
   const processEventsForTick = () => {
-    console.log('currentTick', currentTick);
-    console.log('events', events);
     const eventsForCurrentTick = events.filter((event) => event.tick === currentTick);
-    console.log('eventsForCurrentTick', eventsForCurrentTick);
 
     // Process events for the current tick
     eventsForCurrentTick.forEach((event) => {
@@ -27,7 +24,6 @@ function EventProcessor2() {
     if (hasEventsForNextTick) {
       setCurrentTick((prevTick) => prevTick + 1);
     } else {
-      console.log('-----------------> reset');
       setEvents([]); // Reset the events in the store
     }
   };

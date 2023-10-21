@@ -22,7 +22,7 @@ import {
 import { useElementStore } from '../utils/store';
 import { BottomMenu } from './BottomMenu';
 import { DefenderType } from './Defender';
-import EventProcessor2 from './EventProcessor2';
+import EventProcessor from './EventProcessor';
 import GameOverModal from './GameOverModal'; // importez le composant
 import Gold from './Gold';
 import Life from './Life';
@@ -156,7 +156,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
   return (
     <div style={{ position: 'relative' }}>
-      <EventProcessor2 />
+      <EventProcessor />
       <Stage
         width={WIDTH}
         height={HEIGHT}

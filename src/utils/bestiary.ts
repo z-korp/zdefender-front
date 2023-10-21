@@ -16,14 +16,14 @@ export const bestiary: Record<MobType, MobCharacteristics> = {
   },
   [MobType.BOAR]: {
     health: 200,
-    speed: 5,
-    armor: 20,
-    scale: 2.0,
+    speed: 1,
+    armor: 5,
+    scale: 1.0,
   },
   [MobType.MAMMOTH]: {
     health: 500,
-    speed: 5,
-    armor: 20,
-    scale: 2.0,
+    speed: 1,
+    armor: 10,
+    scale: 1.0,
   },
 };

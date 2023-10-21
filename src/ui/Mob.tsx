@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { Coordinate } from '../types/GridElement';
 import { Animation, Direction, getFramesFromType } from '../utils/animation';
 import { tile_width, to_absolute_coordinate, to_grid_coordinate } from '../utils/grid';
+import { SPEED } from '@/utils/speed';
 
 interface MobProps {
   type: MobType;
@@ -81,23 +82,35 @@ const Mob: React.FC<MobProps> = ({ type, targetPosition, health, id }) => {
     setAnimation(Animation.Walk);
   }, []);
 
+  const [velocity, setVelocity] = useState<Coordinate>({ x: 0, y: 0 });
+
   // If we receive a new targetPosition from props, we transform it into absolute pixel pos and work on it for the move
   useEffect(() => {
     const or = getDirection(absolutePosition, to_absolute_coordinate(targetPosition), orientation);
     setOrientation(or);
     setAbsolutetargetPosition(to_absolute_coordinate(targetPosition));
+
+    // Calculate the velocity
+    const dx = to_absolute_coordinate(targetPosition).x - absolutePosition.x;
+    const dy = to_absolute_coordinate(targetPosition).y - absolutePosition.y;
+    setVelocity({ x: dx * SPEED, y: dy * SPEED });
   }, [targetPosition]);
 
   // Here we work only in absolute positions
-  useTick(() => {
+  useTick((delta) => {
     const currentX = absolutePosition.x;
     const currentY = absolutePosition.y;
     const targetX = absoluteTargetPosition.x;
     const targetY = absoluteTargetPosition.y;
+
     if (Math.abs(targetX - currentX) >= 1 || Math.abs(targetY - currentY) >= 1) {
       setIsMoving(true);
-      const newX = lerp(currentX, targetX, 0.05);
-      const newY = lerp(currentY, targetY, 0.05);
+
+      //const newX = lerp(currentX, targetX, 0.05);
+      //const newY = lerp(currentY, targetY, 0.05);
+      const newX = currentX + velocity.x * 0.0125;
+      const newY = currentY + velocity.y * 0.0125;
+
       setAbsolutePosition({ x: newX, y: newY });
     } else {
       setIsMoving(false);
@@ -137,17 +150,42 @@ const Mob: React.FC<MobProps> = ({ type, targetPosition, health, id }) => {
     <>
       <Graphics
         draw={(g) => {
-          g.clear(); // Clear the previous drawings
+          g.clear();
 
-          // Background of the health bar (e.g., a gray bar to show missing health)
+          // Background of the health bar
           g.beginFill(0xaaaaaa);
-          g.drawRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
+          g.drawRoundedRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight, 5);
           g.endFill();
 
-          // Foreground of the health bar (e.g., a green bar to show current health)
-          g.beginFill(0x00ff00);
+          // Foreground color based on health percentage
+          const healthPercent = currentHealthWidth / healthBarWidth;
+          let fillColor;
+          if (healthPercent > 0.7) {
+            fillColor = 0x00ff00; // Green
+          } else if (healthPercent > 0.3) {
+            fillColor = 0xffff00; // Yellow
+          } else {
+            fillColor = 0xff0000; // Red
+          }
+
+          // Foreground of the health bar
+          g.beginFill(fillColor);
           g.drawRect(healthBarX, healthBarY, currentHealthWidth, healthBarHeight);
           g.endFill();
+
+          // Border
+          g.lineStyle(2, 0x000000, 1); // 2px width, black color, 100% opacity
+          g.drawRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
+
+          // Draw separators for every 10 XP
+          /*const separatorWidth = healthBarWidth / (maxHealth / 10);
+          const numberOfSeparators = maxHealth / 10 - 1; // Subtracting 1 because we don't need a separator at the very end
+          g.lineStyle(1, 0x000000, 0.5); // 1px width, black color, 50% opacity
+          for (let i = 1; i <= numberOfSeparators; i++) {
+            const xPos = healthBarX + separatorWidth * i;
+            g.moveTo(xPos, healthBarY);
+            g.lineTo(xPos, healthBarY + healthBarHeight);
+          }*/
         }}
       />
 
