@@ -49,9 +49,7 @@ function App() {
     <div className="flex flex-col min-h-screen w-full">
       <div className="flex justify-between space p-2">
         <LeaderBoardButton onClick={toggleLeaderBoardModal}></LeaderBoardButton>
-        <div className="flex justify-center items-center text-7xl text">
-          zDefender
-        </div>
+        <div className="flex justify-center items-center text-7xl text">zDefender</div>
         <button
           className="bg-blue-500 hover:bg-blue-700 mx-10 my-10 text-white font-bold py-2 px-4 rounded"
           onClick={toggleRuleModal}
@@ -63,11 +61,7 @@ function App() {
           className="p-2 mr-2 text-2xl w-6 "
           style={{ position: 'absolute', top: 5, right: 10 }}
         >
-          {isMusicPlaying ? (
-            <i className="fa fa-volume-up"></i>
-          ) : (
-            <i className="fa fa-volume-off"></i>
-          )}
+          {isMusicPlaying ? <i className="fa fa-volume-up"></i> : <i className="fa fa-volume-off"></i>}
         </button>
       </div>
 
@@ -75,17 +69,9 @@ function App() {
         <Canvas setMusicPlaying={setMusicPlaying} />
       </div>
 
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={toggleModal}
-        className="modal-base modal-medium"
-        ariaHideApp={false}
-      >
+      <Modal isOpen={isModalOpen} onRequestClose={toggleModal} className="modal-base modal-medium" ariaHideApp={false}>
         <div className="relative">
-          <button
-            onClick={toggleModal}
-            className="absolute top-[-10px] right-0 p-2"
-          >
+          <button onClick={toggleModal} className="absolute top-[-10px] right-0 p-2">
             <div className="relative w-6 h-6">
               <div className="absolute inset-0 w-1 h-full bg-black transform rotate-45 origin-center"></div>
               <div className="absolute inset-0 w-1 h-full bg-black transform -rotate-45 origin-center"></div>
@@ -95,16 +81,9 @@ function App() {
         </div>
       </Modal>
 
-      <Modal
-        isOpen={isRuleModalOpen}
-        onRequestClose={toggleRuleModal}
-        className="modal-base modal-large"
-      >
+      <Modal isOpen={isRuleModalOpen} onRequestClose={toggleRuleModal} className="modal-base modal-large">
         <div className="relative">
-          <button
-            onClick={toggleRuleModal}
-            className="absolute top-[-10px] right-0 p-2"
-          >
+          <button onClick={toggleRuleModal} className="absolute top-[-10px] right-0 p-2">
             <div className="relative w-6 h-6">
               <div className="absolute inset-0 w-1 h-full bg-black transform rotate-45 origin-center"></div>
               <div className="absolute inset-0 w-1 h-full bg-black transform -rotate-45 origin-center"></div>
@@ -121,10 +100,7 @@ function App() {
         ariaHideApp={false}
       >
         <div className="relative">
-          <button
-            onClick={toggleLeaderBoardModal}
-            className="absolute top-[-10px] right-0 p-2"
-          >
+          <button onClick={toggleLeaderBoardModal} className="absolute top-[-10px] right-0 p-2">
             <div className="relative w-6 h-6">
               <div className="absolute inset-0 w-1 h-full bg-black transform rotate-45 origin-center"></div>
               <div className="absolute inset-0 w-1 h-full bg-black transform -rotate-45 origin-center"></div>

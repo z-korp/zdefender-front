@@ -17,6 +17,7 @@ export const useGame = () => {
   const game = useComponentValue(Game, entityId);
 
   return {
+    key: game?.key,
     id: game?.id,
     name: game?.name,
     over: game?.over,
