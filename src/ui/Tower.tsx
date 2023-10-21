@@ -3,8 +3,8 @@ import { Sprite } from '@pixi/react';
 import * as PIXI from 'pixi.js';
 import tower from '../assets/tower.png';
 import { Coordinate } from '../types/GridElement';
-import Mob, { MobType } from './Mob';
-import { useEffect } from 'react';
+import Defender from './Defender';
+import { MobType } from './Mob';
 
 interface TowerProps {
   type: MobType;
@@ -27,7 +27,7 @@ const Tower: React.FC<TowerProps> = ({ type, targetPosition, isHovered, isHitter
         x={H_OFFSET + targetPosition.x * 16 * SCALE}
         y={targetPosition.y * 16 * SCALE}
       />
-      <Mob
+      <Defender
         type={type}
         targetPosition={targetPosition}
         isHovered={isHovered}

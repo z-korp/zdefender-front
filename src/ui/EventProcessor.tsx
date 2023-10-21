@@ -1,3 +1,4 @@
+import { ComponentData, TransformedEvent, logTransformedEvent } from '@/dojo/createSystemCalls';
 import { useEventsStore } from '@/utils/eventsStore';
 import { SPEED } from '@/utils/speed';
 import { setComponent } from '@latticexyz/recs';
@@ -17,9 +18,13 @@ function EventProcessor() {
 
       // Process events for the current tick
       eventsForCurrentTick.forEach((event) => {
-        //console.log('set', event.component, event.entityIndex, event.componentValues);
-        console.log(event);
-        setComponent(event.component, event.entityIndex, event.componentValues);
+        logTransformedEvent(event);
+        if (event.eventType === 'component') {
+          const e = event as TransformedEvent & ComponentData;
+          setComponent(e.component, e.entityIndex, e.componentValues);
+        } else {
+          console.log('------------>', event);
+        }
       });
 
       // Check if there are events for the next tick

@@ -22,7 +22,7 @@ import {
 import { useElementStore } from '../utils/store';
 import { BottomMenu } from './BottomMenu';
 import { DefenderType } from './Defender';
-import EventProcessor from './EventProcessor';
+import EventProcessor2 from './EventProcessor2';
 import GameOverModal from './GameOverModal'; // importez le composant
 import Gold from './Gold';
 import Life from './Life';
@@ -55,15 +55,16 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const [currentAbsoluteTilePosition, setCurrentAbsoluteTilePosition] = useState<Coordinate | undefined>();
 
   const [score, setScore] = useState<number>(0);
+  const [selectedType, setSelectedType] = useState<DefenderType>('knight');
   const [level, setLevel] = useState<number>(0);
   const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(undefined);
   const [hoveredTileAbsolute, setHoveredTileAbsolute] = useState<Coordinate | undefined>(undefined);
-  const [showGhost, setShowGhost] = useState<boolean>(false);
+
   const [selectedTile, setSelectedTile] = useState<Coordinate | undefined>(undefined);
   const [isGameOver, setIsGameOver] = useState(false);
   const [absolutePosition, setAbsolutePosition] = useState<Coordinate | undefined>(undefined);
   const [isBuying, setIsBuying] = useState(false);
-  const { selectedType, setSelectedType, set_ip } = useElementStore((state) => state);
+  const { set_ip } = useElementStore((state) => state);
 
   const [pseudo, setPseudo] = useState('');
   const { ip, loading, error } = useIp();
@@ -95,7 +96,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
   const [range, setRange] = useState<Coordinate[]>([]);
   useEffect(() => {
-    if (hoveredTile && selectedType) {
+    if (hoveredTile) {
       const newRange = getRange(selectedType, hoveredTile, map);
       setRange(newRange);
     } else {
@@ -134,7 +135,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
   useEffect(() => {
     const mobEntities = getComponentEntities(Mob);
-    console.log(mobEntities);
     const newMobs = [...mobEntities].map((key) => getComponentValue(Mob, key));
 
     // Filter out duplicates by "id"
@@ -155,7 +155,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
   return (
     <div style={{ position: 'relative' }}>
-      <EventProcessor />
+      <EventProcessor2 />
       <Stage
         width={WIDTH}
         height={HEIGHT}
@@ -173,12 +173,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               x: e.nativeEvent.offsetX,
               y: e.nativeEvent.offsetY,
             });
-          }
-          if (hoveredTile!.x > 7 || hoveredTile!.y > 7 || hoveredTile!.x < 0 || hoveredTile!.y < 0) {
-            setShowGhost(false);
-            // setSelectedTile(undefined);
-          } else {
-            setShowGhost(true);
           }
         }}
         onPointerDown={(e) => {
@@ -207,19 +201,13 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               <Map />
               <BottomMenu
                 selectedTile={selectedTile}
+                setSelectedType={setSelectedType}
                 isBuying={isBuying}
                 onClose={() => setSelectedTile(undefined)}
                 onBuy={handleBuy}
               />
             </>
-            {selectedType && (
-              <TowerBuilding
-                type={selectedType}
-                targetPosition={{ x: 1, y: 1 }}
-                isHovered={hoveredTile ? areCoordsEqual({ x: 1, y: 1 }, hoveredTile) : false}
-                isHitter={false}
-              />
-            )}
+
             <Wave wave={wave} x={10} y={50} />
             <MobsRemaining remaining={mob_remaining} x={10} y={80} />
             <Gold number={gold} x={20} y={20} />
@@ -236,21 +224,27 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             ))}
             {newTowers.map((tower) => (
               <TowerBuilding
-                type="barbarian"
+                type={
+                  tower.category === TowerCategory.Barbarian
+                    ? 'barbarian'
+                    : tower.category === TowerCategory.Wizard
+                    ? 'wizard'
+                    : 'bowman'
+                }
                 targetPosition={indexToCoordinate(tower.index)}
                 isHovered={hoveredTile ? areCoordsEqual({ x: 1, y: 1 }, hoveredTile) : false}
                 isHitter={false}
               />
             ))}
 
-            {showGhost && selectedTile && currentAbsoluteTilePosition && (
+            {selectedTile && currentAbsoluteTilePosition && (
               <>
                 {range.map((r, index) => (
                   <>
                     {hoveredTile &&
                       to_grid_coordinate(currentAbsoluteTilePosition).x === hoveredTile.x &&
                       to_grid_coordinate(currentAbsoluteTilePosition).y === hoveredTile.y && (
-                        <TowerButton x={currentAbsoluteTilePosition.x} y={currentAbsoluteTilePosition.y + 20} />
+                        <TowerButton x={currentAbsoluteTilePosition.x} y={currentAbsoluteTilePosition.y + 33} />
                       )}
                     <TileMarker key={index} x={r.x} y={r.y} color="cyan" />
                   </>

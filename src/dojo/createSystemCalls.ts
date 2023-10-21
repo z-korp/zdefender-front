@@ -184,7 +184,12 @@ function sleep(ms: number) {
 export async function executeEvents(events: TransformedEvent[]) {
   //const filteredEvents = events.filter((e) => e.tick === 0 && e.type === 'Tower');
   for (const e of events) {
-    setComponent(e.component, e.entityIndex, e.componentValues);
+    if (e.eventType === 'component') {
+      const event = e as TransformedEvent & ComponentData;
+      setComponent(event.component, event.entityIndex, event.componentValues);
+    } else {
+      console.log('aaaa');
+    }
   }
   /*const gameEvents = events.filter(
     (e): e is GameEvent & ComponentData => e.type === 'Game'
@@ -388,16 +393,32 @@ function handleTowerEvent(
   };
 }
 
-type ComponentData = {
+export type ComponentData = {
   component: Component;
   componentValues: Schema;
   entityIndex: EntityIndex;
 };
 
-export type TransformedEvent = GameEvent | TileEvent | MobEvent | TowerEvent;
+type TransformedEventBase = {
+  eventType: 'component' | 'custom';
+};
+
+export type TransformedEvent = (GameEvent | TileEvent | MobEvent | TowerEvent | HitEvent) & TransformedEventBase;
+
+export enum CustomEvents {
+  Hit = '0x33f1adaeb6b7468c983c7285a0776514bd4bc3082362e9ead4211d605daf6fa',
+}
+
+interface HitEvent {
+  gameId: number;
+  tick: number;
+  from: number;
+  to: number;
+  damage: number;
+}
 
 export async function setComponentsFromEvents(components: Components, events: Event[]): Promise<TransformedEvent[]> {
-  const transformedEvents = [];
+  const transformedEvents: TransformedEvent[] = [];
 
   for (const event of events) {
     const componentName = hexToAscii(event.data[0]);
@@ -407,56 +428,142 @@ export async function setComponentsFromEvents(components: Components, events: Ev
     const numberOfValues = parseInt(event.data[index++]);
     const values = event.data.slice(index, index + numberOfValues);
 
-    // Component
-    const component = components[componentName];
-    const componentValues = Object.keys(component.schema).reduce<{
-      [key: string]: string | number;
-    }>((acc, key, index) => {
-      const value = values[index];
-      acc[key] = component.schema[key] === Type.String ? shortString.decodeShortString(value) : Number(value);
-      return acc;
-    }, {});
-    const entity = getEntityIdFromKeys(keys);
+    if (!components[componentName]) {
+      // Custom event
+      //console.log('custom event', event);
+      const eventType = event.keys[0];
+      const [gameId, tick, from, to, damage] = event.data.map((v) => Number(v));
+      switch (eventType) {
+        case CustomEvents.Hit:
+          transformedEvents.push({
+            eventType: 'custom',
+            gameId,
+            tick,
+            from,
+            to,
+            damage,
+          });
+          console.log(`[Hit: VALUES: (gameId: ${gameId}, tick: ${tick}, from: ${from}, to: ${to}, damage: ${damage})]`);
+          break;
+      }
+    } else {
+      // Component event
+      const component = components[componentName];
+      const componentValues = Object.keys(component.schema).reduce<{
+        [key: string]: string | number;
+      }>((acc, key, index) => {
+        const value = values[index];
+        acc[key] = component.schema[key] === Type.String ? shortString.decodeShortString(value) : Number(value);
+        return acc;
+      }, {});
+      const entity = getEntityIdFromKeys(keys);
 
-    const baseEventData = {
-      component,
-      componentValues,
-      entityIndex: entity,
-    };
+      const baseEventData = {
+        component,
+        componentValues,
+        entityIndex: entity,
+      };
 
-    switch (componentName) {
-      case 'Game':
-        transformedEvents.push({
-          ...handleGameEvent(keys, values),
-          ...baseEventData,
-        });
-        break;
-      case 'Tile':
-        transformedEvents.push({
-          ...handleTileEvent(keys, values),
-          ...baseEventData,
-        });
-        break;
-      case 'Mob':
-        transformedEvents.push({
-          ...handleMobEvent(keys, values),
-          ...baseEventData,
-        });
-        break;
-      case 'Tower':
-        transformedEvents.push({
-          ...handleTowerEvent(keys, values),
-          ...baseEventData,
-        });
-        break;
-      default:
-        console.log('componentName', componentName);
-        console.log('keys', keys);
-        console.log('values', values);
+      switch (componentName) {
+        case 'Game':
+          transformedEvents.push({
+            eventType: 'component',
+            ...handleGameEvent(keys, values),
+            ...baseEventData,
+          });
+          break;
+        case 'Tile':
+          transformedEvents.push({
+            eventType: 'component',
+            ...handleTileEvent(keys, values),
+            ...baseEventData,
+          });
+          break;
+        case 'Mob':
+          transformedEvents.push({
+            eventType: 'component',
+            ...handleMobEvent(keys, values),
+            ...baseEventData,
+          });
+          break;
+        case 'Tower':
+          transformedEvents.push({
+            eventType: 'component',
+            ...handleTowerEvent(keys, values),
+            ...baseEventData,
+          });
+          break;
+        default:
+          console.log('componentName', componentName);
+          console.log('keys', keys);
+          console.log('values', values);
+      }
     }
   }
 
   useEventsStore.getState().setEvents(transformedEvents.filter((e) => e.tick > 0));
 
   return transformedEvents;
+}
+
+type EventKeys = {
+  game_id?: number;
+  key?: number;
+  type?: 'Game' | 'Tile' | 'Mob' | 'Tower';
+};
+
+type EventValues = {
+  [key: string]: string | number | boolean;
+};
+
+export function logEvent(type: string, keys: EventKeys, values: EventValues) {
+  const keysString = Object.entries(keys)
+    .map(([keyName, keyValue]) => `${keyName}: ${keyValue}`)
+    .join(', ');
+
+  const valuesString = Object.entries(values)
+    .map(([keyName, keyValue]) => `${keyName}: ${keyValue}`)
+    .join(', ');
+
+  console.log(`[${type}: KEYS: (${keysString}) - VALUES: (${valuesString})]`);
+}
+
+export function logTransformedEvent(event: TransformedEvent) {
+  if (event.eventType === 'component') {
+    if ('type' in event) {
+      switch (event.type) {
+        case 'Game':
+        case 'Tile':
+        case 'Mob':
+        case 'Tower': {
+          const keys = {
+            type: event.type,
+            ...('key' in event ? { key: event.key } : {}),
+            ...('game_id' in event ? { game_id: event.game_id } : {}),
+          };
+          const values = { ...event };
+          delete values.component;
+          delete values.componentValues;
+          delete values.entityIndex;
+          delete (values as any).eventType;
+          logEvent(event.type, keys, values);
+          break;
+        }
+      }
+    } else {
+      console.error('Component event without type:', event);
+    }
+  } else if (event.eventType === 'custom') {
+    if ('gameId' in event && 'tick' in event && 'from' in event && 'to' in event && 'damage' in event) {
+      logEvent(
+        'Hit',
+        { game_id: event.gameId },
+        { tick: event.tick, from: event.from, to: event.to, damage: event.damage }
+      );
+    } else {
+      console.error('Unknown custom event structure:', event);
+    }
+  } else {
+    console.error(`Unknown event type: ${event.eventType}`);
+  }
 }

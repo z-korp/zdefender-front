@@ -1,3 +1,4 @@
+import { ComponentData, TransformedEvent, logTransformedEvent } from '@/dojo/createSystemCalls';
 import { useEventsStore } from '@/utils/eventsStore';
 import { setComponent } from '@latticexyz/recs';
 import { useEffect, useState } from 'react';
@@ -10,12 +11,18 @@ function EventProcessor2() {
 
   // Process events for a given tick
   const processEventsForTick = () => {
+    console.log('--------------------> Tick: ', currentTick);
     const eventsForCurrentTick = events.filter((event) => event.tick === currentTick);
 
     // Process events for the current tick
     eventsForCurrentTick.forEach((event) => {
-      console.log(event);
-      setComponent(event.component, event.entityIndex, event.componentValues);
+      logTransformedEvent(event);
+      if (event.eventType === 'component') {
+        const e = event as TransformedEvent & ComponentData;
+        setComponent(e.component, e.entityIndex, e.componentValues);
+      } else {
+        //console.log('------------>', event);
+      }
     });
 
     // Check if there are events for the next tick
