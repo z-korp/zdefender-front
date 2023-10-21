@@ -1,6 +1,7 @@
 import { useDojo } from '@/DojoContext';
 import { useGame } from '@/hooks/useGame';
 import { Coordinate } from '@/types/GridElement';
+import { TowerCategory } from '@/types/Tower';
 import { useEventsStore } from '@/utils/eventsStore';
 import { getRange } from '@/utils/range';
 import { getComponentEntities, getComponentValue } from '@latticexyz/recs';
@@ -33,7 +34,6 @@ import TileMarker from './TileMarker';
 import Tower from './Tower';
 import { TowerButton } from './TowerButton';
 import Wave from './Wave';
-import { TowerCategory } from '@/types/Tower';
 
 interface CanvasProps {
   setMusicPlaying: (bool: boolean) => void;
@@ -112,7 +112,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   };
 
   const handleBuy = (type: MobType, x: number, y: number) => {
-    let category =
+    const category =
       type === 'knight'
         ? TowerCategory.Barbarian
         : type === 'bowman'
@@ -208,7 +208,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             {animals.map((animal) => (
               <Animal
                 id={animal.id}
-                key={animal.index}
+                key={animal.id}
                 type={'chicken'}
                 targetPosition={indexToCoordinate(animal.index)}
                 health={animal.health}
