@@ -3,7 +3,7 @@ import { useComponentValue } from '@dojoengine/react';
 import { EntityIndex } from '@latticexyz/recs';
 import { useDojo } from '../DojoContext';
 
-export const useComponentStates = () => {
+export const useGame = () => {
   const {
     setup: {
       components: { Game, Mob, Tower },
@@ -16,21 +16,15 @@ export const useComponentStates = () => {
 
   const game = useComponentValue(Game, entityId);
 
-  console.log('game', game);
-
   return {
-    game: game
-      ? {
-          id: game.id,
-          name: game.name,
-          over: game.over,
-          tower_count: game.tower_count,
-          mob_count: game.mob_count,
-          mob_remaining: game.mob_remaining,
-          wave: game.wave,
-          gold: game.gold,
-          health: game.health,
-        }
-      : undefined,
+    id: game.id,
+    name: game.name,
+    over: game.over,
+    tower_count: game.tower_count,
+    mob_count: game.mob_count,
+    mob_remaining: game.mob_remaining,
+    wave: game.wave,
+    gold: game.gold,
+    health: game.health,
   };
 };

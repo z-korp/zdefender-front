@@ -1,9 +1,9 @@
 import { useDojo } from '@/DojoContext';
+import { useGame } from '@/hooks/useGame';
 import { Coordinate } from '@/types/GridElement';
 import { Container, Stage } from '@pixi/react';
 import { useEffect, useState } from 'react';
 import { shortString } from 'starknet';
-import { useComponentStates } from '../hooks/useComponentState';
 import useIp from '../hooks/useIp';
 import { HEIGHT, WIDTH, areCoordsEqual, to_grid_coordinate } from '../utils/grid';
 import { useElementStore } from '../utils/store';
@@ -32,8 +32,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     account: { account },
   } = useDojo();
 
-  const contractState = useComponentStates();
-  const { game } = contractState;
+  const { id, over, wave, mob_remaining, gold, health } = useGame();
 
   const [score, setScore] = useState<number>(0);
   const [level, setLevel] = useState<number>(0);
@@ -66,10 +65,10 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   };
 
   useEffect(() => {
-    if (game && game.over === 1) {
+    if (over === 1) {
       setIsGameOver(true);
     }
-  }, [game]);
+  }, [over]);
 
   const handleTileClick = (tile: Coordinate) => {
     setSelectedTile(tile);
@@ -117,7 +116,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           }
         }}
       >
-        {game !== undefined && (
+        {id !== undefined && (
           <Container sortableChildren={true}>
             <>
               <Map />
@@ -130,17 +129,17 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               isHovered={hoveredTile ? areCoordsEqual({ x: 1, y: 1 }, hoveredTile) : false}
               isHitter={false}
             />
-            <Wave wave={game.wave} x={10} y={50} />
-            <MobsRemaining remaining={game.mob_remaining} x={10} y={80} />
-            <Gold number={game.gold} x={20} y={20} />
-            <Life health={game.health} x={140} y={20} />
+            <Wave wave={wave} x={10} y={50} />
+            <MobsRemaining remaining={mob_remaining} x={10} y={80} />
+            <Gold number={gold} x={20} y={20} />
+            <Life health={health} x={140} y={20} />
             <Animal type={'chicken'} targetPosition={{ x: 2, y: 2 }} health={70} />
           </Container>
         )}
       </Stage>
-      {game !== undefined && <NextWaveButton onClick={() => run(account, ip.toString())} />}
+      {id !== undefined && <NextWaveButton onClick={() => run(account, ip.toString())} />}
 
-      {game === undefined && <NewGame onClick={generateNewGame} onPseudoChange={setPseudo} />}
+      {id === undefined && <NewGame onClick={generateNewGame} onPseudoChange={setPseudo} />}
 
       <GameOverModal score={score} isOpen={isGameOver} onClose={() => setIsGameOver(false)} />
     </div>
