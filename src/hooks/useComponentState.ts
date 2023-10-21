@@ -25,6 +25,7 @@ export const useComponentStates = () => {
           tower_count: game.tower_count,
           mob_count: game.mob_count,
           mob_remaining: game.mob_remaining,
+          mob_alive: game.mob_alive,
           wave: game.wave,
           gold: game.gold,
           health: game.health,

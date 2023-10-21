@@ -16,6 +16,7 @@ export function defineContractComponents(world: World) {
           tower_count: RecsType.Number,
           mob_count: RecsType.Number,
           mob_remaining: RecsType.Number,
+          mob_alive: RecsType.Number,
           wave: RecsType.Number,
           gold: RecsType.Number,
           health: RecsType.Number,

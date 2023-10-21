@@ -243,6 +243,7 @@ type GameEvent = ComponentData & {
   tower_count: number;
   mob_count: number;
   mob_remaining: number;
+  mob_alive: number;
   wave: number;
   gold: number;
   health: number;
@@ -254,13 +255,12 @@ function handleGameEvent(
   values: string[]
 ): Omit<GameEvent, 'component' | 'componentValues' | 'entityIndex'> {
   const [key] = keys.map((k) => Number(k));
-  const [id, _, seed, overNumber, tower_count, mob_count, mob_remaining, wave, gold, health, tick] = values.map((v) =>
-    Number(v)
-  );
+  const [id, _, seed, overNumber, tower_count, mob_count, mob_remaining, mob_alive, wave, gold, health, tick] =
+    values.map((v) => Number(v));
   const over = overNumber === 1;
   const name = shortString.decodeShortString(values[0]);
   console.log(
-    `[Game: KEYS: (key: ${key}) - VALUES: (id: ${id}, name: ${name}, seed: ${seed}, over: ${over}, tower_count: ${tower_count}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, wave: ${wave}, gold: ${gold}, health: ${health}, tick: ${tick})]`
+    `[Game: KEYS: (key: ${key}) - VALUES: (id: ${id}, name: ${name}, seed: ${seed}, over: ${over}, tower_count: ${tower_count}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, mob_alive: ${mob_alive}, wave: ${wave}, gold: ${gold}, health: ${health}, tick: ${tick})]`
   );
   return {
     type: 'Game',
@@ -271,6 +271,7 @@ function handleGameEvent(
     tower_count,
     mob_count,
     mob_remaining,
+    mob_alive,
     wave,
     gold,
     health,
