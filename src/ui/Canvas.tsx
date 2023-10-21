@@ -1,11 +1,12 @@
 import { useDojo } from '@/DojoContext';
 import { useGame } from '@/hooks/useGame';
 import { Coordinate } from '@/types/GridElement';
+import { getRange } from '@/utils/range';
 import { Container, Stage } from '@pixi/react';
 import { useEffect, useState } from 'react';
 import { shortString } from 'starknet';
 import useIp from '../hooks/useIp';
-import { HEIGHT, WIDTH, areCoordsEqual, to_grid_coordinate } from '../utils/grid';
+import { HEIGHT, WIDTH, areCoordsEqual, to_absolute_coordinate, to_grid_coordinate } from '../utils/grid';
 import { useElementStore } from '../utils/store';
 import Animal from './Animal';
 import { BottomMenu } from './BottomMenu';
@@ -13,10 +14,13 @@ import GameOverModal from './GameOverModal'; // importez le composant
 import Gold from './Gold';
 import Life from './Life';
 import Map from './Map';
+import { MobType } from './Mob';
 import MobsRemaining from './MobsRemaining';
 import NewGame from './NewGame';
 import NextWaveButton from './NextWaveButton';
+import TileMarker from './TileMarker';
 import Tower from './Tower';
+import { TowerButton } from './TowerButton';
 import Wave from './Wave';
 
 interface CanvasProps {
@@ -31,10 +35,13 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     },
     account: { account },
   } = useDojo();
+  const { map } = useElementStore((state) => state);
 
   const { id, over, wave, mob_remaining, gold, health } = useGame();
+  const [currentAbsoluteTilePosition, setCurrentAbsoluteTilePosition] = useState<Coordinate | undefined>();
 
   const [score, setScore] = useState<number>(0);
+  const [selectedType, setSelectedType] = useState<MobType>('knight');
   const [level, setLevel] = useState<number>(0);
   const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(undefined);
   const [selectedTile, setSelectedTile] = useState<Coordinate | undefined>(undefined);
@@ -70,6 +77,19 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     }
   }, [over]);
 
+  const [range, setRange] = useState<Coordinate[]>([]);
+  useEffect(() => {
+    if (hoveredTile) {
+      const newRange = getRange(selectedType, hoveredTile, map);
+      setRange(newRange);
+    } else {
+      setRange([]); // clear range if no tile is hovered
+    }
+  }, [hoveredTile, selectedType]);
+
+  useEffect(() => {
+    console.log('hoveredTile', hoveredTile);
+  }, [hoveredTile]);
   const handleTileClick = (tile: Coordinate) => {
     setSelectedTile(tile);
   };
@@ -93,6 +113,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           const tileGridCoords = to_grid_coordinate(tileCoords);
           if (hoveredTile === undefined || !areCoordsEqual(hoveredTile, tileGridCoords)) {
             setHoveredTile(tileGridCoords);
+            setCurrentAbsoluteTilePosition(to_absolute_coordinate(tileGridCoords));
             setAbsolutePosition({
               x: e.nativeEvent.offsetX,
               y: e.nativeEvent.offsetY,
@@ -107,10 +128,10 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             console.log('onPointerDown');
             setSelectedTile(undefined);
           }
-          if (hoveredTile!.x > 7 || hoveredTile!.y > 7 || hoveredTile!.x < 0 || hoveredTile!.y < 0) {
-            console.log('OUT OF THE MAP');
-            // setSelectedTile(undefined);
-          } else {
+          // if (hoveredTile!.x > 7 || hoveredTile!.y > 7 || hoveredTile!.x < 0 || hoveredTile!.y < 0) {
+          //   // setSelectedTile(undefined);
+          // }
+          else {
             console.log('hoveredTile', hoveredTile);
             setSelectedTile(hoveredTile ? hoveredTile : undefined);
           }
@@ -120,7 +141,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           <Container sortableChildren={true}>
             <>
               <Map />
-              <BottomMenu selectedTile={selectedTile} onClose={handleMenuClose} />
+              <BottomMenu selectedTile={selectedTile} setSelectedType={setSelectedType} onClose={handleMenuClose} />
             </>
 
             <Tower
@@ -134,6 +155,25 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             <Gold number={gold} x={20} y={20} />
             <Life health={health} x={140} y={20} />
             <Animal type={'chicken'} targetPosition={{ x: 2, y: 2 }} health={70} />
+
+            {selectedTile && currentAbsoluteTilePosition && (
+              <>
+                {range.map((r, index) => (
+                  <>
+                    {hoveredTile &&
+                      to_grid_coordinate(currentAbsoluteTilePosition).x === hoveredTile.x &&
+                      to_grid_coordinate(currentAbsoluteTilePosition).y === hoveredTile.y && (
+                        <TowerButton
+                          x={currentAbsoluteTilePosition.x}
+                          y={currentAbsoluteTilePosition.y + 20}
+                          onClick={() => {}}
+                        />
+                      )}
+                    <TileMarker key={index} x={r.x} y={r.y} color="cyan" />
+                  </>
+                ))}
+              </>
+            )}
           </Container>
         )}
       </Stage>
