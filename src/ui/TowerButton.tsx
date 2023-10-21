@@ -5,21 +5,19 @@ import barbarian_transparent from '../assets/barbarian_transparent.png';
 import bowman_transparent from '../assets/bowman_transparent.png';
 import tower from '../assets/tower.png';
 import wizard_transparent from '../assets/wizard_transparent.png';
-import { MobType } from './Mob';
+import { useElementStore } from '@/utils/store';
 
 interface TowerButtonProps {
   x: number;
   y: number;
-  selected?: boolean;
-  selectedType?: MobType;
 }
 
 //TODO: rename to TowerAsset
-export const TowerButton: React.FC<TowerButtonProps> = ({ x, y, selectedType, selected = false }) => {
+export const TowerButton: React.FC<TowerButtonProps> = ({ x, y }) => {
   const [imageState, setImageState] = useState<any>(barbarian_transparent);
 
+  const { selectedType } = useElementStore((state) => state);
   useEffect(() => {
-    console.log('selectedType', selectedType);
     setImageState(
       selectedType === 'barbarian'
         ? barbarian_transparent
