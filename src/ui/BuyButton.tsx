@@ -11,7 +11,6 @@ export const BuyButton: React.FC<BuyButtonProps> = ({ onClick, x, y }) => {
   const image = UI_Flat_Checkmark_Large;
   PIXI.Texture.from(image).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
   const handleClick = () => {
-    console.log('BUY ICI');
     onClick();
   };
 

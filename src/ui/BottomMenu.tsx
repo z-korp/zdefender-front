@@ -14,15 +14,10 @@ interface BottomMenuProps {
   onClose: () => void;
 }
 
-export const BottomMenu: React.FC<BottomMenuProps> = ({
-  hoveredTile,
-  selectedTile,
-  setSelectedType,
-  onClose,
-  isBuying,
-}) => {
+export const BottomMenu: React.FC<BottomMenuProps> = ({ hoveredTile, selectedTile, onClose, isBuying }) => {
   const [isOpen, setIsOpen] = useState<boolean>(selectedTile !== undefined);
 
+  const [selectedType, setSelectedType] = useState<MobType>('knight');
   const mobTypes = ['knight', 'bowman', 'wizard', 'barbarian'] as MobType[];
 
   const handleClick = (index: number) => {
@@ -44,6 +39,7 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({
   };
   const handleBuy = () => {
     console.log('Buy');
+    console.log(selectedType);
   };
 
   return (

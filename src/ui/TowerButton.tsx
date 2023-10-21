@@ -10,12 +10,12 @@ import { MobType } from './Mob';
 interface TowerButtonProps {
   x: number;
   y: number;
-  onClick: () => void;
   selected?: boolean;
   selectedType?: MobType;
 }
 
-export const TowerButton: React.FC<TowerButtonProps> = ({ x, y, onClick, selectedType, selected = false }) => {
+//TODO: rename to TowerAsset
+export const TowerButton: React.FC<TowerButtonProps> = ({ x, y, selectedType, selected = false }) => {
   const [imageState, setImageState] = useState<any>(barbarian_transparent);
 
   useEffect(() => {
@@ -31,8 +31,8 @@ export const TowerButton: React.FC<TowerButtonProps> = ({ x, y, onClick, selecte
 
   return (
     <>
-      <Sprite scale={SCALE} image={tower} x={x} y={y - 33} interactive={true} pointerdown={onClick} />
-      <Sprite scale={SCALE - 1} image={imageState} x={x - 16} y={y - 78} interactive={true} pointerdown={onClick} />
+      <Sprite scale={SCALE} image={tower} x={x} y={y - 33} />
+      <Sprite scale={SCALE - 1} image={imageState} x={x - 16} y={y - 78} />
     </>
   );
 };
