@@ -1,6 +1,7 @@
-import { H_OFFSET, SCALE } from '@/utils/grid';
+import { H_OFFSET, SCALE, coordinateToIndex } from '@/utils/grid';
 import { useElementStore } from '@/utils/store';
-import { Graphics, Sprite } from '@pixi/react';
+import { Graphics, Sprite, Text } from '@pixi/react';
+import * as PIXI from 'pixi.js';
 import { SCALE_MODES, Texture } from 'pixi.js';
 import React, { useEffect } from 'react';
 import mapData from '../assets/map-zdefender.json';
@@ -63,20 +64,54 @@ const Map: React.FC = () => {
                     x={H_OFFSET + cell.x * mapData.tilewidth * SCALE}
                     y={cell.y * mapData.tileheight * SCALE}
                   />
-                  <Graphics
-                    draw={(g) => {
-                      g.clear(); // Clear the canvas
-                      // Define border color and width
-                      g.lineStyle(2, 0xff0000); // 2px width, red color
-                      // Draw a rectangle for the border
-                      g.drawRect(
-                        H_OFFSET + cell.x * mapData.tilewidth * SCALE,
-                        cell.y * mapData.tileheight * SCALE,
-                        mapData.tilewidth * SCALE,
-                        mapData.tileheight * SCALE
-                      );
-                    }}
-                  />
+                  {import.meta.env.VITE_PUBLIC_DEBUG && (
+                    <Graphics
+                      draw={(g) => {
+                        g.clear(); // Clear the canvas
+                        // Define border color and width
+                        g.lineStyle(2, 0xff0000); // 2px width, red color
+                        // Draw a rectangle for the border
+                        g.drawRect(
+                          H_OFFSET + cell.x * mapData.tilewidth * SCALE,
+                          cell.y * mapData.tileheight * SCALE,
+                          mapData.tilewidth * SCALE,
+                          mapData.tileheight * SCALE
+                        );
+                      }}
+                    />
+                  )}
+                  {import.meta.env.VITE_PUBLIC_DEBUG && (
+                    <Text
+                      text={`(${cell.x},${cell.y})`}
+                      x={H_OFFSET + cell.x * mapData.tilewidth * SCALE + 2}
+                      y={cell.y * mapData.tileheight * SCALE + 3}
+                      style={
+                        new PIXI.TextStyle({
+                          align: 'center',
+                          fontFamily: '"Press Start 2P", Helvetica, sans-serif',
+                          fontSize: 6,
+                          fontWeight: '400',
+                          fill: '0xff0000',
+                        })
+                      }
+                    />
+                  )}
+                  {import.meta.env.VITE_PUBLIC_DEBUG && (
+                    <Text
+                      text={`${coordinateToIndex({ x: cell.x, y: cell.y })}`}
+                      x={H_OFFSET + cell.x * mapData.tilewidth * SCALE + 2 + 40}
+                      y={cell.y * mapData.tileheight * SCALE + 3}
+                      style={
+                        new PIXI.TextStyle({
+                          align: 'center',
+                          fontFamily: '"Press Start 2P", Helvetica, sans-serif',
+                          fontSize: 6,
+                          fontWeight: '400',
+                          fill: '0xff0000',
+                        })
+                      }
+                    />
+                  )}
                 </>
               );
             })}

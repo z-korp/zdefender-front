@@ -1,4 +1,5 @@
 import { TowerCategory } from '@/types/Tower';
+import { useEventsStore } from '@/utils/eventsStore';
 import { Component, Components, EntityIndex, Schema, Type, setComponent } from '@latticexyz/recs';
 import { poseidonHashMany } from 'micro-starknet';
 import { Account, Call, Event, InvokeTransactionReceiptResponse, shortString } from 'starknet';
@@ -65,7 +66,7 @@ export function createSystemCalls(
 
       if (events) {
         const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
-        await executeEvents(eventsTransformed);
+        // await executeEvents(eventsTransformed);
       }
     } catch (e) {
       console.log(e);
@@ -96,7 +97,7 @@ export function createSystemCalls(
 
       if (events) {
         const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
-        await executeEvents(eventsTransformed);
+        // await executeEvents(eventsTransformed);
       }
     } catch (e) {
       console.log(e);
@@ -127,7 +128,7 @@ export function createSystemCalls(
 
       if (events) {
         const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
-        await executeEvents(eventsTransformed);
+        // await executeEvents(eventsTransformed);
       }
     } catch (e) {
       console.log(e);
@@ -158,7 +159,7 @@ export function createSystemCalls(
 
       if (events) {
         const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
-        await executeEvents(eventsTransformed);
+        // await executeEvents(eventsTransformed);
       }
     } catch (e) {
       console.log(e);
@@ -235,7 +236,7 @@ export function getEntityIdFromKeys(keys: bigint[]): EntityIndex {
 
 type GameEvent = ComponentData & {
   type: 'Game';
-  game_id: number;
+  key: number;
   id: number;
   name: string;
   over: boolean;
@@ -245,24 +246,25 @@ type GameEvent = ComponentData & {
   wave: number;
   gold: number;
   health: number;
+  tick: number;
 };
 
 function handleGameEvent(
   keys: bigint[],
   values: string[]
 ): Omit<GameEvent, 'component' | 'componentValues' | 'entityIndex'> {
-  const [game_id] = keys.map((k) => Number(k));
-  const [id, _, seed, overNumber, tower_count, mob_count, mob_remaining, wave, gold, health] = values.map((v) =>
+  const [key] = keys.map((k) => Number(k));
+  const [id, _, seed, overNumber, tower_count, mob_count, mob_remaining, wave, gold, health, tick] = values.map((v) =>
     Number(v)
   );
   const over = overNumber === 1;
   const name = shortString.decodeShortString(values[0]);
   console.log(
-    `[Game: KEYS: (game_id: ${game_id}) - VALUES: (id: ${id}, name: ${name}, seed: ${seed}, overNumber: ${overNumber}, tower_count: ${tower_count}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, wave: ${wave}, gold: ${gold}, health: ${health})]`
+    `[Game: KEYS: (key: ${key}) - VALUES: (id: ${id}, name: ${name}, seed: ${seed}, over: ${over}, tower_count: ${tower_count}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, wave: ${wave}, gold: ${gold}, health: ${health}, tick: ${tick})]`
   );
   return {
     type: 'Game',
-    game_id,
+    key,
     id,
     name,
     over,
@@ -272,6 +274,7 @@ function handleGameEvent(
     wave,
     gold,
     health,
+    tick,
   };
 }
 
@@ -282,6 +285,7 @@ type TileEvent = ComponentData & {
   army: number;
   owner: number;
   dispatched: number;
+  tick: number;
 };
 
 function handleTileEvent(
@@ -306,39 +310,48 @@ function handleTileEvent(
 type MobEvent = ComponentData & {
   type: 'Mob';
   game_id: number;
+  key: number;
   id: number;
   index: number;
+  previous_index: number;
+  next_index: number;
   health: number;
   speed: number;
   defence: number;
   reward: number;
+  tick: number;
 };
 
 function handleMobEvent(
   keys: bigint[],
   values: string[]
 ): Omit<MobEvent, 'component' | 'componentValues' | 'entityIndex'> {
-  const [game_id, id] = keys.map((k) => Number(k));
-  const [index, health, speed, defence, reward] = values.map((v) => Number(v));
+  const [game_id, key] = keys.map((k) => Number(k));
+  const [id, index, previous_index, next_index, health, speed, defence, reward, tick] = values.map((v) => Number(v));
 
   console.log(
-    `[Mob: KEYS: (game_id: ${game_id}, id: ${id}) - VALUES: (index: ${index}, health: ${health}, speed: ${speed}, defence: ${defence}, reward: ${reward})]`
+    `[Mob: KEYS: (game_id: ${game_id}, key: ${key}) - VALUES: (id: ${id}, index: ${index}, health: ${health}, speed: ${speed}, defence: ${defence}, reward: ${reward}, tick: ${tick})]`
   );
   return {
     type: 'Mob',
     game_id,
+    key,
     id,
     index,
+    previous_index,
+    next_index,
     health,
     speed,
     defence,
     reward,
+    tick,
   };
 }
 
 type TowerEvent = ComponentData & {
   type: 'Tower';
   game_id: number;
+  key: number;
   id: number;
   index: number;
   category: number;
@@ -346,21 +359,23 @@ type TowerEvent = ComponentData & {
   attack: number;
   range: number;
   level: number;
+  tick: number;
 };
 
 function handleTowerEvent(
   keys: bigint[],
   values: string[]
 ): Omit<TowerEvent, 'component' | 'componentValues' | 'entityIndex'> {
-  const [game_id, id] = keys.map((k) => Number(k));
-  const [index, category, speed, attack, range, level] = values.map((v) => Number(v));
+  const [game_id, key] = keys.map((k) => Number(k));
+  const [id, index, category, speed, attack, range, level, tick] = values.map((v) => Number(v));
 
   console.log(
-    `[Mob: KEYS: (game_id: ${game_id}, id: ${id}) - VALUES: (index: ${index}, category: ${category}, speed: ${speed}, attack: ${attack}, range: ${range}, level: ${level})]`
+    `[Mob: KEYS: (game_id: ${game_id}, key: ${key}) - VALUES: (id: ${id}, index: ${index}, category: ${category}, speed: ${speed}, attack: ${attack}, range: ${range}, level: ${level})]`
   );
   return {
     type: 'Tower',
     game_id,
+    key,
     id,
     index,
     category,
@@ -368,6 +383,7 @@ function handleTowerEvent(
     attack,
     range,
     level,
+    tick,
   };
 }
 
@@ -377,7 +393,7 @@ type ComponentData = {
   entityIndex: EntityIndex;
 };
 
-type TransformedEvent = GameEvent | TileEvent | MobEvent | TowerEvent;
+export type TransformedEvent = GameEvent | TileEvent | MobEvent | TowerEvent;
 
 export async function setComponentsFromEvents(components: Components, events: Event[]): Promise<TransformedEvent[]> {
   const transformedEvents = [];
@@ -438,6 +454,8 @@ export async function setComponentsFromEvents(components: Components, events: Ev
         console.log('values', values);
     }
   }
+
+  useEventsStore.getState().setEvents(transformedEvents.filter((e) => e.tick > 0));
 
   return transformedEvents;
 }

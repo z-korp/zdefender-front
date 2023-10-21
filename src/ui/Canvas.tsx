@@ -1,16 +1,26 @@
 import { useDojo } from '@/DojoContext';
 import { useGame } from '@/hooks/useGame';
 import { Coordinate } from '@/types/GridElement';
+import { useEventsStore } from '@/utils/eventsStore';
 import { getRange } from '@/utils/range';
+import { getComponentEntities, getComponentValue } from '@latticexyz/recs';
 import { Container, Stage, Text } from '@pixi/react';
 import * as PIXI from 'pixi.js';
 import { useEffect, useState } from 'react';
 import { shortString } from 'starknet';
 import useIp from '../hooks/useIp';
-import { HEIGHT, WIDTH, areCoordsEqual, to_absolute_coordinate, to_grid_coordinate } from '../utils/grid';
+import {
+  HEIGHT,
+  WIDTH,
+  areCoordsEqual,
+  indexToCoordinate,
+  to_absolute_coordinate,
+  to_grid_coordinate,
+} from '../utils/grid';
 import { useElementStore } from '../utils/store';
 import Animal from './Animal';
 import { BottomMenu } from './BottomMenu';
+import EventProcessor2 from './EventProcessor2';
 import GameOverModal from './GameOverModal'; // importez le composant
 import Gold from './Gold';
 import Life from './Life';
@@ -34,6 +44,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     setup: {
       systemCalls: { create, run, build },
       network: { graphSdk },
+      components: { Mob },
     },
     account: { account },
   } = useDojo();
@@ -113,8 +124,24 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     build(account, ip.toString(), x, y, category);
   };
 
+  const handleMenuClose = () => {
+    console.log('handleMenuClose');
+    setSelectedTile(undefined);
+  };
+
+  const tick = useEventsStore((state) => state.tick);
+  const [animals, setAnimals] = useState<any[]>([]);
+
+  useEffect(() => {
+    const animalEntities = getComponentEntities(Mob);
+    console.log(animalEntities);
+    const newAnimals = [...animalEntities].map((key) => getComponentValue(Mob, key));
+    setAnimals(newAnimals);
+  }, [tick]);
+
   return (
     <div style={{ position: 'relative' }}>
+      <EventProcessor2 />
       <Stage
         width={WIDTH}
         height={HEIGHT}
@@ -177,7 +204,17 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             <MobsRemaining remaining={mob_remaining} x={10} y={80} />
             <Gold number={gold} x={20} y={20} />
             <Life health={health} x={140} y={20} />
-            <Animal type={'chicken'} targetPosition={{ x: 2, y: 2 }} health={70} />
+
+            {animals.map((animal) => (
+              <Animal
+                id={animal.id}
+                key={animal.index}
+                type={'chicken'}
+                targetPosition={indexToCoordinate(animal.index)}
+                health={animal.health}
+              />
+            ))}
+            {/*<Animal type={'chicken'} targetPosition={{ x: 2, y: 2 }} health={70} />*/}
 
             {selectedTile && currentAbsoluteTilePosition && (
               <>
@@ -186,11 +223,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                     {hoveredTile &&
                       to_grid_coordinate(currentAbsoluteTilePosition).x === hoveredTile.x &&
                       to_grid_coordinate(currentAbsoluteTilePosition).y === hoveredTile.y && (
-                        <TowerButton
-                          x={currentAbsoluteTilePosition.x}
-                          y={currentAbsoluteTilePosition.y + 20}
-                          onClick={() => {}}
-                        />
+                        <TowerButton x={currentAbsoluteTilePosition.x} y={currentAbsoluteTilePosition.y + 20} />
                       )}
                     <TileMarker key={index} x={r.x} y={r.y} color="cyan" />
                   </>
@@ -198,34 +231,38 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               </>
             )}
 
-            <Text
-              text={`(${hoveredTile?.x}, ${hoveredTile?.y})`}
-              x={10}
-              y={500}
-              style={
-                new PIXI.TextStyle({
-                  align: 'center',
-                  fontFamily: '"Press Start 2P", Helvetica, sans-serif',
-                  fontSize: 12,
-                  fontWeight: '400',
-                  fill: '#ffffff',
-                })
-              }
-            />
-            <Text
-              text={`(${hoveredTileAbsolute?.x}, ${hoveredTileAbsolute?.y})`}
-              x={10}
-              y={530}
-              style={
-                new PIXI.TextStyle({
-                  align: 'center',
-                  fontFamily: '"Press Start 2P", Helvetica, sans-serif',
-                  fontSize: 12,
-                  fontWeight: '400',
-                  fill: '#ffffff',
-                })
-              }
-            />
+            {import.meta.env.VITE_PUBLIC_DEBUG && (
+              <Text
+                text={`(${hoveredTile?.x}, ${hoveredTile?.y})`}
+                x={10}
+                y={500}
+                style={
+                  new PIXI.TextStyle({
+                    align: 'center',
+                    fontFamily: '"Press Start 2P", Helvetica, sans-serif',
+                    fontSize: 12,
+                    fontWeight: '400',
+                    fill: '#ffffff',
+                  })
+                }
+              />
+            )}
+            {import.meta.env.VITE_PUBLIC_DEBUG && (
+              <Text
+                text={`(${hoveredTileAbsolute?.x}, ${hoveredTileAbsolute?.y})`}
+                x={10}
+                y={530}
+                style={
+                  new PIXI.TextStyle({
+                    align: 'center',
+                    fontFamily: '"Press Start 2P", Helvetica, sans-serif',
+                    fontSize: 12,
+                    fontWeight: '400',
+                    fill: '#ffffff',
+                  })
+                }
+              />
+            )}
           </Container>
         )}
       </Stage>

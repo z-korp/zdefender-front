@@ -1,4 +1,5 @@
-import { AnimatedSprite, Graphics, useTick } from '@pixi/react';
+import { AnimatedSprite, Graphics, Text, useTick } from '@pixi/react';
+import * as PIXI from 'pixi.js';
 import { Assets, Texture } from 'pixi.js';
 import { useEffect, useState } from 'react';
 import { Coordinate } from '../types/GridElement';
@@ -9,6 +10,7 @@ export type AnimalType = 'chicken';
 
 interface AnimalProps {
   type: AnimalType;
+  id: number;
   targetPosition: Coordinate;
   health: number;
 }
@@ -34,7 +36,7 @@ const getDirection = (start: Coordinate, end: Coordinate, orientation: Direction
   return orientation;
 };
 
-const Animal: React.FC<AnimalProps> = ({ type, targetPosition, health }) => {
+const Animal: React.FC<AnimalProps> = ({ type, targetPosition, health, id }) => {
   const [animation, setAnimation] = useState<Animation>(Animation.Idle);
   const [counterAnim, setCounterAnim] = useState(0);
 
@@ -163,6 +165,25 @@ const Animal: React.FC<AnimalProps> = ({ type, targetPosition, health }) => {
         textures={frames}
         initialFrame={currentFrame}
       />
+
+      {import.meta.env.VITE_PUBLIC_DEBUG && (
+        <Text
+          zIndex={to_grid_coordinate(absolutePosition).x + to_grid_coordinate(absolutePosition).y + 10}
+          text={id.toString()}
+          x={absolutePosition.x + tile_width / 2}
+          y={absolutePosition.y + tile_width / 2}
+          anchor={0.5}
+          style={
+            new PIXI.TextStyle({
+              align: 'center',
+              fontFamily: '"Press Start 2P", Helvetica, sans-serif',
+              fontSize: 10,
+              fontWeight: '400',
+              fill: '#000000',
+            })
+          }
+        />
+      )}
 
       {/*{!isMoving &&
         isHovered &&

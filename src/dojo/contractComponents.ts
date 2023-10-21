@@ -19,6 +19,7 @@ export function defineContractComponents(world: World) {
           wave: RecsType.Number,
           gold: RecsType.Number,
           health: RecsType.Number,
+          tick: RecsType.Number,
         },
         {
           metadata: {
@@ -32,11 +33,15 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
+          id: RecsType.Number,
           index: RecsType.Number,
+          previous_index: RecsType.Number,
+          next_index: RecsType.Number,
           health: RecsType.Number,
           speed: RecsType.Number,
           defence: RecsType.Number,
           reward: RecsType.Number,
+          tick: RecsType.Number,
         },
         {
           metadata: {
@@ -50,6 +55,7 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
+          id: RecsType.Number,
           index: RecsType.Number,
           category: RecsType.Number,
           cooldown: RecsType.Number,
@@ -57,7 +63,7 @@ export function defineContractComponents(world: World) {
           range: RecsType.Number,
           level: RecsType.Number,
           cost: RecsType.Number,
-          idle: RecsType.Number,
+          tick: RecsType.Number,
         },
         {
           metadata: {

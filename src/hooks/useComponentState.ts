@@ -16,8 +16,6 @@ export const useComponentStates = () => {
 
   const game = useComponentValue(Game, entityId);
 
-  console.log('game', game);
-
   return {
     game: game
       ? {
