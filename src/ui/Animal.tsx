@@ -165,7 +165,7 @@ const Animal: React.FC<AnimalProps> = ({ type, targetPosition, health, id }) => 
       {import.meta.env.VITE_PUBLIC_DEBUG && (
         <Text
           zIndex={to_grid_coordinate(absolutePosition).x + to_grid_coordinate(absolutePosition).y + 10}
-          text={id.toString()}
+          text={`${id.toString()}`}
           x={absolutePosition.x + tile_width / 2}
           y={absolutePosition.y + tile_width / 2}
           anchor={0.5}

@@ -31,7 +31,7 @@ import MobsRemaining from './MobsRemaining';
 import NewGame from './NewGame';
 import NextWaveButton from './NextWaveButton';
 import TileMarker from './TileMarker';
-import Tower from './Tower';
+import TowerBuilding from './Tower';
 import { TowerButton } from './TowerButton';
 import Wave from './Wave';
 
@@ -44,7 +44,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     setup: {
       systemCalls: { create, run, build },
       network: { graphSdk },
-      components: { Mob },
+      components: { Mob, Tower },
     },
     account: { account },
   } = useDojo();
@@ -136,8 +136,24 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     const animalEntities = getComponentEntities(Mob);
     console.log(animalEntities);
     const newAnimals = [...animalEntities].map((key) => getComponentValue(Mob, key));
-    setAnimals(newAnimals);
+
+    // Filter out duplicates by "id"
+    const uniqueIds = new Set();
+    const filteredAnimals = newAnimals.filter((animal) => {
+      if (!uniqueIds.has(animal.id)) {
+        uniqueIds.add(animal.id);
+        return true;
+      }
+      return false;
+    });
+
+    setAnimals(filteredAnimals);
   }, [tick]);
+
+  const towerEntities = getComponentEntities(Tower);
+  console.log(towerEntities);
+  const newTowers = [...towerEntities].map((key) => getComponentValue(Tower, key));
+  console.log('towers', newTowers);
 
   return (
     <div style={{ position: 'relative' }}>
@@ -194,12 +210,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               />
             </>
 
-            <Tower
-              type="knight"
-              targetPosition={{ x: 1, y: 1 }}
-              isHovered={hoveredTile ? areCoordsEqual({ x: 1, y: 1 }, hoveredTile) : false}
-              isHitter={false}
-            />
             <Wave wave={wave} x={10} y={50} />
             <MobsRemaining remaining={mob_remaining} x={10} y={80} />
             <Gold number={gold} x={20} y={20} />
@@ -212,6 +222,14 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                 type={'chicken'}
                 targetPosition={indexToCoordinate(animal.index)}
                 health={animal.health}
+              />
+            ))}
+            {newTowers.map((tower) => (
+              <TowerBuilding
+                type="barbarian"
+                targetPosition={indexToCoordinate(tower.index)}
+                isHovered={hoveredTile ? areCoordsEqual({ x: 1, y: 1 }, hoveredTile) : false}
+                isHitter={false}
               />
             ))}
             {/*<Animal type={'chicken'} targetPosition={{ x: 2, y: 2 }} health={70} />*/}

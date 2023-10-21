@@ -66,7 +66,7 @@ export function createSystemCalls(
 
       if (events) {
         const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
-        // await executeEvents(eventsTransformed);
+        await executeEvents(eventsTransformed);
       }
     } catch (e) {
       console.log(e);
@@ -97,7 +97,7 @@ export function createSystemCalls(
 
       if (events) {
         const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
-        // await executeEvents(eventsTransformed);
+        await executeEvents(eventsTransformed);
       }
     } catch (e) {
       console.log(e);
@@ -128,7 +128,7 @@ export function createSystemCalls(
 
       if (events) {
         const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
-        // await executeEvents(eventsTransformed);
+        await executeEvents(eventsTransformed);
       }
     } catch (e) {
       console.log(e);
@@ -182,11 +182,9 @@ function sleep(ms: number) {
 }
 
 export async function executeEvents(events: TransformedEvent[]) {
+  //const filteredEvents = events.filter((e) => e.tick === 0 && e.type === 'Tower');
   for (const e of events) {
     setComponent(e.component, e.entityIndex, e.componentValues);
-    if (e.type === 'Game') {
-      await sleep(1000);
-    }
   }
   /*const gameEvents = events.filter(
     (e): e is GameEvent & ComponentData => e.type === 'Game'
