@@ -40,7 +40,7 @@ const Animal: React.FC<AnimalProps> = ({ type, targetPosition, health, id }) => 
   const [animation, setAnimation] = useState<Animation>(Animation.Idle);
   const [counterAnim, setCounterAnim] = useState(0);
 
-  const [orientation, setOrientation] = useState<Direction>(Direction.S);
+  const [orientation, setOrientation] = useState<Direction>(Direction.E);
   const [frames, setFrames] = useState<Texture[]>([]);
   const [resource, setResource] = useState<any>(undefined);
   const [currentFrame, setCurrentFrame] = useState(0);
@@ -83,11 +83,7 @@ const Animal: React.FC<AnimalProps> = ({ type, targetPosition, health, id }) => 
 
   // If we receive a new targetPosition from props, we transform it into absolute pixel pos and work on it for the move
   useEffect(() => {
-    const or = getDirection(
-      to_grid_coordinate(absolutePosition),
-      to_grid_coordinate(to_absolute_coordinate(targetPosition)),
-      orientation
-    );
+    const or = getDirection(absolutePosition, to_absolute_coordinate(targetPosition), orientation);
     setOrientation(or);
     setAbsolutetargetPosition(to_absolute_coordinate(targetPosition));
   }, [targetPosition]);

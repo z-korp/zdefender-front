@@ -207,8 +207,8 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
             {animals.map((animal) => (
               <Animal
-                id={animal.id}
                 key={animal.id}
+                id={animal.id}
                 type={'chicken'}
                 targetPosition={indexToCoordinate(animal.index)}
                 health={animal.health}

@@ -356,10 +356,12 @@ type TowerEvent = ComponentData & {
   id: number;
   index: number;
   category: number;
-  speed: number;
+  cooldown: number;
   attack: number;
   range: number;
   level: number;
+  cost: number;
+  hit: number;
   tick: number;
 };
 
@@ -368,10 +370,10 @@ function handleTowerEvent(
   values: string[]
 ): Omit<TowerEvent, 'component' | 'componentValues' | 'entityIndex'> {
   const [game_id, key] = keys.map((k) => Number(k));
-  const [id, index, category, speed, attack, range, level, tick] = values.map((v) => Number(v));
+  const [id, index, category, cooldown, attack, range, level, cost, hit, tick] = values.map((v) => Number(v));
 
   console.log(
-    `[Mob: KEYS: (game_id: ${game_id}, key: ${key}) - VALUES: (id: ${id}, index: ${index}, category: ${category}, speed: ${speed}, attack: ${attack}, range: ${range}, level: ${level})]`
+    `[Tower: KEYS: (game_id: ${game_id}, key: ${key}) - VALUES: (id: ${id}, index: ${index}, category: ${category}, cooldown: ${cooldown}, attack: ${attack}, range: ${range}, level: ${level}, cost: ${cost}, hit: ${hit}, tick: ${tick})]`
   );
   return {
     type: 'Tower',
@@ -380,10 +382,12 @@ function handleTowerEvent(
     id,
     index,
     category,
-    speed,
+    cooldown,
     attack,
     range,
     level,
+    cost,
+    hit,
     tick,
   };
 }
