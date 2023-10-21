@@ -1,12 +1,12 @@
 import { SCALE } from '@/utils/grid';
+import { useElementStore } from '@/utils/store';
 import { Sprite } from '@pixi/react';
+import * as PIXI from 'pixi.js';
 import { useEffect, useState } from 'react';
 import barbarian_transparent from '../assets/barbarian_transparent.png';
 import bowman_transparent from '../assets/bowman_transparent.png';
-import * as PIXI from 'pixi.js';
 import tower from '../assets/tower.png';
 import wizard_transparent from '../assets/wizard_transparent.png';
-import { useElementStore } from '@/utils/store';
 
 interface TowerButtonProps {
   x: number;

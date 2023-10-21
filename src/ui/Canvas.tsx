@@ -2,7 +2,6 @@ import { useDojo } from '@/DojoContext';
 import { useGame } from '@/hooks/useGame';
 import { Coordinate } from '@/types/GridElement';
 import { TowerCategory } from '@/types/Tower';
-import { useEventsStore } from '@/utils/eventsStore';
 import { getRange } from '@/utils/range';
 import waves, { MobCategory } from '@/utils/wave';
 import { getComponentEntities, getComponentValue } from '@latticexyz/recs';
@@ -22,7 +21,6 @@ import {
 import { useElementStore } from '../utils/store';
 import { BottomMenu } from './BottomMenu';
 import { DefenderType } from './Defender';
-import EventProcessor2 from './EventProcessor2';
 import GameOverModal from './GameOverModal'; // importez le composant
 import Gold from './Gold';
 import Life from './Life';
@@ -31,6 +29,7 @@ import MobBuilding from './Mob';
 import MobsRemaining from './MobsRemaining';
 import NewGame from './NewGame';
 import NextWaveButton from './NextWaveButton';
+import TickProcessor from './TickProcessor';
 import TileMarker from './TileMarker';
 import TowerBuilding from './Tower';
 import { TowerButton } from './TowerButton';
@@ -51,7 +50,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   } = useDojo();
   const { map } = useElementStore((state) => state);
 
-  const { id, over, wave, mob_remaining, gold, health } = useGame();
+  const { id, tick, over, wave, mob_remaining, mob_alive, gold, health } = useGame();
   const [currentAbsoluteTilePosition, setCurrentAbsoluteTilePosition] = useState<Coordinate | undefined>();
 
   const [score, setScore] = useState<number>(0);
@@ -121,7 +120,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
         : type === 'wizard'
         ? TowerCategory.Wizard
         : TowerCategory.Barbarian;
-    console.log('BUIIILLLDD');
     build(account, ip.toString(), x, y, category);
   };
 
@@ -130,32 +128,59 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     setSelectedTile(undefined);
   };
 
-  const tick = useEventsStore((state) => state.tick);
   const [mobs, setMobs] = useState<any[]>([]);
-
   useEffect(() => {
     const mobEntities = getComponentEntities(Mob);
     const newMobs = [...mobEntities].map((key) => getComponentValue(Mob, key));
+    console.log(newMobs);
+    //console.log('newMobs', newMobs);
 
-    // Filter out duplicates by "id"
-    const uniqueIds = new Set();
-    const filteredMobs = newMobs.filter((mob) => {
-      if (!uniqueIds.has(mob.id)) {
-        uniqueIds.add(mob.id);
-        return true;
-      }
-      return false;
-    });
+    // Filter out duplicates by "id" and different "key"
+    const uniqueIdentifiers = new Set();
+    const filteredMobs = newMobs
+      .filter((mob) => mob.health > 0)
+      .filter((mob) => {
+        const identifier = `${mob.id}-${mob.key}`; // Create a combined identifier
+        if (!uniqueIdentifiers.has(identifier)) {
+          uniqueIdentifiers.add(identifier);
+          return true;
+        }
+        return false;
+      });
 
     setMobs(filteredMobs);
   }, [tick]);
 
+  useEffect(() => {
+    console.log('-----------> mobs', mobs);
+  }, [mobs]);
+
+  //console.log('filteredMobs', filteredMobs);
+
+  /*useEffect(() => {
+    console.log('mob_alive', mob_alive);
+    if (mob_alive > 0) {
+      const mobE = getComponentEntities(Mob);
+      const a = [...mobE].map((key, index) => {
+        if (index >= mob_alive) {
+          console.log('DDDFFFFDFDFDFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');
+          //removeComponent(Mob, key);
+          return key;
+        }
+      });
+      console.log('a', a);
+    }
+  }, [mob_alive]);*/
+
   const towerEntities = getComponentEntities(Tower);
   const newTowers = [...towerEntities].map((key) => getComponentValue(Tower, key));
 
+  const { set_is_wave_running } = useElementStore((state) => state);
+
   return (
     <div style={{ position: 'relative' }}>
-      <EventProcessor2 />
+      {/* <EventProcessor2 /> */}
+      <TickProcessor />
       <Stage
         width={WIDTH}
         height={HEIGHT}
@@ -201,7 +226,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               <Map />
               <BottomMenu
                 selectedTile={selectedTile}
-                setSelectedType={setSelectedType}
                 isBuying={isBuying}
                 onClose={() => setSelectedTile(undefined)}
                 onBuy={handleBuy}
@@ -287,7 +311,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           </Container>
         )}
       </Stage>
-      {id !== undefined && <NextWaveButton onClick={() => run(account, ip.toString())} />}
+      {id !== undefined && <NextWaveButton onClick={() => /*run(account, ip.toString())*/ set_is_wave_running(true)} />}
 
       {id === undefined && <NewGame onClick={generateNewGame} onPseudoChange={setPseudo} />}
 

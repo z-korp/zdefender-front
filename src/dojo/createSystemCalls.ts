@@ -168,9 +168,41 @@ export function createSystemCalls(
     }
   };
 
+  const iter = async (signer: Account, player: string, tick: number) => {
+    try {
+      const calls: Call[] = [
+        {
+          contractAddress: import.meta.env.VITE_PUBLIC_ACTIONS_ADDRESS || '',
+          entrypoint: 'iter',
+          calldata: [import.meta.env.VITE_PUBLIC_WORLD_ADDRESS, player, tick],
+        },
+      ];
+
+      const tx = await execute(signer, calls);
+
+      console.log(tx);
+      const receipt = (await signer.waitForTransaction(tx.transaction_hash, {
+        retryInterval: 100,
+      })) as InvokeTransactionReceiptResponse;
+      console.log(receipt.events);
+
+      const events = receipt.events;
+
+      if (events) {
+        const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
+        await executeEvents(eventsTransformed);
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      console.log('');
+    }
+  };
+
   return {
     create,
     run,
+    iter,
     build,
     upgrade,
     sell,
@@ -186,6 +218,7 @@ export async function executeEvents(events: TransformedEvent[]) {
   for (const e of events) {
     if (e.eventType === 'component') {
       const event = e as TransformedEvent & ComponentData;
+      console.log('setComponent', event.component, event.entityIndex, event.componentValues);
       setComponent(event.component, event.entityIndex, event.componentValues);
     } else {
       console.log('aaaa');

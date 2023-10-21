@@ -1,4 +1,5 @@
 import { bestiary } from '@/utils/bestiary';
+import { SPEED } from '@/utils/speed';
 import { MobType } from '@/utils/wave';
 import { AnimatedSprite, Graphics, Text, useTick } from '@pixi/react';
 import * as PIXI from 'pixi.js';
@@ -7,7 +8,6 @@ import { useEffect, useState } from 'react';
 import { Coordinate } from '../types/GridElement';
 import { Animation, Direction, getFramesFromType } from '../utils/animation';
 import { tile_width, to_absolute_coordinate, to_grid_coordinate } from '../utils/grid';
-import { SPEED } from '@/utils/speed';
 
 interface MobProps {
   type: MobType;
@@ -188,6 +188,25 @@ const Mob: React.FC<MobProps> = ({ type, targetPosition, health, id }) => {
           }*/
         }}
       />
+
+      {import.meta.env.VITE_PUBLIC_DEBUG && (
+        <Text
+          zIndex={to_grid_coordinate(absolutePosition).x + to_grid_coordinate(absolutePosition).y + 10}
+          text={`${health.toString()}`}
+          x={absolutePosition.x + tile_width / 2}
+          y={absolutePosition.y + tile_width / 2 - 30}
+          anchor={0.5}
+          style={
+            new PIXI.TextStyle({
+              align: 'center',
+              fontFamily: '"Press Start 2P", Helvetica, sans-serif',
+              fontSize: 4,
+              fontWeight: '400',
+              fill: '#000000',
+            })
+          }
+        />
+      )}
 
       <AnimatedSprite
         zIndex={to_grid_coordinate(absolutePosition).x + to_grid_coordinate(absolutePosition).y}

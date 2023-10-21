@@ -1,5 +1,5 @@
 import { GridElement } from '@/types/GridElement';
-import { MobType } from '@/ui/Mob';
+import { DefenderType } from '@/ui/Defender';
 import { create } from 'zustand';
 
 interface State {
@@ -11,8 +11,10 @@ interface State {
   set_map: (map: GridElement[][]) => void;
   build_menu: boolean;
   set_build_menu: (build_menu: boolean) => void;
-  selectedType: MobType;
-  setSelectedType: (selectedType: MobType) => void;
+  selectedType: DefenderType;
+  setSelectedType: (selectedType: DefenderType) => void;
+  is_wave_running: boolean;
+  set_is_wave_running: (is_wave_running: boolean) => void;
 }
 
 export const useElementStore = create<State>((set) => ({
@@ -26,5 +28,7 @@ export const useElementStore = create<State>((set) => ({
   build_menu: false,
   set_build_menu: (build_menu: boolean) => set(() => ({ build_menu })),
   selectedType: 'knight',
-  setSelectedType: (selectedType: MobType) => set(() => ({ selectedType })),
+  setSelectedType: (selectedType: DefenderType) => set(() => ({ selectedType })),
+  is_wave_running: false,
+  set_is_wave_running: (is_wave_running: boolean) => set(() => ({ is_wave_running })),
 }));

@@ -1,6 +1,7 @@
 import { useElementStore } from '@/utils/store';
 import { useComponentValue } from '@dojoengine/react';
 import { EntityIndex } from '@latticexyz/recs';
+import { useEffect } from 'react';
 import { useDojo } from '../DojoContext';
 
 export const useGame = () => {
@@ -10,11 +11,17 @@ export const useGame = () => {
     },
   } = useDojo();
 
-  const { ip } = useElementStore((state) => state);
+  const { ip, set_is_wave_running } = useElementStore((state) => state);
 
   const entityId = ip as EntityIndex;
 
   const game = useComponentValue(Game, entityId);
+
+  useEffect(() => {
+    if (game && (game.over || (game.mob_remaining === 0 && game.mob_alive === 0))) {
+      set_is_wave_running(false);
+    }
+  }, [game]);
 
   return {
     key: game?.key,
@@ -28,5 +35,6 @@ export const useGame = () => {
     wave: game?.wave,
     gold: game?.gold,
     health: game?.health,
+    tick: game?.tick,
   };
 };

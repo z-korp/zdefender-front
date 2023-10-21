@@ -21,6 +21,7 @@ function EventProcessor() {
         logTransformedEvent(event);
         if (event.eventType === 'component') {
           const e = event as TransformedEvent & ComponentData;
+          console.log('setComponent', e.component, e.entityIndex, e.componentValues);
           setComponent(e.component, e.entityIndex, e.componentValues);
         } else {
           console.log('------------>', event);
