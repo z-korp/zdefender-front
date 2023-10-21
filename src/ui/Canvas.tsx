@@ -33,6 +33,7 @@ import TileMarker from './TileMarker';
 import Tower from './Tower';
 import { TowerButton } from './TowerButton';
 import Wave from './Wave';
+import { TowerCategory } from '@/types/Tower';
 
 interface CanvasProps {
   setMusicPlaying: (bool: boolean) => void;
@@ -41,7 +42,7 @@ interface CanvasProps {
 const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const {
     setup: {
-      systemCalls: { create, run },
+      systemCalls: { create, run, build },
       network: { graphSdk },
       components: { Mob },
     },
@@ -110,6 +111,19 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     setSelectedTile(tile);
   };
 
+  const handleBuy = (type: MobType, x: number, y: number) => {
+    let category =
+      type === 'knight'
+        ? TowerCategory.Barbarian
+        : type === 'bowman'
+        ? TowerCategory.Bowman
+        : type === 'wizard'
+        ? TowerCategory.Wizard
+        : TowerCategory.Barbarian;
+    console.log('BUIIILLLDD');
+    build(account, ip.toString(), x, y, category);
+  };
+
   const handleMenuClose = () => {
     console.log('handleMenuClose');
     setSelectedTile(undefined);
@@ -176,6 +190,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                 setSelectedType={setSelectedType}
                 isBuying={isBuying}
                 onClose={() => setSelectedTile(undefined)}
+                onBuy={handleBuy}
               />
             </>
 
@@ -208,11 +223,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                     {hoveredTile &&
                       to_grid_coordinate(currentAbsoluteTilePosition).x === hoveredTile.x &&
                       to_grid_coordinate(currentAbsoluteTilePosition).y === hoveredTile.y && (
-                        <TowerButton
-                          x={currentAbsoluteTilePosition.x}
-                          y={currentAbsoluteTilePosition.y + 20}
-                          onClick={() => {}}
-                        />
+                        <TowerButton x={currentAbsoluteTilePosition.x} y={currentAbsoluteTilePosition.y + 20} />
                       )}
                     <TileMarker key={index} x={r.x} y={r.y} color="cyan" />
                   </>

@@ -35,7 +35,7 @@ export function createSystemCalls(
 
       if (events) {
         const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
-        // await executeEvents(eventsTransformed);
+        await executeEvents(eventsTransformed);
       }
     } catch (e) {
       console.log(e);
@@ -44,7 +44,7 @@ export function createSystemCalls(
     }
   };
 
-  const build = async (signer: Account, player: string, x: number, y: string, tower: TowerCategory) => {
+  const build = async (signer: Account, player: string, x: number, y: number, tower: TowerCategory) => {
     try {
       const calls: Call[] = [
         {
