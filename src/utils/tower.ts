@@ -1,6 +1,6 @@
 export enum TowerCategory {
   BARBARIAN,
-  BOWAN,
+  BOWMAN,
   WIZARD,
 }
 
@@ -18,7 +18,7 @@ export const towerData: Record<TowerCategory, TowerCharacteristics> = {
     speed: 1,
     scale: 1.0,
   },
-  [TowerCategory.BOWAN]: {
+  [TowerCategory.BOWMAN]: {
     basePrice: 50,
     damage: 100,
     speed: 1,

@@ -61,7 +61,7 @@ const Button: React.FC<ButtonProps> = ({ onClick, x, y, index, price }) => {
           })
         }
       />
-      <Gold number={10} x={x + 90} y={y + 40} />
+      <Gold number={price} x={x + 90} y={y + 40} />
       <BuyButton2 x={x + 170} y={y + 28} onClick={() => console.log('9')} />
     </>
   );

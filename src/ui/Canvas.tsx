@@ -29,6 +29,7 @@ import MobBuilding from './Mob';
 import MobsRemaining from './MobsRemaining';
 import NewGame from './NewGame';
 import NextWaveButton from './NextWaveButton';
+import { PlayerTowerMenu } from './PlayerTowerMenu';
 import TickProcessor from './TickProcessor';
 import TileMarker from './TileMarker';
 import TowerBuilding from './Tower';
@@ -225,11 +226,14 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             <>
               <Map />
               <BottomMenu
+                x={870}
+                y={0}
                 selectedTile={selectedTile}
                 isBuying={isBuying}
                 onClose={() => setSelectedTile(undefined)}
                 onBuy={handleBuy}
               />
+              <PlayerTowerMenu x={870} y={350} />
             </>
 
             <Wave wave={wave} x={10} y={50} />
