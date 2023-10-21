@@ -36,8 +36,7 @@ export function defineContractComponents(world: World) {
         {
           id: RecsType.Number,
           index: RecsType.Number,
-          previous_index: RecsType.Number,
-          next_index: RecsType.Number,
+          category: RecsType.Number,
           health: RecsType.Number,
           speed: RecsType.Number,
           defence: RecsType.Number,
@@ -64,6 +63,7 @@ export function defineContractComponents(world: World) {
           range: RecsType.Number,
           level: RecsType.Number,
           cost: RecsType.Number,
+          hit: RecsType.Number,
           tick: RecsType.Number,
         },
         {

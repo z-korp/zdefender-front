@@ -4,6 +4,7 @@ import { Coordinate } from '@/types/GridElement';
 import { TowerCategory } from '@/types/Tower';
 import { useEventsStore } from '@/utils/eventsStore';
 import { getRange } from '@/utils/range';
+import waves, { MobCategory } from '@/utils/wave';
 import { getComponentEntities, getComponentValue } from '@latticexyz/recs';
 import { Container, Stage, Text } from '@pixi/react';
 import * as PIXI from 'pixi.js';
@@ -19,14 +20,14 @@ import {
   to_grid_coordinate,
 } from '../utils/grid';
 import { useElementStore } from '../utils/store';
-import Animal from './Animal';
 import { BottomMenu } from './BottomMenu';
+import { DefenderType } from './Defender';
 import EventProcessor2 from './EventProcessor2';
 import GameOverModal from './GameOverModal'; // importez le composant
 import Gold from './Gold';
 import Life from './Life';
 import Map from './Map';
-import { MobType } from './Mob';
+import MobBuilding from './Mob';
 import MobsRemaining from './MobsRemaining';
 import NewGame from './NewGame';
 import NextWaveButton from './NextWaveButton';
@@ -54,7 +55,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const [currentAbsoluteTilePosition, setCurrentAbsoluteTilePosition] = useState<Coordinate | undefined>();
 
   const [score, setScore] = useState<number>(0);
-  const [selectedType, setSelectedType] = useState<MobType>('knight');
+  const [selectedType, setSelectedType] = useState<DefenderType>('knight');
   const [level, setLevel] = useState<number>(0);
   const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(undefined);
   const [hoveredTileAbsolute, setHoveredTileAbsolute] = useState<Coordinate | undefined>(undefined);
@@ -111,7 +112,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     setSelectedTile(tile);
   };
 
-  const handleBuy = (type: MobType, x: number, y: number) => {
+  const handleBuy = (type: DefenderType, x: number, y: number) => {
     const category =
       type === 'knight'
         ? TowerCategory.Barbarian
@@ -130,30 +131,28 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   };
 
   const tick = useEventsStore((state) => state.tick);
-  const [animals, setAnimals] = useState<any[]>([]);
+  const [mobs, setMobs] = useState<any[]>([]);
 
   useEffect(() => {
-    const animalEntities = getComponentEntities(Mob);
-    console.log(animalEntities);
-    const newAnimals = [...animalEntities].map((key) => getComponentValue(Mob, key));
+    const mobEntities = getComponentEntities(Mob);
+    console.log(mobEntities);
+    const newMobs = [...mobEntities].map((key) => getComponentValue(Mob, key));
 
     // Filter out duplicates by "id"
     const uniqueIds = new Set();
-    const filteredAnimals = newAnimals.filter((animal) => {
-      if (!uniqueIds.has(animal.id)) {
-        uniqueIds.add(animal.id);
+    const filteredMobs = newMobs.filter((mob) => {
+      if (!uniqueIds.has(mob.id)) {
+        uniqueIds.add(mob.id);
         return true;
       }
       return false;
     });
 
-    setAnimals(filteredAnimals);
+    setMobs(filteredMobs);
   }, [tick]);
 
   const towerEntities = getComponentEntities(Tower);
-  console.log(towerEntities);
   const newTowers = [...towerEntities].map((key) => getComponentValue(Tower, key));
-  console.log('towers', newTowers);
 
   return (
     <div style={{ position: 'relative' }}>
@@ -215,13 +214,13 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             <Gold number={gold} x={20} y={20} />
             <Life health={health} x={140} y={20} />
 
-            {animals.map((animal) => (
-              <Animal
-                key={animal.id}
-                id={animal.id}
-                type={'chicken'}
-                targetPosition={indexToCoordinate(animal.index)}
-                health={animal.health}
+            {mobs.map((mob) => (
+              <MobBuilding
+                key={mob.id}
+                id={mob.id}
+                type={waves[wave][mob.category as MobCategory]}
+                targetPosition={indexToCoordinate(mob.index)}
+                health={mob.health}
               />
             ))}
             {newTowers.map((tower) => (
@@ -232,7 +231,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                 isHitter={false}
               />
             ))}
-            {/*<Animal type={'chicken'} targetPosition={{ x: 2, y: 2 }} health={70} />*/}
 
             {selectedTile && currentAbsoluteTilePosition && (
               <>

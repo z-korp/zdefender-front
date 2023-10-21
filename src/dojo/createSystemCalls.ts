@@ -312,8 +312,7 @@ type MobEvent = ComponentData & {
   key: number;
   id: number;
   index: number;
-  previous_index: number;
-  next_index: number;
+  category: number;
   health: number;
   speed: number;
   defence: number;
@@ -326,10 +325,10 @@ function handleMobEvent(
   values: string[]
 ): Omit<MobEvent, 'component' | 'componentValues' | 'entityIndex'> {
   const [game_id, key] = keys.map((k) => Number(k));
-  const [id, index, previous_index, next_index, health, speed, defence, reward, tick] = values.map((v) => Number(v));
+  const [id, index, category, health, speed, defence, reward, tick] = values.map((v) => Number(v));
 
   console.log(
-    `[Mob: KEYS: (game_id: ${game_id}, key: ${key}) - VALUES: (id: ${id}, index: ${index}, health: ${health}, speed: ${speed}, defence: ${defence}, reward: ${reward}, tick: ${tick})]`
+    `[Mob: KEYS: (game_id: ${game_id}, key: ${key}) - VALUES: (id: ${id}, index: ${index}, category: ${category}, health: ${health}, speed: ${speed}, defence: ${defence}, reward: ${reward}, tick: ${tick})]`
   );
   return {
     type: 'Mob',
@@ -337,8 +336,7 @@ function handleMobEvent(
     key,
     id,
     index,
-    previous_index,
-    next_index,
+    category,
     health,
     speed,
     defence,

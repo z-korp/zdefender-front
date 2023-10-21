@@ -1,23 +1,18 @@
-import { getRange } from '@/utils/range';
-import { useElementStore } from '@/utils/store';
-import { AnimatedSprite, useTick } from '@pixi/react';
+import { bestiary } from '@/utils/bestiary';
+import { MobType } from '@/utils/wave';
+import { AnimatedSprite, Graphics, Text, useTick } from '@pixi/react';
+import * as PIXI from 'pixi.js';
 import { Assets, Texture } from 'pixi.js';
 import { useEffect, useState } from 'react';
 import { Coordinate } from '../types/GridElement';
 import { Animation, Direction, getFramesFromType } from '../utils/animation';
-import { SCALE, to_absolute_coordinate, to_grid_coordinate } from '../utils/grid';
-import TileMarker from './TileMarker';
-
-export type MobType = 'bowman' | 'barbarian' | 'knight' | 'wizard';
+import { tile_width, to_absolute_coordinate, to_grid_coordinate } from '../utils/grid';
 
 interface MobProps {
   type: MobType;
+  id: number;
   targetPosition: Coordinate;
-  isHovered: boolean;
   health: number;
-  isHitter: boolean;
-  knightPosition?: Coordinate;
-  hitPosition?: Coordinate;
 }
 
 function lerp(start: number, end: number, t: number) {
@@ -28,116 +23,44 @@ const getDirection = (start: Coordinate, end: Coordinate, orientation: Direction
   const dx = end.x - start.x;
   const dy = end.y - start.y;
 
-  // Conversion de coordonnées cartésiennes à coordonnées isométriques
-  const iso_dx = dx - dy;
-  const iso_dy = (dx + dy) / 2;
+  // Determine the direction based on the change in x and y coordinates
+  if (Math.abs(dx) > Math.abs(dy)) {
+    // If the horizontal movement is greater than the vertical movement
+    return dx > 0 ? Direction.E : Direction.W;
+  } else {
+    // If the vertical movement is greater than or equal to the horizontal movement
+    return dy > 0 ? Direction.S : Direction.N;
+  }
 
-  if (iso_dx > 0 && iso_dy >= 0) return Direction.SE;
-  if (iso_dx <= 0 && iso_dy > 0) return Direction.SW;
-  if (iso_dx < 0 && iso_dy <= 0) return Direction.NW;
-  if (iso_dx >= 0 && iso_dy < 0) return Direction.NE;
-
-  return orientation; // Retourner NONE si aucune direction n'est trouvée
+  // If for some reason no direction is determined, return the current orientation
+  return orientation;
 };
 
-const getStartOrientation = (mob_coord: Coordinate, knight_position?: Coordinate) => {
-  return getDirection(mob_coord, knight_position ? knight_position : mob_coord, Direction.S);
-};
-
-const Mob: React.FC<MobProps> = ({
-  type,
-  targetPosition,
-  isHovered,
-  health,
-  isHitter,
-  knightPosition,
-  hitPosition,
-}) => {
-  const { map } = useElementStore((state) => state);
-
+const Mob: React.FC<MobProps> = ({ type, targetPosition, health, id }) => {
   const [animation, setAnimation] = useState<Animation>(Animation.Idle);
   const [counterAnim, setCounterAnim] = useState(0);
 
-  const [orientation, setOrientation] = useState<Direction>(getStartOrientation(targetPosition, knightPosition));
+  const [orientation, setOrientation] = useState<Direction>(Direction.E);
   const [frames, setFrames] = useState<Texture[]>([]);
   const [resource, setResource] = useState<any>(undefined);
   const [currentFrame, setCurrentFrame] = useState(0);
 
   const [isMoving, setIsMoving] = useState(false);
 
-  const [range, setRange] = useState<Coordinate[]>([]);
-
-  useEffect(() => {
-    setRange(getRange(type, targetPosition, map));
-  }, [targetPosition]);
-
   useEffect(() => {
     if (resource) {
       if (animation === Animation.Walk) {
-        const or = getDirection(
-          to_grid_coordinate(absolutePosition),
-          to_grid_coordinate(absoluteTargetPosition),
-          orientation
-        );
-        setOrientation(or);
-        setFrames(getFramesFromType(type, Animation.Walk, or, resource));
-      } else if (animation === Animation.BowAttack) {
-        setFrames(getFramesFromType(type, Animation.BowAttack, orientation, resource));
-      } else if (animation === Animation.StaffAttack) {
-        setFrames(getFramesFromType(type, Animation.StaffAttack, orientation, resource));
-      } else if (animation === Animation.SwordAttack) {
-        setFrames(getFramesFromType(type, Animation.SwordAttack, orientation, resource));
-      } else if (animation === Animation.Hurt) {
-        setFrames(getFramesFromType(type, Animation.Hurt, orientation, resource));
-      } else if (animation === Animation.Death) {
-        setFrames(getFramesFromType(type, Animation.Death, orientation, resource));
-      } else {
-        setFrames(getFramesFromType(type, Animation.Idle, orientation, resource));
+        setFrames(getFramesFromType(type, Animation.Walk, orientation, resource));
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animation, resource]);
-
-  useEffect(() => {
-    setCurrentFrame(0);
-    if (health === 0) {
-      setAnimation(Animation.Death);
-    } else {
-      if (
-        (health === 10 && type === 'knight') ||
-        (health === 1 && type === 'barbarian') ||
-        (health === 1 && type === 'wizard') ||
-        (health === 1 && type === 'bowman')
-      ) {
-        setAnimation(Animation.Jump);
-      } else {
-        setAnimation(Animation.Hurt);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [health]);
+  }, [animation, resource, orientation]);
 
   useEffect(() => {
     if (isMoving) {
       setAnimation(Animation.Walk);
     }
   }, [isMoving]);
-
-  useEffect(() => {
-    if (isHitter === true) {
-      setCurrentFrame(0);
-
-      if (hitPosition !== undefined) {
-        const new_orientation = hitPosition ? getDirection(targetPosition, hitPosition, orientation) : orientation;
-        setOrientation(new_orientation);
-
-        if (type === 'knight' || type === 'barbarian') setAnimation(Animation.SwordAttack);
-        else if (type === 'bowman') setAnimation(Animation.BowAttack);
-        else if (type === 'wizard') setAnimation(Animation.StaffAttack);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isHitter]);
 
   // current position absolute during movement
   // will be changing during the movement, towards the absoluteTargetPosition
@@ -149,16 +72,19 @@ const Mob: React.FC<MobProps> = ({
   // Only at init
   useEffect(() => {
     const load = async () => {
-      const resource = await Assets.load(`assets/towers/${type}/${type}.json`);
+      const resource = await Assets.load(`assets/enemies/${type}/${type}.json`);
       setResource(resource);
     };
     load();
     // init position
     setAbsolutePosition(to_absolute_coordinate(targetPosition));
+    setAnimation(Animation.Walk);
   }, []);
 
   // If we receive a new targetPosition from props, we transform it into absolute pixel pos and work on it for the move
   useEffect(() => {
+    const or = getDirection(absolutePosition, to_absolute_coordinate(targetPosition), orientation);
+    setOrientation(or);
     setAbsolutetargetPosition(to_absolute_coordinate(targetPosition));
   }, [targetPosition]);
 
@@ -187,55 +113,81 @@ const Mob: React.FC<MobProps> = ({
       if (counterAnim === 1000) setCounterAnim(0);
 
       if (counterAnim % 10 === 0) {
-        if (animation === Animation.Idle) {
-          // if IDLE, loop through frames
-          if (frames && frames.length > 0) {
-            setCurrentFrame((prevFrame) => (prevFrame + 1) % frames.length); // change to the next frame and back to f0
-          }
-        } else {
-          // otherwise we do only the frames, and then go IDLE
-          if (frames && frames.length > 0 && currentFrame < frames.length - 1) {
-            setCurrentFrame((prevFrame) => prevFrame + 1); // change to the next frame
-          } else {
-            // last frame of the animation
-            if (animation === Animation.Death) {
-              setShouldAnimate(false);
-              setIsDead(true);
-            } else if (
-              animation === Animation.BowAttack ||
-              animation === Animation.StaffAttack ||
-              animation === Animation.SwordAttack
-            ) {
-              setCurrentFrame(0);
-              setAnimation(Animation.Idle);
-            } else {
-              setCurrentFrame(0);
-              setAnimation(Animation.Idle);
-            }
-          }
+        // loop through frames
+        if (frames && frames.length > 0) {
+          setCurrentFrame((prevFrame) => (prevFrame + 1) % frames.length); // change to the next frame and back to f0
         }
       }
     }
   });
 
+  //console.log('frames', frames);
   if (frames.length === 0) {
     return null;
   }
 
+  const maxHealth = bestiary[type].health; // or whatever your maximum health is
+  const healthBarWidth = 50; // width of the health bar at full health
+  const healthBarHeight = 6; // height of the health bar
+  const currentHealthWidth = (health / maxHealth) * healthBarWidth;
+  const healthBarX = absolutePosition.x - healthBarWidth / 2 + tile_width / 2; // to center the health bar above the sprite
+  const healthBarY = absolutePosition.y; // you might need to adjust this to position the health bar correctly above the sprite
+
   return (
     <>
+      <Graphics
+        draw={(g) => {
+          g.clear(); // Clear the previous drawings
+
+          // Background of the health bar (e.g., a gray bar to show missing health)
+          g.beginFill(0xaaaaaa);
+          g.drawRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
+          g.endFill();
+
+          // Foreground of the health bar (e.g., a green bar to show current health)
+          g.beginFill(0x00ff00);
+          g.drawRect(healthBarX, healthBarY, currentHealthWidth, healthBarHeight);
+          g.endFill();
+        }}
+      />
+
       <AnimatedSprite
         zIndex={to_grid_coordinate(absolutePosition).x + to_grid_coordinate(absolutePosition).y}
-        x={isDead ? -100 /*lol*/ : absolutePosition.x + 32 * (SCALE - 3)}
-        y={isDead ? -100 /*lol*/ : absolutePosition.y + 32 * (SCALE - 3) - 32} // weird offset cause sprite is not centered and not 16x16
+        x={isDead ? -100 /*lol*/ : absolutePosition.x + tile_width / 2}
+        y={isDead ? -100 /*lol*/ : absolutePosition.y + tile_width / 2}
         anchor={0.5}
-        scale={SCALE - 1}
+        scale={3}
         isPlaying={false}
         textures={frames}
         initialFrame={currentFrame}
       />
 
-      {isHovered && range && range.map((r, index) => <TileMarker key={index} x={r.x} y={r.y} color="cyan" />)}
+      {import.meta.env.VITE_PUBLIC_DEBUG && (
+        <Text
+          zIndex={to_grid_coordinate(absolutePosition).x + to_grid_coordinate(absolutePosition).y + 10}
+          text={`${id.toString()}`}
+          x={absolutePosition.x + tile_width / 2}
+          y={absolutePosition.y + tile_width / 2}
+          anchor={0.5}
+          style={
+            new PIXI.TextStyle({
+              align: 'center',
+              fontFamily: '"Press Start 2P", Helvetica, sans-serif',
+              fontSize: 10,
+              fontWeight: '400',
+              fill: '#000000',
+            })
+          }
+        />
+      )}
+
+      {/*{!isMoving &&
+        isHovered &&
+        health !== 0 &&
+        neighbors &&
+        neighbors.map((move, index) => (
+          <TileMarker key={index} x={move.tile.x} y={move.tile.y} color={move.action === 'walk' ? 'blue' : 'yellow'} />
+        ))}*/}
     </>
   );
 };

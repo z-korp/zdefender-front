@@ -2,25 +2,24 @@ import { Coordinate } from '@/types/GridElement';
 import { Container } from '@pixi/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Button from './Button';
-import { CloseButton } from './CloseButton';
-import { MobType } from './Mob';
 import { BuyButton } from './BuyButton';
-import { TowerCategory } from '@/types/Tower';
+import { CloseButton } from './CloseButton';
+import { DefenderType } from './Defender';
 
 interface BottomMenuProps {
   hoveredTile?: Coordinate;
   selectedTile?: Coordinate;
-  setSelectedType: Dispatch<SetStateAction<MobType>>;
+  setSelectedType: Dispatch<SetStateAction<DefenderType>>;
   isBuying: boolean;
   onClose: () => void;
-  onBuy: (towerType: MobType, x: number, y: number) => void;
+  onBuy: (towerType: DefenderType, x: number, y: number) => void;
 }
 
 export const BottomMenu: React.FC<BottomMenuProps> = ({ hoveredTile, selectedTile, onClose, isBuying, onBuy }) => {
   const [isOpen, setIsOpen] = useState<boolean>(selectedTile !== undefined);
 
-  const [selectedType, setSelectedType] = useState<MobType>('knight');
-  const mobTypes = ['knight', 'bowman', 'wizard', 'barbarian'] as MobType[];
+  const [selectedType, setSelectedType] = useState<DefenderType>('knight');
+  const mobTypes = ['knight', 'bowman', 'wizard', 'barbarian'] as DefenderType[];
 
   const handleClick = (index: number) => {
     console.log('===================');
