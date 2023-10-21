@@ -6,13 +6,14 @@ export const HEIGHT = 600;
 export const SCALE = 4;
 
 const NUMBER_TILES = 8;
-const h = 16;
-export const H_OFFSET = (HEIGHT - (NUMBER_TILES * h) / 2) / 2;
+export const tile_width = 16 * SCALE;
+export const H_OFFSET = (WIDTH - NUMBER_TILES * tile_width) / 2;
+export const V_OFFSET = (tile_width * SCALE) / 2;
 
 export function to_grid_coordinate(screen: { x: number; y: number }) {
   return {
-    x: Math.floor((screen.x - H_OFFSET) / SCALE / 16),
-    y: Math.floor(screen.y / SCALE / 16),
+    x: Math.floor((screen.x - H_OFFSET) / tile_width),
+    y: Math.floor(screen.y / tile_width),
   };
 }
 

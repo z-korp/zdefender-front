@@ -2,7 +2,8 @@ import { useDojo } from '@/DojoContext';
 import { useGame } from '@/hooks/useGame';
 import { Coordinate } from '@/types/GridElement';
 import { getRange } from '@/utils/range';
-import { Container, Stage } from '@pixi/react';
+import { Container, Stage, Text } from '@pixi/react';
+import * as PIXI from 'pixi.js';
 import { useEffect, useState } from 'react';
 import { shortString } from 'starknet';
 import useIp from '../hooks/useIp';
@@ -44,6 +45,8 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const [selectedType, setSelectedType] = useState<MobType>('knight');
   const [level, setLevel] = useState<number>(0);
   const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(undefined);
+  const [hoveredTileAbsolute, setHoveredTileAbsolute] = useState<Coordinate | undefined>(undefined);
+
   const [selectedTile, setSelectedTile] = useState<Coordinate | undefined>(undefined);
   const [isGameOver, setIsGameOver] = useState(false);
   const [absolutePosition, setAbsolutePosition] = useState<Coordinate | undefined>(undefined);
@@ -88,8 +91,9 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   }, [hoveredTile, selectedType]);
 
   useEffect(() => {
-    console.log('hoveredTile', hoveredTile);
+    if (hoveredTile) setHoveredTileAbsolute(to_absolute_coordinate(hoveredTile));
   }, [hoveredTile]);
+
   const handleTileClick = (tile: Coordinate) => {
     setSelectedTile(tile);
   };
@@ -174,6 +178,35 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                 ))}
               </>
             )}
+
+            <Text
+              text={`(${hoveredTile?.x}, ${hoveredTile?.y})`}
+              x={10}
+              y={500}
+              style={
+                new PIXI.TextStyle({
+                  align: 'center',
+                  fontFamily: '"Press Start 2P", Helvetica, sans-serif',
+                  fontSize: 12,
+                  fontWeight: '400',
+                  fill: '#ffffff',
+                })
+              }
+            />
+            <Text
+              text={`(${hoveredTileAbsolute?.x}, ${hoveredTileAbsolute?.y})`}
+              x={10}
+              y={530}
+              style={
+                new PIXI.TextStyle({
+                  align: 'center',
+                  fontFamily: '"Press Start 2P", Helvetica, sans-serif',
+                  fontSize: 12,
+                  fontWeight: '400',
+                  fill: '#ffffff',
+                })
+              }
+            />
           </Container>
         )}
       </Stage>

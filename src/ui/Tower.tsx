@@ -22,7 +22,6 @@ const Tower: React.FC<TowerProps> = ({ type, targetPosition, isHovered, isHitter
         zIndex={targetPosition.x + targetPosition.y - 1}
         image={tower}
         scale={SCALE}
-        anchor={0.5}
         x={H_OFFSET + targetPosition.x * 16 * SCALE}
         y={targetPosition.y * 16 * SCALE}
       />

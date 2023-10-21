@@ -23,7 +23,7 @@ const image = {
 const TileMarker: React.FC<TileMarkerProps> = ({ x, y, color }) => {
   const { x: finalX, y: finalY } = to_absolute_coordinate({ x, y });
 
-  return <Sprite zIndex={0} image={image[color]} anchor={0.5} scale={SCALE} x={finalX} y={finalY} />;
+  return <Sprite zIndex={0} image={image[color]} scale={SCALE} x={finalX} y={finalY} />;
 };
 
 export default TileMarker;

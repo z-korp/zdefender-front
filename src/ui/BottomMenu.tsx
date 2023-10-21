@@ -1,9 +1,8 @@
-import { Container, Text } from '@pixi/react';
-import Button from './Button';
 import { Coordinate } from '@/types/GridElement';
-import * as PIXI from 'pixi.js';
-import { CloseButton } from './CloseButton';
+import { Container } from '@pixi/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import Button from './Button';
+import { CloseButton } from './CloseButton';
 import { MobType } from './Mob';
 
 interface BottomMenuProps {

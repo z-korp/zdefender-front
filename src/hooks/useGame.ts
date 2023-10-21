@@ -17,14 +17,14 @@ export const useGame = () => {
   const game = useComponentValue(Game, entityId);
 
   return {
-    id: game.id,
-    name: game.name,
-    over: game.over,
-    tower_count: game.tower_count,
-    mob_count: game.mob_count,
-    mob_remaining: game.mob_remaining,
-    wave: game.wave,
-    gold: game.gold,
-    health: game.health,
+    id: game?.id,
+    name: game?.name,
+    over: game?.over,
+    tower_count: game?.tower_count,
+    mob_count: game?.mob_count,
+    mob_remaining: game?.mob_remaining,
+    wave: game?.wave,
+    gold: game?.gold,
+    health: game?.health,
   };
 };

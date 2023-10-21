@@ -1,6 +1,6 @@
 import { H_OFFSET, SCALE } from '@/utils/grid';
 import { useElementStore } from '@/utils/store';
-import { Sprite } from '@pixi/react';
+import { Graphics, Sprite } from '@pixi/react';
 import { SCALE_MODES, Texture } from 'pixi.js';
 import React, { useEffect } from 'react';
 import mapData from '../assets/map-zdefender.json';
@@ -55,14 +55,29 @@ const Map: React.FC = () => {
               const tile = './tilesets/' + cell.tileId + '.png';
               Texture.from(tile).baseTexture.scaleMode = SCALE_MODES.NEAREST;
               return (
-                <Sprite
-                  key={cellIndex}
-                  image={tile}
-                  scale={SCALE} // Change the scale here
-                  anchor={0.5}
-                  x={H_OFFSET + cell.x * mapData.tilewidth * SCALE} // Adjust the x position
-                  y={cell.y * mapData.tileheight * SCALE} // Adjust the y position
-                />
+                <>
+                  <Sprite
+                    key={cellIndex}
+                    image={tile}
+                    scale={SCALE}
+                    x={H_OFFSET + cell.x * mapData.tilewidth * SCALE}
+                    y={cell.y * mapData.tileheight * SCALE}
+                  />
+                  <Graphics
+                    draw={(g) => {
+                      g.clear(); // Clear the canvas
+                      // Define border color and width
+                      g.lineStyle(2, 0xff0000); // 2px width, red color
+                      // Draw a rectangle for the border
+                      g.drawRect(
+                        H_OFFSET + cell.x * mapData.tilewidth * SCALE,
+                        cell.y * mapData.tileheight * SCALE,
+                        mapData.tilewidth * SCALE,
+                        mapData.tileheight * SCALE
+                      );
+                    }}
+                  />
+                </>
               );
             })}
           </>

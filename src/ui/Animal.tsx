@@ -3,7 +3,7 @@ import { Assets, Texture } from 'pixi.js';
 import { useEffect, useState } from 'react';
 import { Coordinate } from '../types/GridElement';
 import { Animation, Direction, getFramesFromType } from '../utils/animation';
-import { SCALE, to_absolute_coordinate, to_grid_coordinate } from '../utils/grid';
+import { tile_width, to_absolute_coordinate, to_grid_coordinate } from '../utils/grid';
 
 export type AnimalType = 'chicken';
 
@@ -132,8 +132,8 @@ const Animal: React.FC<AnimalProps> = ({ type, targetPosition, health }) => {
   const healthBarWidth = 50; // width of the health bar at full health
   const healthBarHeight = 6; // height of the health bar
   const currentHealthWidth = (health / maxHealth) * healthBarWidth;
-  const healthBarX = absolutePosition.x - healthBarWidth / 2; // to center the health bar above the sprite
-  const healthBarY = absolutePosition.y - 55; // you might need to adjust this to position the health bar correctly above the sprite
+  const healthBarX = absolutePosition.x - healthBarWidth / 2 + tile_width / 2; // to center the health bar above the sprite
+  const healthBarY = absolutePosition.y; // you might need to adjust this to position the health bar correctly above the sprite
 
   return (
     <>
@@ -155,10 +155,10 @@ const Animal: React.FC<AnimalProps> = ({ type, targetPosition, health }) => {
 
       <AnimatedSprite
         zIndex={to_grid_coordinate(absolutePosition).x + to_grid_coordinate(absolutePosition).y}
-        x={isDead ? -100 /*lol*/ : absolutePosition.x}
-        y={isDead ? -100 /*lol*/ : absolutePosition.y - 33}
+        x={isDead ? -100 /*lol*/ : absolutePosition.x + tile_width / 2}
+        y={isDead ? -100 /*lol*/ : absolutePosition.y + tile_width / 2}
         anchor={0.5}
-        scale={SCALE - 1}
+        scale={3}
         isPlaying={false}
         textures={frames}
         initialFrame={currentFrame}
