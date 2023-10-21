@@ -218,10 +218,10 @@ export async function executeEvents(events: TransformedEvent[]) {
   for (const e of events) {
     if (e.eventType === 'component') {
       const event = e as TransformedEvent & ComponentData;
-      console.log('setComponent', event.component, event.entityIndex, event.componentValues);
+      //console.log('setComponent', event.component, event.entityIndex, event.componentValues);
       setComponent(event.component, event.entityIndex, event.componentValues);
     } else {
-      console.log('aaaa');
+      //console.log('aaaa');
     }
   }
   /*const gameEvents = events.filter(
