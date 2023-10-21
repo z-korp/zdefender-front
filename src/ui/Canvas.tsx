@@ -61,6 +61,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const [selectedTile, setSelectedTile] = useState<Coordinate | undefined>(undefined);
   const [isGameOver, setIsGameOver] = useState(false);
   const [absolutePosition, setAbsolutePosition] = useState<Coordinate | undefined>(undefined);
+  const [isBuying, setIsBuying] = useState(false);
   const { set_ip } = useElementStore((state) => state);
 
   const [pseudo, setPseudo] = useState('');
@@ -145,20 +146,23 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               y: e.nativeEvent.offsetY,
             });
           }
-
-          // console.log('grid_coordinate', grid_coordinate);
-          // console.log('onPointerMove');
         }}
         onPointerDown={(e) => {
-          if (absolutePosition && absolutePosition.x > 760 && absolutePosition.y < 55) {
-            console.log('onPointerDown');
-            setSelectedTile(undefined);
-          }
-          // if (hoveredTile!.x > 7 || hoveredTile!.y > 7 || hoveredTile!.x < 0 || hoveredTile!.y < 0) {
-          //   // setSelectedTile(undefined);
-          // }
-          else {
+          if (hoveredTile!.x > 7 || hoveredTile!.y > 7 || hoveredTile!.x < 0 || hoveredTile!.y < 0) {
+            console.log('est out');
+            console.log(selectedTile);
+            // setSelectedTile(undefined);
+          } else {
             console.log('hoveredTile', hoveredTile);
+            console.log('selectedTile', selectedTile);
+            if (selectedTile) {
+              const hoveredTileType = map[selectedTile.y][selectedTile.x];
+              console.log('hoveredTileType', hoveredTileType);
+              if (hoveredTileType.type !== 'road') {
+                setIsBuying(true); // Assuming you have a state called 'isBuying' and a setter 'setIsBuying'
+              }
+            }
+
             setSelectedTile(hoveredTile ? hoveredTile : undefined);
           }
         }}
@@ -167,7 +171,12 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           <Container sortableChildren={true}>
             <>
               <Map />
-              <BottomMenu selectedTile={selectedTile} setSelectedType={setSelectedType} onClose={handleMenuClose} />
+              <BottomMenu
+                selectedTile={selectedTile}
+                setSelectedType={setSelectedType}
+                isBuying={isBuying}
+                onClose={() => setSelectedTile(undefined)}
+              />
             </>
 
             <Tower
