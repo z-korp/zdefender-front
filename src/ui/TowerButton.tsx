@@ -3,6 +3,7 @@ import { Sprite } from '@pixi/react';
 import { useEffect, useState } from 'react';
 import barbarian_transparent from '../assets/barbarian_transparent.png';
 import bowman_transparent from '../assets/bowman_transparent.png';
+import * as PIXI from 'pixi.js';
 import tower from '../assets/tower.png';
 import wizard_transparent from '../assets/wizard_transparent.png';
 import { useElementStore } from '@/utils/store';
@@ -15,6 +16,7 @@ interface TowerButtonProps {
 //TODO: rename to TowerAsset
 export const TowerButton: React.FC<TowerButtonProps> = ({ x, y }) => {
   const [imageState, setImageState] = useState<any>(barbarian_transparent);
+  PIXI.Texture.from(tower).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
   const { selectedType } = useElementStore((state) => state);
   useEffect(() => {
