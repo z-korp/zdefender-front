@@ -270,6 +270,12 @@ export function getEntityIdFromKeys(keys: bigint[]): EntityIndex {
   return parseInt(poseidon.toString()) as EntityIndex;
 }
 
+export function getEntityIdForMobAndTower(key: bigint, id: bigint): EntityIndex {
+  // calculate the poseidon hash of the keys
+  const poseidon = poseidonHashMany([BigInt(2), key, id]);
+  return parseInt(poseidon.toString()) as EntityIndex;
+}
+
 type GameEvent = ComponentData & {
   type: 'Game';
   key: number;
@@ -492,7 +498,11 @@ export async function setComponentsFromEvents(components: Components, events: Ev
         acc[key] = component.schema[key] === Type.String ? shortString.decodeShortString(value) : Number(value);
         return acc;
       }, {});
-      const entity = getEntityIdFromKeys(keys);
+
+      let entity = getEntityIdFromKeys(keys);
+      if (component === 'Tower' || component === 'Mob') {
+        entity = getEntityIdForMobAndTower(keys[0], BigInt(values[0]));
+      }
 
       const baseEventData = {
         component,
