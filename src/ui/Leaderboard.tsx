@@ -5,8 +5,10 @@ const Leaderboard = () => {
 
   const playerScores: { [key: string]: number } = {};
   for (const game of leaderboard) {
-    if (!playerScores[game.player] || playerScores[game.player] < game.score) {
-      playerScores[game.player] = game.score;
+    console.log('GAME LEADERBOARD');
+    console.log('game', game);
+    if (!playerScores[game.name] || playerScores[game.name] < game.score) {
+      playerScores[game.name] = game.score;
     }
   }
 

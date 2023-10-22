@@ -12,6 +12,11 @@ export interface HitEvent {
   toid: number;
   damage: number;
 }
+export interface Score {
+  stage: number;
+  score: number;
+  name: string;
+}
 
 interface State {
   ip: number | undefined;
@@ -35,6 +40,8 @@ interface State {
   hits: HitEvent[];
   setHits: (hits: HitEvent[]) => void;
   removeFirstHit: () => void;
+  leaderboard: Score[];
+  add_to_leaderboard: (s: Score) => void;
 }
 
 export const useElementStore = create<State>((set) => ({
@@ -60,4 +67,6 @@ export const useElementStore = create<State>((set) => ({
   hits: [],
   setHits: (newHits: HitEvent[]) => set(() => ({ hits: newHits })),
   removeFirstHit: () => set((state) => ({ hits: state.hits.slice(1) })),
+  leaderboard: [],
+  add_to_leaderboard: (s: Score) => set((state) => ({ leaderboard: [...state.leaderboard, s] })),
 }));

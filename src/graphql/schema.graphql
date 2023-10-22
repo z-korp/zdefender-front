@@ -17,3 +17,16 @@ query getEntities {
     }
   }
 }
+
+query getFinishedGames {
+  gameModels(first: 100) {
+    edges {
+      node {
+        id
+        score
+        over
+        name
+      }
+    }
+  }
+}

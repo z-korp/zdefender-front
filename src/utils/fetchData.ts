@@ -3,22 +3,25 @@ import { shortString } from 'starknet';
 export const fetchData = async (graphSdk: any): Promise<{ stage: number; score: number; player: string }[]> => {
   try {
     const { data } = await graphSdk.getFinishedGames();
-
-    if (data && data.mapComponents && data.mapComponents.edges) {
-      const gameComponentsWithKeys: any[] = [];
-
-      data.mapComponents.edges.forEach((edge: any) => {
-        if (edge && edge.node?.score !== undefined && edge.node?.name && edge.node?.level) {
-          gameComponentsWithKeys.push({
+    console.log('Data', data);
+    if (data && data.gameModels && data.gameModels.edges) {
+      const gameModelsWithKeys: any[] = [];
+      console.log('gamemodels before', data.gameModels.edges);
+      data.gameModels.edges.forEach((edge: any) => {
+        console.log('edge', edge.node);
+        if (edge && edge.node?.score !== undefined && edge.node?.over && edge.node?.name && edge.node?.id) {
+          console.log(`Edge: ${JSON.stringify(edge.node)}`);
+          gameModelsWithKeys.push({
             score: edge.node?.score,
-            stage: edge.node?.level, // Changed 'level' to 'stage' to match the return type
-            player: shortString.decodeShortString(edge.node?.name),
+            over: edge.node?.over, // Changed 'level' to 'stage' to match the return type
+            name: shortString.decodeShortString(edge.node?.name),
+            id: edge.node?.id,
           });
         }
       });
 
       //console.log('gameComponentsWithKeys', gameComponentsWithKeys);
-      return gameComponentsWithKeys;
+      return gameModelsWithKeys;
     } else {
       return []; // Return an empty array if the conditions are not met
     }
