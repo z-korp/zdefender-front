@@ -1,6 +1,6 @@
 {
   "frames": {
-    "reddemonarmored-walk-S-0": {
+    "devil-walk-S-0": {
       "frame": {
         "x": 0,
         "y": 0,
@@ -20,7 +20,7 @@
         "h": 64
       }
     },
-    "reddemonarmored-walk-S-1": {
+    "devil-walk-S-1": {
       "frame": {
         "x": 16,
         "y": 0,
@@ -40,7 +40,7 @@
         "h": 64
       }
     },
-    "reddemonarmored-walk-S-2": {
+    "devil-walk-S-2": {
       "frame": {
         "x": 32,
         "y": 0,
@@ -60,7 +60,7 @@
         "h": 64
       }
     },
-    "reddemonarmored-walk-S-3": {
+    "devil-walk-S-3": {
       "frame": {
         "x": 48,
         "y": 0,
@@ -80,7 +80,7 @@
         "h": 64
       }
     },
-    "reddemonarmored-walk-N-0": {
+    "devil-walk-N-0": {
       "frame": {
         "x": 0,
         "y": 16,
@@ -100,7 +100,7 @@
         "h": 64
       }
     },
-    "reddemonarmored-walk-N-1": {
+    "devil-walk-N-1": {
       "frame": {
         "x": 16,
         "y": 16,
@@ -120,7 +120,7 @@
         "h": 64
       }
     },
-    "reddemonarmored-walk-N-2": {
+    "devil-walk-N-2": {
       "frame": {
         "x": 32,
         "y": 16,
@@ -140,7 +140,7 @@
         "h": 64
       }
     },
-    "reddemonarmored-walk-N-3": {
+    "devil-walk-N-3": {
       "frame": {
         "x": 48,
         "y": 16,
@@ -160,7 +160,7 @@
         "h": 64
       }
     },
-    "reddemonarmored-walk-E-0": {
+    "devil-walk-E-0": {
       "frame": {
         "x": 0,
         "y": 32,
@@ -180,7 +180,7 @@
         "h": 64
       }
     },
-    "reddemonarmored-walk-E-1": {
+    "devil-walk-E-1": {
       "frame": {
         "x": 16,
         "y": 32,
@@ -200,7 +200,7 @@
         "h": 64
       }
     },
-    "reddemonarmored-walk-E-2": {
+    "devil-walk-E-2": {
       "frame": {
         "x": 32,
         "y": 32,
@@ -220,7 +220,7 @@
         "h": 64
       }
     },
-    "reddemonarmored-walk-E-3": {
+    "devil-walk-E-3": {
       "frame": {
         "x": 48,
         "y": 32,
@@ -240,7 +240,7 @@
         "h": 64
       }
     },
-    "reddemonarmored-walk-W-0": {
+    "devil-walk-W-0": {
       "frame": {
         "x": 0,
         "y": 48,
@@ -260,7 +260,7 @@
         "h": 64
       }
     },
-    "reddemonarmored-walk-W-1": {
+    "devil-walk-W-1": {
       "frame": {
         "x": 16,
         "y": 48,
@@ -280,7 +280,7 @@
         "h": 64
       }
     },
-    "reddemonarmored-walk-W-2": {
+    "devil-walk-W-2": {
       "frame": {
         "x": 32,
         "y": 48,
@@ -300,7 +300,7 @@
         "h": 64
       }
     },
-    "reddemonarmored-walk-W-3": {
+    "devil-walk-W-3": {
       "frame": {
         "x": 48,
         "y": 48,
@@ -324,7 +324,7 @@
   "meta": {
     "app": "sprite-sheet-to-json",
     "version": "1.0.0",
-    "image": "reddemonarmored.png",
+    "image": "devil.png",
     "format": "RGBA8888",
     "size": {
       "w": 64,

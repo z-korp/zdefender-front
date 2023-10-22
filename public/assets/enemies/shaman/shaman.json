@@ -1,6 +1,6 @@
 {
   "frames": {
-    "orcshaman-walk-S-0": {
+    "shaman-walk-S-0": {
       "frame": {
         "x": 0,
         "y": 0,
@@ -20,7 +20,7 @@
         "h": 64
       }
     },
-    "orcshaman-walk-S-1": {
+    "shaman-walk-S-1": {
       "frame": {
         "x": 16,
         "y": 0,
@@ -40,7 +40,7 @@
         "h": 64
       }
     },
-    "orcshaman-walk-S-2": {
+    "shaman-walk-S-2": {
       "frame": {
         "x": 32,
         "y": 0,
@@ -60,7 +60,7 @@
         "h": 64
       }
     },
-    "orcshaman-walk-S-3": {
+    "shaman-walk-S-3": {
       "frame": {
         "x": 48,
         "y": 0,
@@ -80,7 +80,7 @@
         "h": 64
       }
     },
-    "orcshaman-walk-N-0": {
+    "shaman-walk-N-0": {
       "frame": {
         "x": 0,
         "y": 16,
@@ -100,7 +100,7 @@
         "h": 64
       }
     },
-    "orcshaman-walk-N-1": {
+    "shaman-walk-N-1": {
       "frame": {
         "x": 16,
         "y": 16,
@@ -120,7 +120,7 @@
         "h": 64
       }
     },
-    "orcshaman-walk-N-2": {
+    "shaman-walk-N-2": {
       "frame": {
         "x": 32,
         "y": 16,
@@ -140,7 +140,7 @@
         "h": 64
       }
     },
-    "orcshaman-walk-N-3": {
+    "shaman-walk-N-3": {
       "frame": {
         "x": 48,
         "y": 16,
@@ -160,7 +160,7 @@
         "h": 64
       }
     },
-    "orcshaman-walk-E-0": {
+    "shaman-walk-E-0": {
       "frame": {
         "x": 0,
         "y": 32,
@@ -180,7 +180,7 @@
         "h": 64
       }
     },
-    "orcshaman-walk-E-1": {
+    "shaman-walk-E-1": {
       "frame": {
         "x": 16,
         "y": 32,
@@ -200,7 +200,7 @@
         "h": 64
       }
     },
-    "orcshaman-walk-E-2": {
+    "shaman-walk-E-2": {
       "frame": {
         "x": 32,
         "y": 32,
@@ -220,7 +220,7 @@
         "h": 64
       }
     },
-    "orcshaman-walk-E-3": {
+    "shaman-walk-E-3": {
       "frame": {
         "x": 48,
         "y": 32,
@@ -240,7 +240,7 @@
         "h": 64
       }
     },
-    "orcshaman-walk-W-0": {
+    "shaman-walk-W-0": {
       "frame": {
         "x": 0,
         "y": 48,
@@ -260,7 +260,7 @@
         "h": 64
       }
     },
-    "orcshaman-walk-W-1": {
+    "shaman-walk-W-1": {
       "frame": {
         "x": 16,
         "y": 48,
@@ -280,7 +280,7 @@
         "h": 64
       }
     },
-    "orcshaman-walk-W-2": {
+    "shaman-walk-W-2": {
       "frame": {
         "x": 32,
         "y": 48,
@@ -300,7 +300,7 @@
         "h": 64
       }
     },
-    "orcshaman-walk-W-3": {
+    "shaman-walk-W-3": {
       "frame": {
         "x": 48,
         "y": 48,
@@ -324,7 +324,7 @@
   "meta": {
     "app": "sprite-sheet-to-json",
     "version": "1.0.0",
-    "image": "orcshaman.png",
+    "image": "shaman.png",
     "format": "RGBA8888",
     "size": {
       "w": 64,
