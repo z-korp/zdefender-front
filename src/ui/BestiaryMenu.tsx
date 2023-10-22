@@ -12,6 +12,8 @@ interface BestiaryMenuProps {
 export const BestiaryMenu: React.FC<BestiaryMenuProps> = ({ x, y }) => {
   const { wave } = useElementStore((state) => state);
 
+  if (wave === undefined) return null;
+
   return (
     <Container x={x} y={y}>
       <Graphics
@@ -36,9 +38,9 @@ export const BestiaryMenu: React.FC<BestiaryMenuProps> = ({ x, y }) => {
         }
       />
 
-      <MobDetails x={10} y={40} type={MobCategory.NORMAL} mob={waves[Math.max(wave - 1, 9)][MobCategory.NORMAL]} />
-      <MobDetails x={110} y={40} type={MobCategory.ELITE} mob={waves[Math.max(wave - 1, 9)][MobCategory.ELITE]} />
-      <MobDetails x={210} y={40} type={MobCategory.BOSS} mob={waves[Math.max(wave - 1, 9)][MobCategory.BOSS]} />
+      <MobDetails x={10} y={40} type={MobCategory.NORMAL} mob={waves[Math.min(wave - 1, 9)][MobCategory.NORMAL]} />
+      <MobDetails x={110} y={40} type={MobCategory.ELITE} mob={waves[Math.min(wave - 1, 9)][MobCategory.ELITE]} />
+      <MobDetails x={210} y={40} type={MobCategory.BOSS} mob={waves[Math.min(wave - 1, 9)][MobCategory.BOSS]} />
     </Container>
   );
 };

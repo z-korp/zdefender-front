@@ -145,7 +145,7 @@ const Mob: React.FC<MobProps> = ({ type, targetPosition, health, id }) => {
   const mobType = bestiary[type].type;
   const base = baseMobCharacteristic[mobType];
 
-  const maxHealth = base.health(wave - 1); // or whatever your maximum health is
+  const maxHealth = base.health(wave); // or whatever your maximum health is
   const healthBarWidth = 50; // width of the health bar at full health
   const healthBarHeight = 5; // height of the health bar
   const currentHealthWidth = (health / maxHealth) * healthBarWidth;

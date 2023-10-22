@@ -318,7 +318,7 @@ function handleGameEvent(
   const over = overNumber === 1;
   const name = shortString.decodeShortString(values[0]);
   console.log(
-    `[Game: KEYS: (key: ${key}) - VALUES: (id: ${id}, name: ${name}, seed: ${seed}, over: ${over}, tower_count: ${tower_count}, tower_build: ${tower_build}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, mob_alive: ${mob_alive}, wave: ${wave}, gold: ${gold}, health: ${health}, tick: ${tick})]`
+    `[Game: KEYS: (key: ${key}) - VALUES: (id: ${id}, name: ${name}, seed: ${seed}, over: ${over}, tower_count: ${tower_count}, tower_build: ${tower_build}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, mob_alive: ${mob_alive}, wave: ${wave}, gold: ${gold}, health: ${health}, tick: ${tick}, score: ${score})]`
   );
   return {
     type: 'Game',
