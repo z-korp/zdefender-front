@@ -12,6 +12,11 @@ export interface HitEvent {
   toid: number;
   damage: number;
 }
+export interface Score {
+  stage: number;
+  score: number;
+  name: string;
+}
 
 interface State {
   ip: number | undefined;
@@ -39,6 +44,8 @@ interface State {
   set_speed: (speed: number) => void;
   increment_speed: () => void;
   decrement_speed: () => void;
+  leaderboard: Score[];
+  add_to_leaderboard: (s: Score) => void;
 }
 
 export const useElementStore = create<State>((set) => ({
@@ -68,4 +75,6 @@ export const useElementStore = create<State>((set) => ({
   set_speed: (speed: number) => set(() => ({ speed })),
   increment_speed: () => set((state) => ({ speed: Math.min(state.speed + 1, 3) })),
   decrement_speed: () => set((state) => ({ speed: Math.max(state.speed - 1, 1) })),
+  leaderboard: [],
+  add_to_leaderboard: (s: Score) => set((state) => ({ leaderboard: [...state.leaderboard, s] })),
 }));

@@ -1,6 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 import { GraphQLClientRequestHeaders } from 'graphql-request/build/cjs/types';
-import { print } from 'graphql'
+import { print } from 'graphql';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -11,16 +11,16 @@ export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> =
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
-  Cursor: { input: any; output: any; }
-  DateTime: { input: any; output: any; }
-  felt252: { input: any; output: any; }
-  u8: { input: any; output: any; }
-  u32: { input: any; output: any; }
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
+  Cursor: { input: any; output: any };
+  DateTime: { input: any; output: any };
+  felt252: { input: any; output: any };
+  u8: { input: any; output: any };
+  u32: { input: any; output: any };
 };
 
 export type ComponentUnion = Moves | Position;
@@ -120,6 +120,39 @@ export type Query = {
   systems?: Maybe<SystemConnection>;
 };
 
+export type GetFinishedGamesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetFinishedGamesQuery = {
+  __typename?: 'Query';
+  gameModels?: {
+    __typename?: 'MapConnection';
+    edges?: Array<{
+      __typename?: 'MapEdge';
+      node?: {
+        __typename?: 'Map';
+        score?: any | null;
+        id?: any | null;
+        over?: any | null;
+        name?: string | null;
+      } | null;
+    } | null> | null;
+  } | null;
+};
+
+export const GetFinishedGamesDocument = gql`
+  query getFinishedGames {
+    gameModels(first: 10000) {
+      edges {
+        node {
+          score
+          over
+          name
+          id
+        }
+      }
+    }
+  }
+`;
 
 export type QueryEntitiesArgs = {
   after?: InputMaybe<Scalars['Cursor']['input']>;
@@ -129,16 +162,13 @@ export type QueryEntitiesArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type QueryEntityArgs = {
   id: Scalars['ID']['input'];
 };
 
-
 export type QueryEventArgs = {
   id: Scalars['ID']['input'];
 };
-
 
 export type QueryMovesComponentsArgs = {
   after?: InputMaybe<Scalars['Cursor']['input']>;
@@ -147,7 +177,6 @@ export type QueryMovesComponentsArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type QueryPositionComponentsArgs = {
   after?: InputMaybe<Scalars['Cursor']['input']>;
   before?: InputMaybe<Scalars['Cursor']['input']>;
@@ -155,11 +184,9 @@ export type QueryPositionComponentsArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type QuerySystemArgs = {
   id: Scalars['ID']['input'];
 };
-
 
 export type QuerySystemCallArgs = {
   id: Scalars['Int']['input'];
@@ -209,44 +236,88 @@ export type SystemEdge = {
   node?: Maybe<System>;
 };
 
-export type GetEntitiesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetEntitiesQueryVariables = Exact<{ [key: string]: never }>;
 
-
-export type GetEntitiesQuery = { __typename?: 'Query', entities?: { __typename?: 'EntityConnection', edges?: Array<{ __typename?: 'EntityEdge', node?: { __typename?: 'Entity', keys?: string | null, components?: Array<{ __typename: 'Moves', remaining?: any | null } | { __typename: 'Position', x?: any | null, y?: any | null } | null> | null } | null } | null> | null } | null };
-
+export type GetEntitiesQuery = {
+  __typename?: 'Query';
+  entities?: {
+    __typename?: 'EntityConnection';
+    edges?: Array<{
+      __typename?: 'EntityEdge';
+      node?: {
+        __typename?: 'Entity';
+        keys?: string | null;
+        components?: Array<
+          | { __typename: 'Moves'; remaining?: any | null }
+          | { __typename: 'Position'; x?: any | null; y?: any | null }
+          | null
+        > | null;
+      } | null;
+    } | null> | null;
+  } | null;
+};
 
 export const GetEntitiesDocument = gql`
-    query getEntities {
-  entities(keys: ["%"]) {
-    edges {
-      node {
-        keys
-        components {
-          __typename
-          ... on Moves {
-            remaining
-          }
-          ... on Position {
-            x
-            y
+  query getEntities {
+    entities(keys: ["%"]) {
+      edges {
+        node {
+          keys
+          components {
+            __typename
+            ... on Moves {
+              remaining
+            }
+            ... on Position {
+              x
+              y
+            }
           }
         }
       }
     }
   }
-}
-    `;
+`;
 
-export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
-
+export type SdkFunctionWrapper = <T>(
+  action: (requestHeaders?: Record<string, string>) => Promise<T>,
+  operationName: string,
+  operationType?: string
+) => Promise<T>;
 
 const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationType) => action();
 const GetEntitiesDocumentString = print(GetEntitiesDocument);
+const GetFinishedGamesDocumentString = print(GetFinishedGamesDocument);
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    getEntities(variables?: GetEntitiesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<{ data: GetEntitiesQuery; extensions?: any; headers: Dom.Headers; status: number; }> {
-        return withWrapper((wrappedRequestHeaders) => client.rawRequest<GetEntitiesQuery>(GetEntitiesDocumentString, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getEntities', 'query');
-    }
+    getEntities(
+      variables?: GetEntitiesQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders
+    ): Promise<{ data: GetEntitiesQuery; extensions?: any; headers: Dom.Headers; status: number }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<GetEntitiesQuery>(GetEntitiesDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'getEntities',
+        'query'
+      );
+    },
+    getFinishedGames(
+      variables?: GetFinishedGamesQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders
+    ): Promise<{ data: GetFinishedGamesQuery; extensions?: any; headers: Dom.Headers; status: number }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<GetFinishedGamesQuery>(GetFinishedGamesDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'getFinishedGames',
+        'query'
+      );
+    },
   };
 }
 export type Sdk = ReturnType<typeof getSdk>;
