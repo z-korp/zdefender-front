@@ -101,7 +101,7 @@ export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower, o
             }
           />
           <Text
-            text={`Damage:${data.damage(1)} -> ${nextLevelDmg}`}
+            text={`Damage:${data.damage(tower.level)} -> ${nextLevelDmg}`}
             x={x + 90}
             y={y + 120}
             style={
