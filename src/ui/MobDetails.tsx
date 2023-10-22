@@ -24,6 +24,7 @@ const MobDetails: React.FC<MobDetailsProps> = ({ x, y, type, mob }) => {
   const armorIcon = armor;
   const bootsIcon = boots;
   PIXI.Texture.from(image).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+  PIXI.Texture.from(bootsIcon).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
   PIXI.Texture.from(armorIcon).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
   return (
     <Container x={x} y={y}>
