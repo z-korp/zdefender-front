@@ -37,6 +37,7 @@ import TileMarker from './TileMarker';
 import TowerBuilding from './Tower';
 import { TowerAsset } from './TowerAsset';
 import Wave from './Wave';
+import { sound } from '@pixi/sound';
 
 interface CanvasProps {
   setMusicPlaying: (bool: boolean) => void;
@@ -56,6 +57,14 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
   const { id, tick, over, wave, mob_remaining, gold, health, towers } = useGame();
 
+  useEffect(() => {
+    sound.add('build', './assets/build-1.mp3');
+    sound.add('gold', './assets/gold.mp3');
+  }, []);
+
+  useEffect(() => {
+    sound.play('gold');
+  }, [gold]);
   const [score, setScore] = useState<number>(0);
   const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(undefined);
   const [hoveredTileType, setHoveredTileType] = useState<string | undefined>(undefined);
@@ -118,6 +127,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
         ? TowerCategory.WIZARD
         : TowerCategory.BARBARIAN;
     build(account, ip.toString(), x, y, category);
+    sound.play('build');
   };
 
   const [mobs, setMobs] = useState<any[]>([]);

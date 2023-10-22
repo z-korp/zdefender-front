@@ -8,6 +8,8 @@ import LeaderBoardButton from './ui/LeaderBoardButton';
 import Leaderboard from './ui/Leaderboard';
 import RulesModal from './ui/RulesModal';
 import { useElementStore } from './utils/store';
+import 'font-awesome/css/font-awesome.min.css';
+import { sound } from '@pixi/sound';
 
 function App() {
   Modal.setAppElement('#root');
@@ -16,6 +18,18 @@ function App() {
 
   const [isLeaderBoardModalOpen, setLeaderBoardModalOpen] = useState(false);
   const [isMusicPlaying, setMusicPlaying] = useState(false);
+
+  useEffect(() => {
+    sound.add('my-sound', './assets/main_theme.mp3');
+  }, []);
+
+  useEffect(() => {
+    if (isMusicPlaying) {
+      sound.play('my-sound', { loop: true });
+    } else {
+      sound.stopAll();
+    }
+  }, [isMusicPlaying]);
 
   const toggleMusic = () => {
     const newIsMusicPlaying = !isMusicPlaying;
@@ -56,11 +70,7 @@ function App() {
         >
           Rules
         </button>
-        <button
-          onClick={toggleMusic}
-          className="p-2 mr-2 text-2xl w-6 "
-          style={{ position: 'absolute', top: 5, right: 10 }}
-        >
+        <button onClick={toggleMusic} className="p-2 mr-2 text-2xl mx-10 my-10 text-white">
           {isMusicPlaying ? <i className="fa fa-volume-up"></i> : <i className="fa fa-volume-off"></i>}
         </button>
       </div>
