@@ -19,7 +19,7 @@ export enum MobType {
   ORC_SHAMAN = 'orcshaman',
   GRUM = 'grum',
   KATAN = 'katan',
-  SKELETON_SOLDIER = 'squeletonsoldier',
+  SKELETON_SOLDIER = 'skeletonsoldier',
   DRAGON = 'dragon',
 }
 
