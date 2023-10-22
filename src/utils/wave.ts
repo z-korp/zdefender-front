@@ -6,8 +6,21 @@ export enum MobCategory {
 
 export enum MobType {
   CHICKEN = 'chicken',
-  MAMMOTH = 'mammoth',
   BOAR = 'boar',
+  MAMMOTH = 'mammoth',
+  WENDIGO = 'wendigo',
+  YETI = 'yeti',
+  BORG = 'borg',
+  DAEMON = 'demon',
+  DEVIL = 'devil',
+  NECROMANCER = 'necromancer',
+  MINOTAUR = 'monitaur',
+  ORC = 'orc',
+  SPEAR_OGOBLIN = 'spear_goblin',
+  ORC_SHAMAN = 'orc_shaman',
+  GRUM = 'grum',
+  KATAN = 'katan',
+  DRAGON = 'dragon',
 }
 
 export interface WaveConfig {
@@ -18,12 +31,6 @@ export interface WaveConfig {
 
 const waves: WaveConfig[] = [
   {
-    // WAVE 0
-    [MobCategory.NORMAL]: MobType.CHICKEN,
-    [MobCategory.ELITE]: MobType.BOAR,
-    [MobCategory.BOSS]: MobType.MAMMOTH,
-  },
-  {
     // WAVE 1
     [MobCategory.NORMAL]: MobType.CHICKEN,
     [MobCategory.ELITE]: MobType.BOAR,
@@ -33,7 +40,55 @@ const waves: WaveConfig[] = [
     // WAVE 2
     [MobCategory.NORMAL]: MobType.CHICKEN,
     [MobCategory.ELITE]: MobType.BOAR,
-    [MobCategory.BOSS]: MobType.MAMMOTH,
+    [MobCategory.BOSS]: MobType.WENDIGO,
+  },
+  {
+    // WAVE 3
+    [MobCategory.NORMAL]: MobType.CHICKEN,
+    [MobCategory.ELITE]: MobType.BOAR,
+    [MobCategory.BOSS]: MobType.YETI,
+  },
+  {
+    // WAVE 4
+    [MobCategory.NORMAL]: MobType.BORG,
+    [MobCategory.ELITE]: MobType.DAEMON,
+    [MobCategory.BOSS]: MobType.DEVIL,
+  },
+  {
+    // WAVE 5
+    [MobCategory.NORMAL]: MobType.BORG,
+    [MobCategory.ELITE]: MobType.DAEMON,
+    [MobCategory.BOSS]: MobType.NECROMANCER,
+  },
+  {
+    // WAVE 6
+    [MobCategory.NORMAL]: MobType.BORG,
+    [MobCategory.ELITE]: MobType.DAEMON,
+    [MobCategory.BOSS]: MobType.MINOTAUR,
+  },
+  {
+    // WAVE 7
+    [MobCategory.NORMAL]: MobType.ORC,
+    [MobCategory.ELITE]: MobType.SPEAR_OGOBLIN,
+    [MobCategory.BOSS]: MobType.ORC_SHAMAN,
+  },
+  {
+    // WAVE 8
+    [MobCategory.NORMAL]: MobType.ORC,
+    [MobCategory.ELITE]: MobType.SPEAR_OGOBLIN,
+    [MobCategory.BOSS]: MobType.GRUM,
+  },
+  {
+    // WAVE 9
+    [MobCategory.NORMAL]: MobType.ORC,
+    [MobCategory.ELITE]: MobType.SPEAR_OGOBLIN,
+    [MobCategory.BOSS]: MobType.KATAN,
+  },
+  {
+    // WAVE 10
+    [MobCategory.NORMAL]: MobType.YETI,
+    [MobCategory.ELITE]: MobType.MINOTAUR,
+    [MobCategory.BOSS]: MobType.DRAGON,
   },
 ];
 
