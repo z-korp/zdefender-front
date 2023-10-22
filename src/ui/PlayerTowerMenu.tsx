@@ -5,7 +5,10 @@ import { DefenderType } from './Defender';
 import { SellButtonWithGold } from './SellButtonWithGold';
 import { TowerAsset } from './TowerAsset';
 import { UpgradeButtonWithGold } from './UpgradeButtonWithGold';
-import { Text } from './base/Text';
+import { Text as TextHeader } from './base/Text';
+
+import { Text } from '@pixi/react';
+import * as PIXI from 'pixi.js';
 
 interface PlayerTowerMenuProps {
   x: number;
@@ -17,7 +20,8 @@ interface PlayerTowerMenuProps {
 
 export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower, onUpgrade, onSell }) => {
   const [type, setType] = useState<DefenderType | undefined>(undefined);
-
+  const [nextLevelDmg, setNextLevelDmg] = useState<number | null>(null);
+  const [nextLevelPrice, setNextLevelPrice] = useState<number | null>(null);
   useEffect(() => {
     if (tower && tower.category !== undefined) {
       const type =
@@ -29,6 +33,9 @@ export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower, o
           ? 'wizard'
           : 'knight';
       setType(type);
+
+      setNextLevelDmg(data.damage(tower.level + 1));
+      setNextLevelPrice(data.price(tower.level + 1));
     }
   }, [tower]);
 
@@ -43,16 +50,85 @@ export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower, o
         draw={(g) => {
           g.clear();
           g.lineStyle(2, 0xffffff); // 2 is the thickness of the line, 0xffffff is white color
-          g.drawRect(x, y, 315, 162); // Adjust the rectangle dimensions and position as needed
+          g.drawRect(x, y, 315, 192); // Adjust the rectangle dimensions and position as needed
         }}
       />
-      <Text text={`TOWER`} x={x + 100} y={y + 10} fontSize={22} />
+      <TextHeader text={`TOWER`} x={x + 100} y={y + 10} fontSize={22} />
       {type && (
         <>
           <TowerAsset x={x + 20} y={y + 70} type={type} />
-          <Text text={`LVL ${tower.level}`} x={x + 120} y={y + 112} fontSize={12} />
-          <SellButtonWithGold x={x + 200} y={y + 70} price={16} onClick={onSell} />
-          <UpgradeButtonWithGold x={x + 200} y={y + 105} price={data.price(tower.level)} onClick={onUpgrade} />
+          <Text
+            text={`LVL: ${tower.level}`}
+            x={x + 90}
+            y={y + 60}
+            style={
+              new PIXI.TextStyle({
+                align: 'center',
+                fontFamily: '"Press Start 2P", Helvetica, sans-serif',
+                fontSize: 10,
+                fontWeight: '400',
+                fill: '#ffffff',
+              })
+            }
+          />
+          <Text
+            text={`Range:${data.range}`}
+            x={x + 90}
+            y={y + 80}
+            style={
+              new PIXI.TextStyle({
+                align: 'center',
+                fontFamily: '"Press Start 2P", Helvetica, sans-serif',
+                fontSize: 10,
+                fontWeight: '400',
+                fill: '#ffffff',
+              })
+            }
+          />
+          <Text
+            text={`Speed:${data.speed}`}
+            x={x + 90}
+            y={y + 100}
+            style={
+              new PIXI.TextStyle({
+                align: 'center',
+                fontFamily: '"Press Start 2P", Helvetica, sans-serif',
+                fontSize: 10,
+                fontWeight: '400',
+                fill: '#ffffff',
+              })
+            }
+          />
+          <Text
+            text={`Damage:${data.damage(1)} -> ${nextLevelDmg}`}
+            x={x + 90}
+            y={y + 120}
+            style={
+              new PIXI.TextStyle({
+                align: 'center',
+                fontFamily: '"Press Start 2P", Helvetica, sans-serif',
+                fontSize: 10,
+                fontWeight: '400',
+                fill: '#ffffff',
+              })
+            }
+          />
+          <Text
+            text={`Cooldown:${data.cooldown}`}
+            x={x + 90}
+            y={y + 140}
+            style={
+              new PIXI.TextStyle({
+                align: 'center',
+                fontFamily: '"Press Start 2P", Helvetica, sans-serif',
+                fontSize: 10,
+                fontWeight: '400',
+                fill: '#ffffff',
+              })
+            }
+          />
+          <SellButtonWithGold x={x + 200} y={y + 50} price={16} onClick={onSell} />
+          <UpgradeButtonWithGold x={x + 200} y={y + 85} price={data.price(tower.level)} onClick={onUpgrade} />
         </>
       )}
     </Container>

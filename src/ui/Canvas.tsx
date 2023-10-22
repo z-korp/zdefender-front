@@ -263,7 +263,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               {selectedTower && (
                 <PlayerTowerMenu
                   x={870}
-                  y={350}
+                  y={320}
                   tower={selectedTower}
                   onUpgrade={() => upgrade(account, ip.toString(), selectedTower.id)}
                   onSell={() => sell(account, ip.toString(), selectedTower.id)}
