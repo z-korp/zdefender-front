@@ -1,15 +1,14 @@
 import { MobImages } from '@/assets/mobs/mobs';
+import { baseMobCharacteristic } from '@/utils/bestiary';
 import { SCALE } from '@/utils/grid';
+import { useElementStore } from '@/utils/store';
 import { MobCategory, MobType } from '@/utils/wave';
 import { Container, Sprite } from '@pixi/react';
-import { Text } from './base/Text';
-import { baseMobCharacteristic } from '@/utils/bestiary';
-import { utils } from 'pixi.js';
-import { useElementStore } from '@/utils/store';
+import * as PIXI from 'pixi.js';
 import armor from '../assets/armor.png';
 import boots from '../assets/boots.png';
 import hearth from '../assets/heart.png';
-import * as PIXI from 'pixi.js';
+import { Text } from './base/Text';
 
 interface MobDetailsProps {
   x: number;
@@ -20,8 +19,6 @@ interface MobDetailsProps {
 
 const MobDetails: React.FC<MobDetailsProps> = ({ x, y, type, mob }) => {
   const image = MobImages[mob];
-  console.log('==============================');
-  console.log(baseMobCharacteristic[type]);
   const mobData = baseMobCharacteristic[type];
   const { wave } = useElementStore();
   const armorIcon = armor;

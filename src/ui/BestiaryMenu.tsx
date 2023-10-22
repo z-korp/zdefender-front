@@ -20,7 +20,7 @@ export const BestiaryMenu: React.FC<BestiaryMenuProps> = ({ x, y }) => {
         draw={(g) => {
           g.clear();
           g.lineStyle(2, 0xffffff);
-          g.drawRect(0, 0, 315, 310); // Adjust based on the container's position
+          g.drawRect(0, 0, 315, 220); // Adjust based on the container's position
         }}
       />
       <Text

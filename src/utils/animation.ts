@@ -35,34 +35,34 @@ export const getFramesFromType = (
   const frames = Object.keys(resource.data.frames);
   let filtered = [];
   if (type === Animation.Idle) {
-    console.log('[', mob_name, ']', 'Idle Frame');
+    //console.log('[', mob_name, ']', 'Idle Frame');
     filtered = frames.filter((e) => e.includes('idle'));
   } else if (type === Animation.Walk) {
     // console.log('[', mob_name, ']', 'Walk Frame');
     filtered = frames.filter((e) => e.includes('walk'));
   } else if (type === Animation.Carry) {
-    console.log('[', mob_name, ']', 'Carry Frame');
+    //console.log('[', mob_name, ']', 'Carry Frame');
     filtered = frames.filter((e) => e.includes('carry'));
   } else if (type === Animation.Jump) {
-    console.log('[', mob_name, ']', 'Jump Frame');
+    //console.log('[', mob_name, ']', 'Jump Frame');
     filtered = frames.filter((e) => e.includes('jump'));
   } else if (type === Animation.SwordAttack) {
-    console.log('[', mob_name, ']', 'SwordAttack Frame');
+    //console.log('[', mob_name, ']', 'SwordAttack Frame');
     filtered = frames.filter((e) => e.includes('sword'));
   } else if (type === Animation.BowAttack) {
-    console.log('[', mob_name, ']', 'BowAttack Frame');
+    //console.log('[', mob_name, ']', 'BowAttack Frame');
     filtered = frames.filter((e) => e.includes('-bow'));
   } else if (type === Animation.StaffAttack) {
-    console.log('[', mob_name, ']', 'StaffAttack Frame');
+    //console.log('[', mob_name, ']', 'StaffAttack Frame');
     filtered = frames.filter((e) => e.includes('staff'));
   } else if (type === Animation.Throw) {
-    console.log('[', mob_name, ']', 'Throw Frame');
+    //console.log('[', mob_name, ']', 'Throw Frame');
     filtered = frames.filter((e) => e.includes('throw'));
   } else if (type === Animation.Hurt) {
-    console.log('[', mob_name, ']', 'Hurt Frame');
+    //console.log('[', mob_name, ']', 'Hurt Frame');
     filtered = frames.filter((e) => e.includes('hurt'));
   } else if (type === Animation.Death) {
-    console.log('[', mob_name, ']', 'Death Frame');
+    //console.log('[', mob_name, ']', 'Death Frame');
     filtered = frames.filter((e) => e.includes('death'));
   } else {
     throw new Error('Invalid AnimationType');
