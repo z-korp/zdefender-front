@@ -39,6 +39,7 @@ import TileMarker from './TileMarker';
 import TowerBuilding from './Tower';
 import { TowerAsset } from './TowerAsset';
 import Wave from './Wave';
+import { fetchData } from '@/utils/fetchData';
 
 interface CanvasProps {
   setMusicPlaying: (bool: boolean) => void;
@@ -53,8 +54,17 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     },
     account: { account },
   } = useDojo();
-  const { map, set_is_wave_running, is_building, set_ip, selectedType, set_is_building, hits, setHits } =
-    useElementStore((state) => state);
+  const {
+    map,
+    set_is_wave_running,
+    is_building,
+    set_ip,
+    selectedType,
+    set_is_building,
+    hits,
+    setHits,
+    add_to_leaderboard,
+  } = useElementStore((state) => state);
 
   const { id, tick, over, wave, mob_remaining, gold, health, towers, score } = useGame();
 
@@ -130,6 +140,16 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     set_is_building(false);
     sound.play('build');
   };
+
+  useEffect(() => {
+    const fetchAndProcessData = async () => {
+      console.log(graphSdk);
+      const array = await fetchData(graphSdk);
+      array.forEach((e: any) => add_to_leaderboard(e));
+    };
+
+    fetchAndProcessData();
+  }, [isGameOver]);
 
   const [mobs, setMobs] = useState<any[]>([]);
   useEffect(() => {

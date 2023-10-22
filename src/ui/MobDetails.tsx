@@ -20,20 +20,22 @@ interface MobDetailsProps {
 
 const MobDetails: React.FC<MobDetailsProps> = ({ x, y, type, mob }) => {
   const image = MobImages[mob];
-  console.log('==============================');
-  console.log(baseMobCharacteristic[type]);
   const mobData = baseMobCharacteristic[type];
   const { wave } = useElementStore();
   const armorIcon = armor;
   const bootsIcon = boots;
   PIXI.Texture.from(image).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
   PIXI.Texture.from(armorIcon).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+  const healthText = mobData.health(wave).toString();
+  const heartIconXPosition = mobData.health(wave) > 999 ? 10 : 15;
+
   return (
     <Container x={x} y={y}>
       <Sprite anchor={0.5} key={`mob`} image={image} scale={SCALE} x={50} y={30} />
       <Text anchor={0.5} x={50} y={80} text={mob.toUpperCase()} />
       <Text anchor={0.5} x={50} y={100} text={''} />
-      <Sprite anchor={0.5} image={hearth} x={15} y={120} />
+      {/* <Sprite anchor={0.5} image={hearth} x={15} y={120} /> */}
+      <Sprite anchor={0.5} image={hearth} x={heartIconXPosition} y={120} />
 
       <Text anchor={0.5} x={45} y={120} text={mobData.health(wave).toString()} />
       {/* <i className="fa fa-volume-up"></i> */}
