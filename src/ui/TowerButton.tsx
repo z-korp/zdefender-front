@@ -8,9 +8,8 @@ import barbarian_transparent from '../assets/barbarian_transparent.png';
 import bowman_transparent from '../assets/bowman_transparent.png';
 import tower from '../assets/tower.png';
 import wizard_transparent from '../assets/wizard_transparent.png';
-import { BuyButton2 } from './BuyButton2';
+import { BuyButtonWithGold } from './BuyButtonWithGold';
 import { CancelButton } from './CancelButton';
-import Gold from './Gold';
 import { TowerAsset } from './TowerAsset';
 
 interface TowerButtonProps {
@@ -50,11 +49,11 @@ const TowerButton: React.FC<TowerButtonProps> = ({ onClick, x, y, category }) =>
 
   return (
     <>
-      <TowerAsset type={defenderTypes[category]} x={x} y={y} />
+      <TowerAsset type={defenderTypes[category]} x={x - 5} y={y} />
       <Text
         text={category === TowerCategory.BARBARIAN ? 'BARBAR' : category === TowerCategory.BOWMAN ? 'BOWMAN' : 'WIZARD'}
-        x={x + 80}
-        y={y}
+        x={x + 70}
+        y={y + 2}
         style={
           new PIXI.TextStyle({
             align: 'center',
@@ -67,7 +66,7 @@ const TowerButton: React.FC<TowerButtonProps> = ({ onClick, x, y, category }) =>
       />
       <Text
         text={`Damage: ${damage}`}
-        x={x + 80}
+        x={x + 70}
         y={y + 28}
         style={
           new PIXI.TextStyle({
@@ -81,7 +80,7 @@ const TowerButton: React.FC<TowerButtonProps> = ({ onClick, x, y, category }) =>
       />
       <Text
         text={`Range:  ${range}`}
-        x={x + 80}
+        x={x + 70}
         y={y + 43}
         style={
           new PIXI.TextStyle({
@@ -93,22 +92,22 @@ const TowerButton: React.FC<TowerButtonProps> = ({ onClick, x, y, category }) =>
           })
         }
       />
-      <Gold number={basePrice} x={x + 220} y={y + 10} />
 
-      <BuyButton2
+      <BuyButtonWithGold
         x={x + 200}
-        y={y + 28}
+        y={y}
         isDisabled={isBuying || total_gold < basePrice}
         onClick={() => {
           setIsBuying(true);
           set_is_building(true);
           onClick();
         }}
+        price={basePrice}
       />
       {isBuying && (
         <CancelButton
           x={x + 200}
-          y={y + 28}
+          y={y}
           onClick={() => {
             setIsBuying(false);
             set_is_building(false);

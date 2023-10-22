@@ -7,9 +7,10 @@ interface GoldSmallProps {
   number: number;
   x: number;
   y: number;
+  color?: string;
 }
 
-const GoldSmall: React.FC<GoldSmallProps> = ({ number, x, y }) => {
+const GoldSmall: React.FC<GoldSmallProps> = ({ number, x, y, color }) => {
   const [displayedNumber, setDisplayedNumber] = useState<number>(number);
 
   useEffect(() => {
@@ -39,15 +40,16 @@ const GoldSmall: React.FC<GoldSmallProps> = ({ number, x, y }) => {
       <Sprite key={`sword`} image={gold} anchor={0.5} scale={0.75} x={x} y={y} />
       <Text
         text={`${Math.round(displayedNumber)}`}
-        x={x + 20}
-        y={y - 10}
+        x={x + 19}
+        y={y}
+        anchor={0.5}
         style={
           new PIXI.TextStyle({
             align: 'center',
             fontFamily: '"Press Start 2P", Helvetica, sans-serif',
             fontSize: 10,
             fontWeight: '400',
-            fill: '#ffffff',
+            fill: color ? color : '#ffffff',
           })
         }
       />

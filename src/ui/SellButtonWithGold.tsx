@@ -1,8 +1,7 @@
 import { Container, Graphics, Text } from '@pixi/react';
 import * as PIXI from 'pixi.js';
-import GoldSmall from './GoldSmall';
 
-interface BuyButtonWithGoldProps {
+interface SellButtonWithGoldProps {
   x: number;
   y: number;
   price: number;
@@ -10,9 +9,9 @@ interface BuyButtonWithGoldProps {
   isDisabled?: boolean;
 }
 
-export const BuyButtonWithGold: React.FC<BuyButtonWithGoldProps> = ({ x, y, price, isDisabled, onClick }) => {
+export const SellButtonWithGold: React.FC<SellButtonWithGoldProps> = ({ x, y, price, isDisabled, onClick }) => {
   const handlePointerDown = () => {
-    if (!isDisabled) onClick();
+    onClick();
   };
 
   return (
@@ -23,15 +22,15 @@ export const BuyButtonWithGold: React.FC<BuyButtonWithGoldProps> = ({ x, y, pric
           graphics.clear();
           graphics.beginFill(isDisabled ? 0x99b3c2 : 0x0099ff); // Fill color
           graphics.lineStyle(1, !isDisabled ? '#ffffff' : '#f0f0f0'); // Border color
-          graphics.drawRect(0, 0, 80, 25); // Smaller rectangle dimensions
+          graphics.drawRect(0, 0, 100, 25); // Smaller rectangle dimensions
           graphics.endFill();
         }}
         pointerdown={handlePointerDown}
       />
       <Text
-        text="BUY"
+        text="SELL"
         anchor={0.5}
-        x={20} // Half of the button width to center the text
+        x={50} // Half of the button width to center the text
         y={12.5} // Half of the button height to center the text
         style={
           new PIXI.TextStyle({
@@ -43,7 +42,9 @@ export const BuyButtonWithGold: React.FC<BuyButtonWithGoldProps> = ({ x, y, pric
           })
         }
       />
-      <GoldSmall x={48} y={12} number={price} />
+      {/*<GoldSmall x={62} y={12} number={price} />*/}
     </Container>
   );
 };
+
+// color="AEEA00"

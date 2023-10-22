@@ -211,6 +211,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               console.log('hoveredTileType', hoveredTileType);
               if (hoveredTileType.type !== 'road') {
                 handleBuy(selectedType, tileGridCoords.x, tileGridCoords.y);
+                //set_is_building(false);
               }
 
               setSelectedTile(hoveredTile ? hoveredTile : undefined);

@@ -2,8 +2,9 @@ import { TowerCategory } from '@/utils/tower';
 import { Container, Graphics } from '@pixi/react';
 import { useEffect, useState } from 'react';
 import { DefenderType } from './Defender';
+import { SellButtonWithGold } from './SellButtonWithGold';
 import { TowerAsset } from './TowerAsset';
-import { Button } from './base/Button';
+import { UpgradeButtonWithGold } from './UpgradeButtonWithGold';
 import { Text } from './base/Text';
 
 interface PlayerTowerMenuProps {
@@ -45,8 +46,8 @@ export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower })
         <>
           <TowerAsset x={x + 20} y={y + 70} type={type} />
           <Text text={`LVL ${tower.level}`} x={x + 120} y={y + 112} fontSize={12} />
-          <Button x={x + 200} y={y + 70} text="SELL" onClick={() => console.log('sell')} />
-          <Button x={x + 200} y={y + 105} text="UPGRADE" onClick={() => console.log('upgrade')} />
+          <SellButtonWithGold x={x + 200} y={y + 70} price={16} onClick={() => console.log('sell')} />
+          <UpgradeButtonWithGold x={x + 200} y={y + 105} price={20} onClick={() => console.log('upgrade')} />
         </>
       )}
     </Container>
