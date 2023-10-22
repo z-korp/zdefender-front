@@ -6,6 +6,7 @@ import { TowerCategory } from '@/utils/tower';
 import waves, { MobCategory } from '@/utils/wave';
 import { getComponentEntities, getComponentValue } from '@latticexyz/recs';
 import { Container, Stage, Text } from '@pixi/react';
+import { sound } from '@pixi/sound';
 import * as PIXI from 'pixi.js';
 import { useEffect, useState } from 'react';
 import { shortString } from 'starknet';
@@ -20,6 +21,7 @@ import {
   to_grid_coordinate,
 } from '../utils/grid';
 import { useElementStore } from '../utils/store';
+import { BestiaryMenu } from './BestiaryMenu';
 import { BuyTowerMenu } from './BuyTowerMenu';
 import { DefenderType } from './Defender';
 import GameOverModal from './GameOverModal'; // importez le composant
@@ -37,7 +39,6 @@ import TileMarker from './TileMarker';
 import TowerBuilding from './Tower';
 import { TowerAsset } from './TowerAsset';
 import Wave from './Wave';
-import { sound } from '@pixi/sound';
 
 interface CanvasProps {
   setMusicPlaying: (bool: boolean) => void;
@@ -127,6 +128,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
         ? TowerCategory.WIZARD
         : TowerCategory.BARBARIAN;
     build(account, ip.toString(), x, y, category);
+    set_is_building(false);
     sound.play('build');
   };
 
@@ -154,10 +156,8 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
   useEffect(() => {
     if (towers.length === 1) setSelectedTower(towers[0]);
+    else if (towers.length === 0) setSelectedTower(undefined);
   }, [towers]);
-
-  const towerEntities = getComponentEntities(Tower);
-  const newTowers = [...towerEntities].map((key) => getComponentValue(Tower, key));
 
   useEffect(() => {
     const handleKeyPress = (event: any) => {
@@ -240,6 +240,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           <Container sortableChildren={true}>
             <>
               <Map />
+              <BestiaryMenu x={15} y={202} />
               <BuyTowerMenu x={870} y={0} />
               {selectedTower && (
                 <PlayerTowerMenu
@@ -247,7 +248,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                   y={320}
                   tower={selectedTower}
                   onUpgrade={() => upgrade(account, ip.toString(), selectedTower.id)}
-                  onSell={() => sell(account, ip.toString(), selectedTower.id)}
+                  onSell={() => sell(account, ip.toString(), selectedTower.key)}
                 />
               )}
             </>
@@ -267,13 +268,14 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                 health={mob.health}
               />
             ))}
-            {newTowers.map((tower) => {
+            {towers.map((tower) => {
               // console.log('tower', tower);
               const hitIndex = hits.filter((x) => x.fromid == tower.id)[0];
               const hitPosition = indexToCoordinate(hitIndex?.toindex ?? 0);
 
               return (
                 <TowerBuilding
+                  key={tower.id}
                   type={
                     tower.category === TowerCategory.BARBARIAN
                       ? 'barbarian'
@@ -317,7 +319,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               <Text
                 text={`(${hoveredTile?.x}, ${hoveredTile?.y})`}
                 x={10}
-                y={500}
+                y={520}
                 style={
                   new PIXI.TextStyle({
                     align: 'center',
@@ -333,7 +335,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               <Text
                 text={`(${hoveredTileAbsolute?.x}, ${hoveredTileAbsolute?.y})`}
                 x={10}
-                y={530}
+                y={550}
                 style={
                   new PIXI.TextStyle({
                     align: 'center',

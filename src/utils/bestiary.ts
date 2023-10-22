@@ -8,19 +8,19 @@ export type MobCharacteristics = {
 
 export const baseMobCharacteristic: Record<MobCategory, MobCharacteristics> = {
   [MobCategory.NORMAL]: {
-    health: (lvl: number) => 100 + lvl * 10,
-    speed: (lvl: number) => 100 + lvl * 10,
-    armor: (lvl: number) => 100 + lvl * 10,
+    health: (lvl: number) => 100 * lvl,
+    speed: (lvl: number) => 1,
+    armor: (lvl: number) => 1 * lvl,
   },
   [MobCategory.ELITE]: {
-    health: (lvl: number) => 200 + lvl * 10,
-    speed: (lvl: number) => 100 + lvl * 10,
-    armor: (lvl: number) => 100 + lvl * 10,
+    health: (lvl: number) => 200 * lvl,
+    speed: (lvl: number) => 1,
+    armor: (lvl: number) => 5 * lvl,
   },
   [MobCategory.BOSS]: {
-    health: (lvl: number) => 300 + lvl * 10,
-    speed: (lvl: number) => 100 + lvl * 10,
-    armor: (lvl: number) => 100 + lvl * 10,
+    health: (lvl: number) => 300 * lvl,
+    speed: (lvl: number) => 1,
+    armor: (lvl: number) => 10 * lvl,
   },
 };
 

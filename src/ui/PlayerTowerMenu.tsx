@@ -59,7 +59,7 @@ export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower, o
         <>
           <TowerAsset x={x + 20} y={y + 70} type={type} />
           <Text
-            text={`LVL: ${tower.level}`}
+            text={`LVL: ${tower.level + 1}`}
             x={x + 90}
             y={y + 60}
             style={
