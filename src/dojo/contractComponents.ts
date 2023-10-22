@@ -14,6 +14,7 @@ export function defineContractComponents(world: World) {
           seed: RecsType.Number, // felt252
           over: RecsType.Boolean,
           tower_count: RecsType.Number,
+          tower_build: RecsType.Number,
           mob_count: RecsType.Number,
           mob_remaining: RecsType.Number,
           mob_alive: RecsType.Number,

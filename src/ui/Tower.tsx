@@ -1,11 +1,11 @@
 import { H_OFFSET, SCALE, indexToCoordinate } from '@/utils/grid';
+import { HitEvent, useElementStore } from '@/utils/store';
 import { Sprite } from '@pixi/react';
 import * as PIXI from 'pixi.js';
+import { useEffect, useState } from 'react';
 import tower from '../assets/tower.png';
 import { Coordinate } from '../types/GridElement';
 import Defender, { DefenderType } from './Defender';
-import { useEffect, useState } from 'react';
-import { HitEvent, useElementStore } from '@/utils/store';
 
 interface TowerProps {
   type: DefenderType;
@@ -44,7 +44,7 @@ const Tower: React.FC<TowerProps> = ({
     if (currentHit) {
       // Traiter l'animation ici
 
-      let hitIndex = hits.filter((x) => x.fromindex == index)[0];
+      const hitIndex = hits.filter((x) => x.fromindex == index)[0];
       setHitPositions((prev) => [...prev, indexToCoordinate(hitIndex?.toindex ?? 0)]);
 
       // Une fois l'animation terminée, retirez le hit actuel et passez au suivant

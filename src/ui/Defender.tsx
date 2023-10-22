@@ -28,16 +28,31 @@ const getDirection = (start: Coordinate, end: Coordinate, orientation: Direction
   const dx = end.x - start.x;
   const dy = end.y - start.y;
 
-  // Conversion de coordonnées cartésiennes à coordonnées isométriques
-  const iso_dx = dx - dy;
-  const iso_dy = (dx + dy) / 2;
+  if (Math.abs(dx) > Math.abs(dy)) {
+    // Horizontal movement is dominant
+    if (dx > 0) {
+      // Moving to the right
+      return dy > 0 ? Direction.SE : dy < 0 ? Direction.NE : Direction.E;
+    } else {
+      // Moving to the left
+      return dy > 0 ? Direction.SW : dy < 0 ? Direction.NW : Direction.W;
+    }
+  } else if (Math.abs(dy) > Math.abs(dx)) {
+    // Vertical movement is dominant
+    return dy > 0 ? Direction.S : Direction.N;
+  } else if (dx === 0 && dy === 0) {
+    // No movement, return the current orientation
+    return orientation;
+  } else {
+    // Diagonal movement where dx and dy are equal in magnitude but may have different signs
+    if (dx > 0 && dy > 0) return Direction.SE;
+    if (dx < 0 && dy < 0) return Direction.NW;
+    if (dx > 0 && dy < 0) return Direction.NE;
+    if (dx < 0 && dy > 0) return Direction.SW;
+  }
 
-  if (iso_dx > 0 && iso_dy >= 0) return Direction.SE;
-  if (iso_dx <= 0 && iso_dy > 0) return Direction.SW;
-  if (iso_dx < 0 && iso_dy <= 0) return Direction.NW;
-  if (iso_dx >= 0 && iso_dy < 0) return Direction.NE;
-
-  return orientation; // Retourner NONE si aucune direction n'est trouvée
+  // Fallback to the current orientation
+  return orientation;
 };
 
 const getStartOrientation = (mob_coord: Coordinate, knight_position?: Coordinate) => {
@@ -129,6 +144,7 @@ const Defender: React.FC<DefenderProps> = ({
 
       if (hitPosition !== undefined) {
         const new_orientation = hitPosition ? getDirection(targetPosition, hitPosition, orientation) : orientation;
+        console.log('new_orientation', new_orientation);
         setOrientation(new_orientation);
 
         if (type === 'knight' || type === 'barbarian') setAnimation(Animation.SwordAttack);

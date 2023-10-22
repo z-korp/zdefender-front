@@ -1,11 +1,11 @@
 import { useEventsStore } from '@/utils/eventsStore';
+import { useElementStore } from '@/utils/store';
 import { TowerCategory } from '@/utils/tower';
 import { Component, Components, EntityIndex, Schema, Type, setComponent } from '@latticexyz/recs';
 import { poseidonHashMany } from 'micro-starknet';
 import { Account, Call, Event, InvokeTransactionReceiptResponse, shortString } from 'starknet';
 import { ClientComponents } from './createClientComponents';
 import { SetupNetworkResult } from './setupNetwork';
-import { useElementStore } from '@/utils/store';
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -271,6 +271,13 @@ export function getEntityIdFromKeys(keys: bigint[]): EntityIndex {
   return parseInt(poseidon.toString()) as EntityIndex;
 }
 
+export function getEntityIdForMobAndTower(key: bigint, id: bigint): EntityIndex {
+  console.log('dddddddddddddddd getEntityIdForMobAndTower');
+  // calculate the poseidon hash of the keys
+  const poseidon = poseidonHashMany([BigInt(2), key, id]);
+  return parseInt(poseidon.toString()) as EntityIndex;
+}
+
 type GameEvent = ComponentData & {
   type: 'Game';
   key: number;
@@ -278,6 +285,7 @@ type GameEvent = ComponentData & {
   name: string;
   over: boolean;
   tower_count: number;
+  tower_build: number;
   mob_count: number;
   mob_remaining: number;
   mob_alive: number;
@@ -293,13 +301,27 @@ function handleGameEvent(
   values: string[]
 ): Omit<GameEvent, 'component' | 'componentValues' | 'entityIndex'> {
   const [key] = keys.map((k) => Number(k));
-  const [id, _, seed, overNumber, tower_count, mob_count, mob_remaining, mob_alive, wave, gold, health, tick, score] =
-    values.map((v) => Number(v));
+  const [
+    id,
+    _,
+    seed,
+    overNumber,
+    tower_count,
+    tower_build,
+    mob_count,
+    mob_remaining,
+    mob_alive,
+    wave,
+    gold,
+    health,
+    tick,
+    score,
+  ] = values.map((v) => Number(v));
   const over = overNumber === 1;
   const name = shortString.decodeShortString(values[0]);
-  // console.log(
-  //   `[Game: KEYS: (key: ${key}) - VALUES: (id: ${id}, name: ${name}, seed: ${seed}, over: ${over}, tower_count: ${tower_count}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, mob_alive: ${mob_alive}, wave: ${wave}, gold: ${gold}, health: ${health}, tick: ${tick})]`
-  // );
+  console.log(
+    `[Game: KEYS: (key: ${key}) - VALUES: (id: ${id}, name: ${name}, seed: ${seed}, over: ${over}, tower_count: ${tower_count}, tower_build: ${tower_build}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, mob_alive: ${mob_alive}, wave: ${wave}, gold: ${gold}, health: ${health}, tick: ${tick})]`
+  );
   return {
     type: 'Game',
     key,
@@ -307,6 +329,7 @@ function handleGameEvent(
     name,
     over,
     tower_count,
+    tower_build,
     mob_count,
     mob_remaining,
     mob_alive,
@@ -369,9 +392,9 @@ function handleMobEvent(
   const [game_id, key] = keys.map((k) => Number(k));
   const [id, index, category, health, speed, defence, reward, tick] = values.map((v) => Number(v));
 
-  // console.log(
-  //   `[Mob: KEYS: (game_id: ${game_id}, key: ${key}) - VALUES: (id: ${id}, index: ${index}, category: ${category}, health: ${health}, speed: ${speed}, defence: ${defence}, reward: ${reward}, tick: ${tick})]`
-  // );
+  console.log(
+    `[Mob: KEYS: (game_id: ${game_id}, key: ${key}) - VALUES: (id: ${id}, index: ${index}, category: ${category}, health: ${health}, speed: ${speed}, defence: ${defence}, reward: ${reward}, tick: ${tick})]`
+  );
   return {
     type: 'Mob',
     game_id,
@@ -507,7 +530,12 @@ export async function setComponentsFromEvents(components: Components, events: Ev
         acc[key] = component.schema[key] === Type.String ? shortString.decodeShortString(value) : Number(value);
         return acc;
       }, {});
-      const entity = getEntityIdFromKeys(keys);
+
+      let entity = getEntityIdFromKeys(keys);
+      console.log('XXXXXXXXXXXXXXX componentName', componentName);
+      if (componentName === 'Tower' || componentName === 'Mob') {
+        entity = getEntityIdForMobAndTower(keys[0], BigInt(values[0]));
+      }
 
       const baseEventData = {
         component,

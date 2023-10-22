@@ -15,26 +15,33 @@ function TickProcessor() {
   const { is_wave_running } = useElementStore((state) => state);
 
   const [currentTick, setCurrentTick] = useState<number>(0);
-  const currentTickRef = useRef<number>(currentTick); // <-- create a ref
+  const currentTickRef = useRef<number>(currentTick);
+  const [isIncrementing, setIsIncrementing] = useState(true); // <-- State to control incrementing
 
   useEffect(() => {
-    currentTickRef.current = currentTick; // <-- update the ref value on state change
+    currentTickRef.current = currentTick;
   }, [currentTick]);
 
   useEffect(() => {
-    if (is_wave_running) {
-      // Set up the interval to call iter every second
+    if (is_wave_running && isIncrementing) {
+      // <-- Check if incrementing is allowed
       const iterIntervalId = setInterval(() => {
-        iter(account, ip.toString(), currentTickRef.current); // <-- use the ref value
+        iter(account, ip.toString(), currentTickRef.current);
         setCurrentTick((prevTick) => prevTick + 1);
       }, 1000 / SPEED);
 
-      // Clear the interval when the component is unmounted
       return () => clearInterval(iterIntervalId);
     }
-  }, [is_wave_running]);
+  }, [is_wave_running, isIncrementing]); // <-- Include isIncrementing in dependency array
 
-  return null;
+  return (
+    <div>
+      {/* Button to toggle incrementing */}
+      <button onClick={() => setIsIncrementing((prev) => !prev)}>
+        {isIncrementing ? 'Stop Incrementing' : 'Start Incrementing'}
+      </button>
+    </div>
+  );
 }
 
 export default TickProcessor;
