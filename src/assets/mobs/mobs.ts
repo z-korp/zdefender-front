@@ -8,12 +8,12 @@ import chickenImage from './chicken.png';
 import grumImage from './grum.png';
 import katanImage from './katan.png';
 import mammothImage from './mammoth.png';
-import minotaurImage from './minotaur.png';
 import necromancerImage from './necromancer.png';
 import orcImage from './orc.png';
 import orcshamanImage from './orcshaman.png';
 import reddemonImage from './reddemon.png';
 import reddemonarmoredImage from './reddemonarmored.png';
+import skeletonSoldierImage from './skeletonsoldier.png';
 import speargoblinImage from './speargoblin.png';
 import wendigoImage from './wendigo.png';
 import yetiImage from './yeti.png';
@@ -28,12 +28,12 @@ export const MobImages: Record<MobType, string> = {
   [MobType.RED_DEMON]: reddemonImage,
   [MobType.RED_DEMON_ARMORED]: reddemonarmoredImage,
   [MobType.NECROMANCER]: necromancerImage,
-  [MobType.MINOTAUR]: minotaurImage,
   [MobType.ORC]: orcImage,
-  [MobType.SPEAR_OGOBLIN]: speargoblinImage,
+  [MobType.SPEAR_GOBLIN]: speargoblinImage,
   [MobType.ORC_SHAMAN]: orcshamanImage,
   [MobType.GRUM]: grumImage,
   [MobType.KATAN]: katanImage,
+  [MobType.SKELETON_SOLDIER]: skeletonSoldierImage,
   [MobType.DRAGON]: blackdragonImage,
 };
 

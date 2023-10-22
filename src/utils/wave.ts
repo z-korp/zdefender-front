@@ -19,7 +19,7 @@ export enum MobType {
   ORC_SHAMAN = 'orcshaman',
   GRUM = 'grum',
   KATAN = 'katan',
-  SQUELETON_SOLDIER = 'squeletonsoldier',
+  SKELETON_SOLDIER = 'squeletonsoldier',
   DRAGON = 'dragon',
 }
 
@@ -50,44 +50,44 @@ const waves: WaveConfig[] = [
   },
   {
     // WAVE 4
-    [MobCategory.NORMAL]: MobType.BORG,
+    [MobCategory.NORMAL]: MobType.SKELETON_SOLDIER,
     [MobCategory.ELITE]: MobType.RED_DEMON,
     [MobCategory.BOSS]: MobType.RED_DEMON_ARMORED,
   },
   {
     // WAVE 5
-    [MobCategory.NORMAL]: MobType.BORG,
+    [MobCategory.NORMAL]: MobType.SKELETON_SOLDIER,
     [MobCategory.ELITE]: MobType.RED_DEMON,
     [MobCategory.BOSS]: MobType.NECROMANCER,
   },
   {
     // WAVE 6
-    [MobCategory.NORMAL]: MobType.BORG,
+    [MobCategory.NORMAL]: MobType.SKELETON_SOLDIER,
     [MobCategory.ELITE]: MobType.RED_DEMON,
-    [MobCategory.BOSS]: MobType.MINOTAUR,
+    [MobCategory.BOSS]: MobType.BORG,
   },
   {
     // WAVE 7
     [MobCategory.NORMAL]: MobType.ORC,
-    [MobCategory.ELITE]: MobType.SPEAR_OGOBLIN,
+    [MobCategory.ELITE]: MobType.SPEAR_GOBLIN,
     [MobCategory.BOSS]: MobType.ORC_SHAMAN,
   },
   {
     // WAVE 8
     [MobCategory.NORMAL]: MobType.ORC,
-    [MobCategory.ELITE]: MobType.SPEAR_OGOBLIN,
+    [MobCategory.ELITE]: MobType.SPEAR_GOBLIN,
     [MobCategory.BOSS]: MobType.GRUM,
   },
   {
     // WAVE 9
     [MobCategory.NORMAL]: MobType.ORC,
-    [MobCategory.ELITE]: MobType.SPEAR_OGOBLIN,
+    [MobCategory.ELITE]: MobType.SPEAR_GOBLIN,
     [MobCategory.BOSS]: MobType.KATAN,
   },
   {
     // WAVE 10
     [MobCategory.NORMAL]: MobType.YETI,
-    [MobCategory.ELITE]: MobType.MINOTAUR,
+    [MobCategory.ELITE]: MobType.BORG,
     [MobCategory.BOSS]: MobType.DRAGON,
   },
 ];

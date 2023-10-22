@@ -40,7 +40,7 @@ export const bestiary: Record<MobType, { type: MobCategory }> = {
   [MobType.YETI]: {
     type: MobCategory.BOSS,
   },
-  [MobType.SQUELETON_SOLDIER]: {
+  [MobType.SKELETON_SOLDIER]: {
     type: MobCategory.NORMAL,
   },
   [MobType.RED_DEMON]: {
@@ -58,7 +58,7 @@ export const bestiary: Record<MobType, { type: MobCategory }> = {
   [MobType.ORC]: {
     type: MobCategory.NORMAL,
   },
-  [MobType.SPEAR_OGOBLIN]: {
+  [MobType.SPEAR_GOBLIN]: {
     type: MobCategory.ELITE,
   },
   [MobType.GRUM]: {
