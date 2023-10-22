@@ -1,6 +1,6 @@
 {
   "frames": {
-    "necromancer-walk-S-0": {
+    "necro-walk-S-0": {
       "frame": {
         "x": 0,
         "y": 0,
@@ -20,7 +20,7 @@
         "h": 64
       }
     },
-    "necromancer-walk-S-1": {
+    "necro-walk-S-1": {
       "frame": {
         "x": 16,
         "y": 0,
@@ -40,7 +40,7 @@
         "h": 64
       }
     },
-    "necromancer-walk-S-2": {
+    "necro-walk-S-2": {
       "frame": {
         "x": 32,
         "y": 0,
@@ -60,7 +60,7 @@
         "h": 64
       }
     },
-    "necromancer-walk-S-3": {
+    "necro-walk-S-3": {
       "frame": {
         "x": 48,
         "y": 0,
@@ -80,7 +80,7 @@
         "h": 64
       }
     },
-    "necromancer-walk-N-0": {
+    "necro-walk-N-0": {
       "frame": {
         "x": 0,
         "y": 16,
@@ -100,7 +100,7 @@
         "h": 64
       }
     },
-    "necromancer-walk-N-1": {
+    "necro-walk-N-1": {
       "frame": {
         "x": 16,
         "y": 16,
@@ -120,7 +120,7 @@
         "h": 64
       }
     },
-    "necromancer-walk-N-2": {
+    "necro-walk-N-2": {
       "frame": {
         "x": 32,
         "y": 16,
@@ -140,7 +140,7 @@
         "h": 64
       }
     },
-    "necromancer-walk-N-3": {
+    "necro-walk-N-3": {
       "frame": {
         "x": 48,
         "y": 16,
@@ -160,7 +160,7 @@
         "h": 64
       }
     },
-    "necromancer-walk-E-0": {
+    "necro-walk-E-0": {
       "frame": {
         "x": 0,
         "y": 32,
@@ -180,7 +180,7 @@
         "h": 64
       }
     },
-    "necromancer-walk-E-1": {
+    "necro-walk-E-1": {
       "frame": {
         "x": 16,
         "y": 32,
@@ -200,7 +200,7 @@
         "h": 64
       }
     },
-    "necromancer-walk-E-2": {
+    "necro-walk-E-2": {
       "frame": {
         "x": 32,
         "y": 32,
@@ -220,7 +220,7 @@
         "h": 64
       }
     },
-    "necromancer-walk-E-3": {
+    "necro-walk-E-3": {
       "frame": {
         "x": 48,
         "y": 32,
@@ -240,7 +240,7 @@
         "h": 64
       }
     },
-    "necromancer-walk-W-0": {
+    "necro-walk-W-0": {
       "frame": {
         "x": 0,
         "y": 48,
@@ -260,7 +260,7 @@
         "h": 64
       }
     },
-    "necromancer-walk-W-1": {
+    "necro-walk-W-1": {
       "frame": {
         "x": 16,
         "y": 48,
@@ -280,7 +280,7 @@
         "h": 64
       }
     },
-    "necromancer-walk-W-2": {
+    "necro-walk-W-2": {
       "frame": {
         "x": 32,
         "y": 48,
@@ -300,7 +300,7 @@
         "h": 64
       }
     },
-    "necromancer-walk-W-3": {
+    "necro-walk-W-3": {
       "frame": {
         "x": 48,
         "y": 48,
@@ -324,7 +324,7 @@
   "meta": {
     "app": "sprite-sheet-to-json",
     "version": "1.0.0",
-    "image": "necromancer.png",
+    "image": "necro.png",
     "format": "RGBA8888",
     "size": {
       "w": 64,
