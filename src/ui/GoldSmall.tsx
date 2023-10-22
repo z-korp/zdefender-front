@@ -40,9 +40,8 @@ const GoldSmall: React.FC<GoldSmallProps> = ({ number, x, y, color }) => {
       <Sprite key={`sword`} image={gold} anchor={0.5} scale={0.75} x={x} y={y} />
       <Text
         text={`${Math.round(displayedNumber)}`}
-        x={x + 19}
-        y={y}
-        anchor={0.5}
+        x={x + 9}
+        y={y - 5}
         style={
           new PIXI.TextStyle({
             align: 'center',

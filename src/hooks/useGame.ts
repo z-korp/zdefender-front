@@ -11,7 +11,7 @@ export const useGame = () => {
     },
   } = useDojo();
 
-  const { ip, set_is_wave_running, set_total_gold } = useElementStore((state) => state);
+  const { ip, set_is_wave_running, set_total_gold, set_wave } = useElementStore((state) => state);
 
   const entityId = ip as EntityIndex;
 
@@ -27,6 +27,10 @@ export const useGame = () => {
 
   useEffect(() => {
     set_is_wave_running(false);
+  }, [wave]);
+
+  useEffect(() => {
+    set_wave(wave);
   }, [wave]);
 
   return {

@@ -29,7 +29,7 @@ const TowerButton: React.FC<TowerButtonProps> = ({ onClick, x, y, category }) =>
   PIXI.Texture.from(image).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
   PIXI.Texture.from(tower).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
-  const { basePrice, damage, range } = towerData[category];
+  const { price, damage, range } = towerData[category];
 
   const [isBuying, setIsBuying] = React.useState(false);
 
@@ -65,7 +65,7 @@ const TowerButton: React.FC<TowerButtonProps> = ({ onClick, x, y, category }) =>
         }
       />
       <Text
-        text={`Damage: ${damage}`}
+        text={`Damage: ${damage(1)}`}
         x={x + 70}
         y={y + 28}
         style={
@@ -96,13 +96,13 @@ const TowerButton: React.FC<TowerButtonProps> = ({ onClick, x, y, category }) =>
       <BuyButtonWithGold
         x={x + 200}
         y={y}
-        isDisabled={isBuying || total_gold < basePrice}
+        isDisabled={isBuying || total_gold < price(1)}
         onClick={() => {
           setIsBuying(true);
           set_is_building(true);
           onClick();
         }}
-        price={basePrice}
+        price={price(1)}
       />
       {isBuying && (
         <CancelButton

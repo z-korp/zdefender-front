@@ -1,4 +1,4 @@
-import { TowerCategory } from '@/utils/tower';
+import { TowerCategory, towerData } from '@/utils/tower';
 import { Container, Graphics } from '@pixi/react';
 import { useEffect, useState } from 'react';
 import { DefenderType } from './Defender';
@@ -14,8 +14,6 @@ interface PlayerTowerMenuProps {
 }
 
 export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower }) => {
-  console.log(tower);
-
   const [type, setType] = useState<DefenderType | undefined>(undefined);
 
   useEffect(() => {
@@ -32,6 +30,11 @@ export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower })
     }
   }, [tower]);
 
+  if (tower === undefined) return null;
+
+  const category = tower.category as TowerCategory;
+  const data = towerData[category];
+
   return (
     <Container>
       <Graphics
@@ -47,7 +50,12 @@ export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower })
           <TowerAsset x={x + 20} y={y + 70} type={type} />
           <Text text={`LVL ${tower.level}`} x={x + 120} y={y + 112} fontSize={12} />
           <SellButtonWithGold x={x + 200} y={y + 70} price={16} onClick={() => console.log('sell')} />
-          <UpgradeButtonWithGold x={x + 200} y={y + 105} price={20} onClick={() => console.log('upgrade')} />
+          <UpgradeButtonWithGold
+            x={x + 200}
+            y={y + 105}
+            price={data.price(tower.level)}
+            onClick={() => console.log('upgrade')}
+          />
         </>
       )}
     </Container>

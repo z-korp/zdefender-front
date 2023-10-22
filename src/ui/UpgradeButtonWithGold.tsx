@@ -43,7 +43,7 @@ export const UpgradeButtonWithGold: React.FC<UpgradeButtonWithGoldProps> = ({ x,
           })
         }
       />
-      <GoldSmall x={62} y={12} number={price} />
+      <GoldSmall x={52} y={12} number={price} />
     </Container>
   );
 };

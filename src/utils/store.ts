@@ -19,6 +19,8 @@ interface State {
   set_is_building: (is_building: boolean) => void;
   total_gold: number;
   set_total_gold: (total_gold: number) => void;
+  wave: number;
+  set_wave: (wave: number) => void;
 }
 
 export const useElementStore = create<State>((set) => ({
@@ -39,4 +41,6 @@ export const useElementStore = create<State>((set) => ({
   set_is_building: (is_building: boolean) => set(() => ({ is_building })),
   total_gold: 0,
   set_total_gold: (total_gold: number) => set(() => ({ total_gold })),
+  wave: 0,
+  set_wave: (wave: number) => set(() => ({ wave })),
 }));
