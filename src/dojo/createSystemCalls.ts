@@ -272,7 +272,6 @@ export function getEntityIdFromKeys(keys: bigint[]): EntityIndex {
 }
 
 export function getEntityIdForMobAndTower(key: bigint, id: bigint): EntityIndex {
-  console.log('dddddddddddddddd getEntityIdForMobAndTower');
   // calculate the poseidon hash of the keys
   const poseidon = poseidonHashMany([BigInt(2), key, id]);
   return parseInt(poseidon.toString()) as EntityIndex;
@@ -516,14 +515,14 @@ export async function setComponentsFromEvents(components: Components, events: Ev
             ]);
 
           console.log(
-            `[Hit: VALUES: (gameId: ${gameId}, tick: ${tick}, from: ${fromid}, to: ${fromid}, damage: ${damage})]`
+            `[Hit: VALUES: (gameId: ${gameId}, tick: ${tick}, fromindex: ${fromindex}, fromid: ${fromid}, toid: ${toid}, toindex: ${toindex}, damage: ${damage})]`
           );
           break;
       }
     } else {
       // Component event
       const component = components[componentName];
-      const componentValues = Object.keys(component.schema).reduce<{
+      let componentValues = Object.keys(component.schema).reduce<{
         [key: string]: string | number;
       }>((acc, key, index) => {
         const value = values[index];
@@ -532,9 +531,9 @@ export async function setComponentsFromEvents(components: Components, events: Ev
       }, {});
 
       let entity = getEntityIdFromKeys(keys);
-      console.log('XXXXXXXXXXXXXXX componentName', componentName);
-      if (componentName === 'Tower' || componentName === 'Mob') {
+      if (componentName === 'Tower') {
         entity = getEntityIdForMobAndTower(keys[0], BigInt(values[0]));
+        componentValues = { ...componentValues, key: Number(keys[1]) };
       }
 
       const baseEventData = {

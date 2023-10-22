@@ -179,7 +179,7 @@ const Defender: React.FC<DefenderProps> = ({
   }, [targetPosition]);
 
   // Here we work only in absolute positions
-  useTick(() => {
+  /*useTick(() => {
     const currentX = absolutePosition.x;
     const currentY = absolutePosition.y;
     const targetX = absoluteTargetPosition.x;
@@ -192,7 +192,7 @@ const Defender: React.FC<DefenderProps> = ({
     } else {
       setIsMoving(false);
     }
-  });
+  });*/
 
   const [shouldAnimate, setShouldAnimate] = useState(true);
   const [isDead, setIsDead] = useState(false);

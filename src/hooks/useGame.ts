@@ -39,11 +39,11 @@ export const useGame = () => {
     const towerEntities = getComponentEntities(Tower);
     const updatedTowers = [...towerEntities].map((key) => getComponentValue(Tower, key));
 
-    console.log('updatedTowers', updatedTowers);
-    setTowers(updatedTowers.filter((tower) => tower.level > 0));
+    const filteredTowers = updatedTowers.filter((tower) => tower.level > 0);
+    setTowers(filteredTowers);
   }, [tower_build]);
 
-  console.log('towers', towers);
+  //console.log('towers', towers);
 
   return {
     key: game?.key,

@@ -144,10 +144,8 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
   useEffect(() => {
     if (towers.length === 1) setSelectedTower(towers[0]);
+    else if (towers.length === 0) setSelectedTower(undefined);
   }, [towers]);
-
-  const towerEntities = getComponentEntities(Tower);
-  const newTowers = [...towerEntities].map((key) => getComponentValue(Tower, key));
 
   useEffect(() => {
     const handleKeyPress = (event: any) => {
@@ -189,7 +187,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                 y: e.nativeEvent.offsetY,
               });
             } else {
-              //set_is_building(false);
+              set_is_building(false);
               setHoveredTileType(undefined);
               setHoveredTile(undefined);
             }
@@ -237,7 +235,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                   y={350}
                   tower={selectedTower}
                   onUpgrade={() => upgrade(account, ip.toString(), selectedTower.id)}
-                  onSell={() => sell(account, ip.toString(), selectedTower.id)}
+                  onSell={() => sell(account, ip.toString(), selectedTower.key)}
                 />
               )}
             </>
@@ -257,13 +255,14 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                 health={mob.health}
               />
             ))}
-            {newTowers.map((tower) => {
+            {towers.map((tower) => {
               // console.log('tower', tower);
               const hitIndex = hits.filter((x) => x.fromid == tower.id)[0];
               const hitPosition = indexToCoordinate(hitIndex?.toindex ?? 0);
 
               return (
                 <TowerBuilding
+                  key={tower.id}
                   type={
                     tower.category === TowerCategory.BARBARIAN
                       ? 'barbarian'

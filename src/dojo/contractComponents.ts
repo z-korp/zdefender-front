@@ -67,6 +67,7 @@ export function defineContractComponents(world: World) {
           cost: RecsType.Number,
           hit: RecsType.Number,
           tick: RecsType.Number,
+          key: RecsType.Number, // for selling
         },
         {
           metadata: {
