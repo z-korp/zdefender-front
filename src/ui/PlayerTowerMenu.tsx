@@ -1,5 +1,8 @@
+import { useElementStore } from '@/utils/store';
 import { TowerCategory, towerData } from '@/utils/tower';
-import { Container, Graphics } from '@pixi/react';
+import { getComponentValue, getEntitiesWithValue } from '@latticexyz/recs';
+import { Container, Graphics, Text } from '@pixi/react';
+import * as PIXI from 'pixi.js';
 import { useEffect, useState } from 'react';
 import { DefenderType } from './Defender';
 import { SellButtonWithGold } from './SellButtonWithGold';
@@ -7,21 +10,23 @@ import { TowerAsset } from './TowerAsset';
 import { UpgradeButtonWithGold } from './UpgradeButtonWithGold';
 import { Text as TextHeader } from './base/Text';
 
-import { Text } from '@pixi/react';
-import * as PIXI from 'pixi.js';
-
 interface PlayerTowerMenuProps {
   x: number;
   y: number;
   tower: any;
   onUpgrade: () => void;
   onSell: () => void;
+  towerComponent: any;
 }
 
-export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower, onUpgrade, onSell }) => {
+export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower, onUpgrade, onSell, towerComponent }) => {
   const [type, setType] = useState<DefenderType | undefined>(undefined);
-  const [nextLevelDmg, setNextLevelDmg] = useState<number | null>(null);
-  const [nextLevelPrice, setNextLevelPrice] = useState<number | null>(null);
+  console.log('tower', tower);
+
+  const { total_gold } = useElementStore((state) => state);
+
+  const t = getEntitiesWithValue(towerComponent, { id: tower.id });
+  const tower_level = [...t].map((e) => getComponentValue(towerComponent, e)).map((obj) => obj.level)[0];
 
   useEffect(() => {
     if (tower && tower.category !== undefined) {
@@ -34,9 +39,6 @@ export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower, o
           ? 'wizard'
           : 'knight';
       setType(type);
-
-      setNextLevelDmg(data.damage(tower.level + 1));
-      setNextLevelPrice(data.price(tower.level + 1));
     }
   }, [tower]);
 
@@ -59,7 +61,7 @@ export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower, o
         <>
           <TowerAsset x={x + 20} y={y + 70} type={type} />
           <Text
-            text={`LVL: ${tower.level + 1}`}
+            text={`LVL: ${tower_level}`}
             x={x + 90}
             y={y + 60}
             style={
@@ -101,7 +103,7 @@ export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower, o
             }
           />
           <Text
-            text={`Damage:${data.damage(tower.level)} -> ${nextLevelDmg}`}
+            text={`Damage:${data.damage(tower_level)} -> ${data.damage(tower_level + 1)}`}
             x={x + 90}
             y={y + 120}
             style={
@@ -129,7 +131,13 @@ export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower, o
             }
           />
           <SellButtonWithGold x={x + 200} y={y + 50} price={16} onClick={onSell} />
-          <UpgradeButtonWithGold x={x + 200} y={y + 85} price={data.price(tower.level)} onClick={onUpgrade} />
+          <UpgradeButtonWithGold
+            x={x + 200}
+            y={y + 85}
+            price={data.price(tower_level)}
+            onClick={onUpgrade}
+            isDisabled={total_gold < data.price(tower_level)}
+          />
         </>
       )}
     </Container>

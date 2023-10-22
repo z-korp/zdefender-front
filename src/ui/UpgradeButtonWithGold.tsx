@@ -1,8 +1,8 @@
 import { Container, Graphics, Text } from '@pixi/react';
-import * as PIXI from 'pixi.js';
-import GoldSmall from './GoldSmall';
-import { useEffect } from 'react';
 import { sound } from '@pixi/sound';
+import * as PIXI from 'pixi.js';
+import { useEffect } from 'react';
+import GoldSmall from './GoldSmall';
 
 interface UpgradeButtonWithGoldProps {
   x: number;
@@ -14,9 +14,12 @@ interface UpgradeButtonWithGoldProps {
 
 export const UpgradeButtonWithGold: React.FC<UpgradeButtonWithGoldProps> = ({ x, y, price, isDisabled, onClick }) => {
   const handlePointerDown = () => {
-    onClick();
-    sound.play('upgrade');
+    if (!isDisabled) {
+      onClick();
+      sound.play('upgrade', { volume: 0.1 });
+    }
   };
+
   useEffect(() => {
     sound.add('upgrade', './assets/upgrade.mp3');
   }, []);
