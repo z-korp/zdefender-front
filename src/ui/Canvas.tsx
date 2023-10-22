@@ -287,6 +287,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                   hitPosition={hitPosition}
                   // hitPosition={{ x: 1, y: 1 }}
                   index={tower.index}
+                  level={tower.level}
                 />
               );
             })}
