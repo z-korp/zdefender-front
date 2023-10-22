@@ -1,10 +1,10 @@
 import { MobType } from '@/utils/wave';
 import * as PIXI from 'pixi.js';
 
-import blackdragonImage from './blackdragon.png';
 import boarImage from './boar.png';
 import borgImage from './borg.png';
 import chickenImage from './chicken.png';
+import blackdragonImage from './dragon.png';
 import grumImage from './grum.png';
 import katanImage from './katan.png';
 import mammothImage from './mammoth.png';
