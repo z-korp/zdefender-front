@@ -20,6 +20,7 @@ import {
   to_grid_coordinate,
 } from '../utils/grid';
 import { useElementStore } from '../utils/store';
+import { BestiaryMeny } from './BestiaryMeny';
 import { BuyTowerMenu } from './BuyTowerMenu';
 import { DefenderType } from './Defender';
 import GameOverModal from './GameOverModal'; // importez le composant
@@ -118,6 +119,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
         ? TowerCategory.WIZARD
         : TowerCategory.BARBARIAN;
     build(account, ip.toString(), x, y, category);
+    set_is_building(false);
   };
 
   const [mobs, setMobs] = useState<any[]>([]);
@@ -187,7 +189,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                 y: e.nativeEvent.offsetY,
               });
             } else {
-              set_is_building(false);
+              //set_is_building(false);
               setHoveredTileType(undefined);
               setHoveredTile(undefined);
             }
@@ -228,6 +230,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           <Container sortableChildren={true}>
             <>
               <Map />
+              <BestiaryMeny x={15} y={202} />
               <BuyTowerMenu x={870} y={0} />
               {selectedTower && (
                 <PlayerTowerMenu
@@ -305,7 +308,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               <Text
                 text={`(${hoveredTile?.x}, ${hoveredTile?.y})`}
                 x={10}
-                y={500}
+                y={520}
                 style={
                   new PIXI.TextStyle({
                     align: 'center',
@@ -321,7 +324,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               <Text
                 text={`(${hoveredTileAbsolute?.x}, ${hoveredTileAbsolute?.y})`}
                 x={10}
-                y={530}
+                y={550}
                 style={
                   new PIXI.TextStyle({
                     align: 'center',
