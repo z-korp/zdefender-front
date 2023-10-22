@@ -51,7 +51,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     },
     account: { account },
   } = useDojo();
-  const { map, set_is_wave_running, is_building, set_ip, selectedType, set_is_building } = useElementStore(
+  const { map, set_is_wave_running, is_building, set_ip, selectedType, set_is_building, total_gold } = useElementStore(
     (state) => state
   );
 
@@ -128,7 +128,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   useEffect(() => {
     const mobEntities = getComponentEntities(Mob);
     const newMobs = [...mobEntities].map((key) => getComponentValue(Mob, key));
-    console.log(newMobs);
     //console.log('newMobs', newMobs);
 
     // Filter out duplicates by "id" and different "key"
@@ -146,10 +145,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
     setMobs(filteredMobs);
   }, [tick]);
-
-  useEffect(() => {
-    console.log('-----------> mobs', mobs);
-  }, [mobs]);
 
   const towerEntities = getComponentEntities(Tower);
   const newTowers = [...towerEntities].map((key) => getComponentValue(Tower, key));
@@ -185,6 +180,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
           const tileCoords = { x: tileX, y: tileY };
           const tileGridCoords = to_grid_coordinate(tileCoords);
+          if (map.length === 0) return;
           if (hoveredTile === undefined || !areCoordsEqual(hoveredTile, tileGridCoords)) {
             if (tileGridCoords.x >= 0 && tileGridCoords.x <= 7 && tileGridCoords.y >= 0 && tileGridCoords.y <= 7) {
               setHoveredTileType(map[tileGridCoords.y][tileGridCoords.x].type);
@@ -194,6 +190,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                 y: e.nativeEvent.offsetY,
               });
             } else {
+              //set_is_building(false);
               setHoveredTileType(undefined);
               setHoveredTile(undefined);
             }
@@ -217,7 +214,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               console.log('hoveredTileType', hoveredTileType);
               if (hoveredTileType.type !== 'road') {
                 handleBuy(selectedType, tileGridCoords.x, tileGridCoords.y);
-                //set_is_building(false);
               }
 
               setSelectedTile(hoveredTile ? hoveredTile : undefined);
@@ -238,7 +234,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             <>
               <Map />
               <BuyTowerMenu x={870} y={0} />
-              <PlayerTowerMenu x={870} y={350} tower={selectedTower} />
+              {selectedTower && <PlayerTowerMenu x={870} y={350} tower={selectedTower} />}
             </>
 
             <Wave wave={wave} x={10} y={50} />
@@ -276,10 +272,12 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               <>
                 {/* if not road, we display range */}
                 {hoveredTile &&
+                  hoveredTileType &&
                   hoveredTileType !== 'road' &&
                   range.map((r, index) => <TileMarker key={index} x={r.x} y={r.y} color={'cyan'} />)}
                 {/* otherwise a red marker */}
                 {hoveredTile &&
+                  hoveredTileType &&
                   hoveredTileType === 'road' &&
                   range.map((r, index) => <TileMarker key={index} x={r.x} y={r.y} color={'red'} />)}
                 <TowerAsset

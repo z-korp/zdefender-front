@@ -24,8 +24,8 @@ export const TowerAsset: React.FC<TowerAssetProps> = ({ type, x, y }) => {
 
   return (
     <>
-      <Sprite scale={SCALE} image={tower} x={x} y={y - 5} />
-      <Sprite scale={SCALE - 1} image={image} x={x - 16} y={y - 47} />
+      <Sprite zIndex={x + y} scale={SCALE} image={tower} x={x} y={y - 4} />
+      <Sprite zIndex={x + y} scale={SCALE - 1} image={image} x={x - 16} y={y - 47} />
     </>
   );
 };

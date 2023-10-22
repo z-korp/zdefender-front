@@ -24,7 +24,7 @@ const Tower: React.FC<TowerProps> = ({ type, targetPosition, isHovered, isHitter
         image={tower}
         scale={SCALE}
         x={H_OFFSET + targetPosition.x * 16 * SCALE}
-        y={targetPosition.y * 16 * SCALE}
+        y={targetPosition.y * 16 * SCALE - 4}
       />
       <Defender
         type={type}

@@ -16,6 +16,7 @@ export const useGame = () => {
   const entityId = ip as EntityIndex;
 
   const game = useComponentValue(Game, entityId);
+  const { wave } = game || {};
 
   useEffect(() => {
     if (game && (game.over || (game.mob_remaining === 0 && game.mob_alive === 0))) {
@@ -23,6 +24,10 @@ export const useGame = () => {
     }
     set_total_gold(game?.gold || 0);
   }, [game]);
+
+  useEffect(() => {
+    set_is_wave_running(false);
+  }, [wave]);
 
   return {
     key: game?.key,
