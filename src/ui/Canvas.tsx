@@ -55,10 +55,10 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   );
 
   const { id, tick, over, wave, mob_remaining, gold, health } = useGame();
-  const [currentAbsoluteTilePosition, setCurrentAbsoluteTilePosition] = useState<Coordinate | undefined>();
 
   const [score, setScore] = useState<number>(0);
   const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(undefined);
+  const [hoveredTileType, setHoveredTileType] = useState<string | undefined>(undefined);
   const [hoveredTileAbsolute, setHoveredTileAbsolute] = useState<Coordinate | undefined>(undefined);
 
   const [selectedTile, setSelectedTile] = useState<Coordinate | undefined>(undefined);
@@ -185,12 +185,14 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           const tileCoords = { x: tileX, y: tileY };
           const tileGridCoords = to_grid_coordinate(tileCoords);
           if (hoveredTile === undefined || !areCoordsEqual(hoveredTile, tileGridCoords)) {
-            setHoveredTile(tileGridCoords);
-            setCurrentAbsoluteTilePosition(to_absolute_coordinate(tileGridCoords));
-            setAbsolutePosition({
-              x: e.nativeEvent.offsetX,
-              y: e.nativeEvent.offsetY,
-            });
+            if (tileGridCoords.x >= 0 && tileGridCoords.x <= 7 && tileGridCoords.y >= 0 && tileGridCoords.y <= 7) {
+              setHoveredTileType(map[tileGridCoords.y][tileGridCoords.x].type);
+              setHoveredTile(tileGridCoords);
+              setAbsolutePosition({
+                x: e.nativeEvent.offsetX,
+                y: e.nativeEvent.offsetY,
+              });
+            }
           }
         }}
         onPointerDown={(e) => {
@@ -264,22 +266,22 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               />
             ))}
 
-            {is_building && currentAbsoluteTilePosition && (
+            {/* display buying tower range */}
+            {is_building && hoveredTile && (
               <>
-                {range.map((r, index) => (
-                  <>
-                    {hoveredTile &&
-                      to_grid_coordinate(currentAbsoluteTilePosition).x === hoveredTile.x &&
-                      to_grid_coordinate(currentAbsoluteTilePosition).y === hoveredTile.y && (
-                        <TowerAsset
-                          type={selectedType}
-                          x={currentAbsoluteTilePosition.x}
-                          y={currentAbsoluteTilePosition.y}
-                        />
-                      )}
-                    <TileMarker key={index} x={r.x} y={r.y} color="cyan" />
-                  </>
-                ))}
+                {/* if not road, we display range */}
+                {hoveredTile &&
+                  hoveredTileType !== 'road' &&
+                  range.map((r, index) => <TileMarker key={index} x={r.x} y={r.y} color={'cyan'} />)}
+                {/* otherwise a red marker */}
+                {hoveredTile && hoveredTileType === 'road' && (
+                  <TileMarker x={hoveredTile.x} y={hoveredTile.y} color={'red'} />
+                )}
+                <TowerAsset
+                  type={selectedType}
+                  x={to_absolute_coordinate(hoveredTile).x}
+                  y={to_absolute_coordinate(hoveredTile).y}
+                />
               </>
             )}
 

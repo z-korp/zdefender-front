@@ -1,5 +1,6 @@
 import { useDojo } from '@/DojoContext';
 import useIp from '@/hooks/useIp';
+import { SPEED } from '@/utils/speed';
 import { useElementStore } from '@/utils/store';
 import { useEffect, useRef, useState } from 'react';
 
@@ -26,7 +27,7 @@ function TickProcessor() {
       const iterIntervalId = setInterval(() => {
         iter(account, ip.toString(), currentTickRef.current); // <-- use the ref value
         setCurrentTick((prevTick) => prevTick + 1);
-      }, 1000);
+      }, 1000 / SPEED);
 
       // Clear the interval when the component is unmounted
       return () => clearInterval(iterIntervalId);
