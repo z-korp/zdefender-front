@@ -47,8 +47,6 @@ const Map: React.FC = () => {
   //   );
   // };
 
-  console.log('VITE_PUBLIC_DEBUG', import.meta.env.VITE_PUBLIC_DEBUG);
-
   return (
     <>
       {map &&
