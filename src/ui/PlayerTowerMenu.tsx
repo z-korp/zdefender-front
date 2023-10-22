@@ -52,7 +52,7 @@ export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower, o
         draw={(g) => {
           g.clear();
           g.lineStyle(2, 0xffffff); // 2 is the thickness of the line, 0xffffff is white color
-          g.drawRect(x, y, 315, 192); // Adjust the rectangle dimensions and position as needed
+          g.drawRect(x, y, 330, 192); // Adjust the rectangle dimensions and position as needed
         }}
       />
       <TextHeader text={`TOWER`} x={x + 100} y={y + 10} fontSize={22} />
@@ -117,7 +117,7 @@ export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower, o
           />
           <Text
             text={`Cooldown:${data.cooldown}`}
-            x={x + 90}
+            x={x + 92}
             y={y + 140}
             style={
               new PIXI.TextStyle({

@@ -23,7 +23,7 @@ export const BuyTowerMenu: React.FC<BuyTowerMenuProps> = ({ x, y }) => {
         draw={(g) => {
           g.clear();
           g.lineStyle(2, 0xffffff); // 2 is the thickness of the line, 0xffffff is white color
-          g.drawRect(x, y, 315, 310); // Adjust the rectangle dimensions and position as needed
+          g.drawRect(x, y, 328, 310); // Adjust the rectangle dimensions and position as needed
         }}
       />
       <Text

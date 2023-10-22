@@ -26,19 +26,15 @@ import { BestiaryMenu } from './BestiaryMenu';
 import { BuyTowerMenu } from './BuyTowerMenu';
 import { DefenderType } from './Defender';
 import GameOverModal from './GameOverModal'; // importez le composant
-import Gold from './Gold';
-import Life from './Life';
 import Map from './Map';
 import MobBuilding from './Mob';
-import MobsRemaining from './MobsRemaining';
 import NewGame from './NewGame';
+import { PlayerMenu } from './PlayerMenu';
 import { PlayerTowerMenu } from './PlayerTowerMenu';
-import Score from './Score';
 import TickProcessor from './TickProcessor';
 import TileMarker from './TileMarker';
 import TowerBuilding from './Tower';
 import { TowerAsset } from './TowerAsset';
-import Wave from './Wave';
 
 interface CanvasProps {
   setMusicPlaying: (bool: boolean) => void;
@@ -53,19 +49,11 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     },
     account: { account },
   } = useDojo();
-  const {
-    map,
-    set_is_wave_running,
-    is_building,
-    set_ip,
-    selectedType,
-    set_is_building,
-    hits,
-    setHits,
-    add_to_leaderboard,
-  } = useElementStore((state) => state);
+  const { map, is_building, set_ip, selectedType, set_is_building, hits, add_to_leaderboard } = useElementStore(
+    (state) => state
+  );
 
-  const { id, tick, over, wave, mob_remaining, gold, health, towers, score } = useGame();
+  const { id, tick, over, wave, mob_remaining, gold, health, towers, score, name } = useGame();
 
   useEffect(() => {
     sound.add('build', './assets/build-1.mp3');
@@ -258,7 +246,17 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           <Container sortableChildren={true}>
             <>
               <Map />
-              <BestiaryMenu x={15} y={292} />
+              <BestiaryMenu x={15} y={261} />
+              <PlayerMenu
+                x={15}
+                y={0}
+                name={name}
+                mob_remaining={mob_remaining}
+                gold={gold}
+                health={health}
+                score={score}
+              />
+
               <BuyTowerMenu x={870} y={0} />
               {selectedTower && (
                 <PlayerTowerMenu
@@ -271,12 +269,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                 />
               )}
             </>
-
-            <Wave wave={wave} x={10} y={50} />
-            <MobsRemaining remaining={mob_remaining} x={10} y={80} />
-            <Gold number={gold} x={20} y={20} />
-            <Life health={health} x={140} y={20} />
-            <Score score={score} x={10} y={110} />
 
             {mobs.map((mob) => (
               <MobBuilding

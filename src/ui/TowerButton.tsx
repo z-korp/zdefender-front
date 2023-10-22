@@ -67,7 +67,7 @@ const TowerButton: React.FC<TowerButtonProps> = ({ onClick, x, y, category }) =>
       />
 
       <BuyButtonWithGold
-        x={x + 185}
+        x={x + 190}
         y={y}
         isDisabled={isBuying || total_gold < price(1)}
         onClick={() => {

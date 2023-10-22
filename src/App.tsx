@@ -60,7 +60,7 @@ function App() {
   }, [ip, loading]);
 
   return (
-    <div className="flex flex-col min-h-screen w-full">
+    <div className="flex flex-col w-full">
       <div className="flex justify-between space p-2">
         <LeaderBoardButton onClick={toggleLeaderBoardModal}></LeaderBoardButton>
         <div className="flex justify-center items-center text-7xl text">zDefender</div>
