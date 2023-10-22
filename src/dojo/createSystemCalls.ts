@@ -1,10 +1,10 @@
 import { useEventsStore } from '@/utils/eventsStore';
+import { TowerCategory } from '@/utils/tower';
 import { Component, Components, EntityIndex, Schema, Type, setComponent } from '@latticexyz/recs';
 import { poseidonHashMany } from 'micro-starknet';
 import { Account, Call, Event, InvokeTransactionReceiptResponse, shortString } from 'starknet';
 import { ClientComponents } from './createClientComponents';
 import { SetupNetworkResult } from './setupNetwork';
-import { TowerCategory } from '@/utils/tower';
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -284,6 +284,7 @@ type GameEvent = ComponentData & {
   gold: number;
   health: number;
   tick: number;
+  score: number;
 };
 
 function handleGameEvent(
@@ -291,12 +292,12 @@ function handleGameEvent(
   values: string[]
 ): Omit<GameEvent, 'component' | 'componentValues' | 'entityIndex'> {
   const [key] = keys.map((k) => Number(k));
-  const [id, _, seed, overNumber, tower_count, mob_count, mob_remaining, mob_alive, wave, gold, health, tick] =
+  const [id, _, seed, overNumber, tower_count, mob_count, mob_remaining, mob_alive, wave, gold, health, tick, score] =
     values.map((v) => Number(v));
   const over = overNumber === 1;
   const name = shortString.decodeShortString(values[0]);
   console.log(
-    `[Game: KEYS: (key: ${key}) - VALUES: (id: ${id}, name: ${name}, seed: ${seed}, over: ${over}, tower_count: ${tower_count}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, mob_alive: ${mob_alive}, wave: ${wave}, gold: ${gold}, health: ${health}, tick: ${tick})]`
+    `[Game: KEYS: (key: ${key}) - VALUES: (id: ${id}, name: ${name}, seed: ${seed}, over: ${over}, tower_count: ${tower_count}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, mob_alive: ${mob_alive}, wave: ${wave}, gold: ${gold}, health: ${health}, tick: ${tick}, score: ${score})]`
   );
   return {
     type: 'Game',
@@ -312,6 +313,7 @@ function handleGameEvent(
     gold,
     health,
     tick,
+    score,
   };
 }
 
@@ -341,6 +343,7 @@ function handleTileEvent(
     army,
     owner,
     dispatched,
+    tick: 0,
   };
 }
 

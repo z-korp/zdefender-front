@@ -31,6 +31,7 @@ import MobsRemaining from './MobsRemaining';
 import NewGame from './NewGame';
 import NextWaveButton from './NextWaveButton';
 import { PlayerTowerMenu } from './PlayerTowerMenu';
+import Score from './Score';
 import TickProcessor from './TickProcessor';
 import TileMarker from './TileMarker';
 import TowerBuilding from './Tower';
@@ -192,6 +193,9 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                 x: e.nativeEvent.offsetX,
                 y: e.nativeEvent.offsetY,
               });
+            } else {
+              setHoveredTileType(undefined);
+              setHoveredTile(undefined);
             }
           }
         }}
@@ -241,12 +245,13 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             <MobsRemaining remaining={mob_remaining} x={10} y={80} />
             <Gold number={gold} x={20} y={20} />
             <Life health={health} x={140} y={20} />
+            <Score score={score} x={10} y={110} />
 
             {mobs.map((mob) => (
               <MobBuilding
                 key={mob.id}
                 id={mob.id}
-                type={waves[wave][mob.category as MobCategory]}
+                type={waves[wave - 1][mob.category as MobCategory]}
                 targetPosition={indexToCoordinate(mob.index)}
                 health={mob.health}
               />
@@ -274,9 +279,9 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                   hoveredTileType !== 'road' &&
                   range.map((r, index) => <TileMarker key={index} x={r.x} y={r.y} color={'cyan'} />)}
                 {/* otherwise a red marker */}
-                {hoveredTile && hoveredTileType === 'road' && (
-                  <TileMarker x={hoveredTile.x} y={hoveredTile.y} color={'red'} />
-                )}
+                {hoveredTile &&
+                  hoveredTileType === 'road' &&
+                  range.map((r, index) => <TileMarker key={index} x={r.x} y={r.y} color={'red'} />)}
                 <TowerAsset
                   type={selectedType}
                   x={to_absolute_coordinate(hoveredTile).x}

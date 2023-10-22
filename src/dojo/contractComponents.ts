@@ -21,6 +21,7 @@ export function defineContractComponents(world: World) {
           gold: RecsType.Number,
           health: RecsType.Number,
           tick: RecsType.Number,
+          score: RecsType.Number,
         },
         {
           metadata: {

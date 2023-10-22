@@ -1,29 +1,40 @@
-import { MobType } from './wave';
+import { MobCategory, MobType } from './wave';
 
 export type MobCharacteristics = {
-  health: number;
-  speed: number;
-  armor: number;
-  scale: number;
+  health: (lvl: number) => number;
+  speed: (lvl: number) => number;
+  armor: (lvl: number) => number;
 };
 
-export const bestiary: Record<MobType, MobCharacteristics> = {
+export const baseMobCharacteristic: Record<MobCategory, MobCharacteristics> = {
+  [MobCategory.NORMAL]: {
+    health: (lvl: number) => 100 + lvl * 10,
+    speed: (lvl: number) => 100 + lvl * 10,
+    armor: (lvl: number) => 100 + lvl * 10,
+  },
+  [MobCategory.ELITE]: {
+    health: (lvl: number) => 200 + lvl * 10,
+    speed: (lvl: number) => 100 + lvl * 10,
+    armor: (lvl: number) => 100 + lvl * 10,
+  },
+  [MobCategory.BOSS]: {
+    health: (lvl: number) => 300 + lvl * 10,
+    speed: (lvl: number) => 100 + lvl * 10,
+    armor: (lvl: number) => 100 + lvl * 10,
+  },
+};
+
+export const bestiary: Record<MobType, { type: MobCategory; lvl: number }> = {
   [MobType.CHICKEN]: {
-    health: 100,
-    speed: 1,
-    armor: 1,
-    scale: 1.0,
+    type: MobCategory.NORMAL,
+    lvl: 1,
   },
   [MobType.BOAR]: {
-    health: 200,
-    speed: 1,
-    armor: 5,
-    scale: 1.0,
+    type: MobCategory.ELITE,
+    lvl: 1,
   },
   [MobType.MAMMOTH]: {
-    health: 500,
-    speed: 1,
-    armor: 10,
-    scale: 1.0,
+    type: MobCategory.BOSS,
+    lvl: 1,
   },
 };

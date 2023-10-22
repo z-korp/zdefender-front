@@ -37,5 +37,6 @@ export const useGame = () => {
     gold: game?.gold,
     health: game?.health,
     tick: game?.tick,
+    score: game?.score,
   };
 };
