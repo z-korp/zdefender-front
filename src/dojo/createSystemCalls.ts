@@ -1,10 +1,10 @@
-import { TowerCategory } from '@/types/Tower';
 import { useEventsStore } from '@/utils/eventsStore';
 import { Component, Components, EntityIndex, Schema, Type, setComponent } from '@latticexyz/recs';
 import { poseidonHashMany } from 'micro-starknet';
 import { Account, Call, Event, InvokeTransactionReceiptResponse, shortString } from 'starknet';
 import { ClientComponents } from './createClientComponents';
 import { SetupNetworkResult } from './setupNetwork';
+import { TowerCategory } from '@/utils/tower';
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 

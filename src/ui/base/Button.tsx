@@ -1,14 +1,15 @@
 import { Container, Graphics, Text } from '@pixi/react';
 import * as PIXI from 'pixi.js';
 
-interface BuyButtonProps {
+interface ButtonProps {
   x: number;
   y: number;
+  text: string;
   isDisabled?: boolean;
   onClick: () => void;
 }
 
-export const BuyButton2: React.FC<BuyButtonProps> = ({ x, y, onClick, isDisabled }) => {
+export const Button: React.FC<ButtonProps> = ({ x, y, text, onClick, isDisabled }) => {
   const handlePointerDown = () => {
     if (!isDisabled) onClick();
   };
@@ -27,7 +28,7 @@ export const BuyButton2: React.FC<BuyButtonProps> = ({ x, y, onClick, isDisabled
         pointerdown={handlePointerDown}
       />
       <Text
-        text="BUY"
+        text={text}
         anchor={0.5}
         x={40} // Half of the button width to center the text
         y={12.5} // Half of the button height to center the text

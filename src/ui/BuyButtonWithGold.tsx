@@ -1,16 +1,17 @@
 import { Container, Graphics, Text } from '@pixi/react';
 import * as PIXI from 'pixi.js';
+import Gold from './Gold';
 
-interface BuyButtonProps {
+interface BuyButtonWithGoldProps {
   x: number;
   y: number;
-  isDisabled?: boolean;
+  price: number;
   onClick: () => void;
 }
 
-export const BuyButton2: React.FC<BuyButtonProps> = ({ x, y, onClick, isDisabled }) => {
+export const BuyButtonWithGold: React.FC<BuyButtonWithGoldProps> = ({ x, y, price, onClick }) => {
   const handlePointerDown = () => {
-    if (!isDisabled) onClick();
+    onClick();
   };
 
   return (
@@ -19,9 +20,9 @@ export const BuyButton2: React.FC<BuyButtonProps> = ({ x, y, onClick, isDisabled
         interactive={true}
         draw={(graphics) => {
           graphics.clear();
-          graphics.beginFill(isDisabled ? 0x99b3c2 : 0x0099ff); // Fill color
-          graphics.lineStyle(1, !isDisabled ? '#ffffff' : '#f0f0f0'); // Border color
-          graphics.drawRect(0, 0, 80, 25); // Smaller rectangle dimensions
+          graphics.beginFill(0x0099ff); // Fill color
+          graphics.lineStyle(1, 0xffffff); // Border color
+          graphics.drawRect(0, 0, 100, 25); // Smaller rectangle dimensions
           graphics.endFill();
         }}
         pointerdown={handlePointerDown}
@@ -29,7 +30,7 @@ export const BuyButton2: React.FC<BuyButtonProps> = ({ x, y, onClick, isDisabled
       <Text
         text="BUY"
         anchor={0.5}
-        x={40} // Half of the button width to center the text
+        x={50} // Half of the button width to center the text
         y={12.5} // Half of the button height to center the text
         style={
           new PIXI.TextStyle({
@@ -37,10 +38,11 @@ export const BuyButton2: React.FC<BuyButtonProps> = ({ x, y, onClick, isDisabled
             fontFamily: '"Press Start 2P", Helvetica, sans-serif',
             fontSize: 10, // Smaller font size
             fontWeight: '400',
-            fill: !isDisabled ? '#ffffff' : '#f0f0f0',
+            fill: '#ffffff',
           })
         }
       />
+      <Gold x={10} y={10} number={price} />
     </Container>
   );
 };

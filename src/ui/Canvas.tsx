@@ -1,8 +1,8 @@
 import { useDojo } from '@/DojoContext';
 import { useGame } from '@/hooks/useGame';
 import { Coordinate } from '@/types/GridElement';
-import { TowerCategory } from '@/types/Tower';
 import { getRange } from '@/utils/range';
+import { TowerCategory } from '@/utils/tower';
 import waves, { MobCategory } from '@/utils/wave';
 import { getComponentEntities, getComponentValue } from '@latticexyz/recs';
 import { Container, Stage, Text } from '@pixi/react';
@@ -14,12 +14,13 @@ import {
   HEIGHT,
   WIDTH,
   areCoordsEqual,
+  coordinateToIndex,
   indexToCoordinate,
   to_absolute_coordinate,
   to_grid_coordinate,
 } from '../utils/grid';
 import { useElementStore } from '../utils/store';
-import { BottomMenu } from './BottomMenu';
+import { BuyTowerMenu } from './BuyTowerMenu';
 import { DefenderType } from './Defender';
 import GameOverModal from './GameOverModal'; // importez le composant
 import Gold from './Gold';
@@ -33,7 +34,7 @@ import { PlayerTowerMenu } from './PlayerTowerMenu';
 import TickProcessor from './TickProcessor';
 import TileMarker from './TileMarker';
 import TowerBuilding from './Tower';
-import { TowerButton } from './TowerButton';
+import { TowerAsset } from './TowerAsset';
 import Wave from './Wave';
 
 interface CanvasProps {
@@ -43,28 +44,26 @@ interface CanvasProps {
 const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const {
     setup: {
-      systemCalls: { create, run, build },
+      systemCalls: { create, build },
       network: { graphSdk },
       components: { Mob, Tower },
     },
     account: { account },
   } = useDojo();
-  const { map } = useElementStore((state) => state);
+  const { map, set_is_wave_running, is_building, set_ip, selectedType, set_is_building } = useElementStore(
+    (state) => state
+  );
 
-  const { id, tick, over, wave, mob_remaining, mob_alive, gold, health } = useGame();
+  const { id, tick, over, wave, mob_remaining, gold, health } = useGame();
   const [currentAbsoluteTilePosition, setCurrentAbsoluteTilePosition] = useState<Coordinate | undefined>();
 
   const [score, setScore] = useState<number>(0);
-  const [selectedType, setSelectedType] = useState<DefenderType>('knight');
-  const [level, setLevel] = useState<number>(0);
   const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(undefined);
   const [hoveredTileAbsolute, setHoveredTileAbsolute] = useState<Coordinate | undefined>(undefined);
 
   const [selectedTile, setSelectedTile] = useState<Coordinate | undefined>(undefined);
   const [isGameOver, setIsGameOver] = useState(false);
   const [absolutePosition, setAbsolutePosition] = useState<Coordinate | undefined>(undefined);
-  const [isBuying, setIsBuying] = useState(false);
-  const { set_ip } = useElementStore((state) => state);
 
   const [pseudo, setPseudo] = useState('');
   const { ip, loading, error } = useIp();
@@ -96,13 +95,13 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
   const [range, setRange] = useState<Coordinate[]>([]);
   useEffect(() => {
-    if (hoveredTile) {
+    if (is_building && hoveredTile) {
       const newRange = getRange(selectedType, hoveredTile, map);
       setRange(newRange);
     } else {
       setRange([]); // clear range if no tile is hovered
     }
-  }, [hoveredTile, selectedType]);
+  }, [is_building, hoveredTile, selectedType, map]);
 
   useEffect(() => {
     if (hoveredTile) setHoveredTileAbsolute(to_absolute_coordinate(hoveredTile));
@@ -115,18 +114,13 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const handleBuy = (type: DefenderType, x: number, y: number) => {
     const category =
       type === 'knight'
-        ? TowerCategory.Barbarian
+        ? TowerCategory.BARBARIAN
         : type === 'bowman'
-        ? TowerCategory.Bowman
+        ? TowerCategory.BOWMAN
         : type === 'wizard'
-        ? TowerCategory.Wizard
-        : TowerCategory.Barbarian;
+        ? TowerCategory.WIZARD
+        : TowerCategory.BARBARIAN;
     build(account, ip.toString(), x, y, category);
-  };
-
-  const handleMenuClose = () => {
-    console.log('handleMenuClose');
-    setSelectedTile(undefined);
   };
 
   const [mobs, setMobs] = useState<any[]>([]);
@@ -156,27 +150,25 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     console.log('-----------> mobs', mobs);
   }, [mobs]);
 
-  //console.log('filteredMobs', filteredMobs);
-
-  /*useEffect(() => {
-    console.log('mob_alive', mob_alive);
-    if (mob_alive > 0) {
-      const mobE = getComponentEntities(Mob);
-      const a = [...mobE].map((key, index) => {
-        if (index >= mob_alive) {
-          console.log('DDDFFFFDFDFDFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');
-          //removeComponent(Mob, key);
-          return key;
-        }
-      });
-      console.log('a', a);
-    }
-  }, [mob_alive]);*/
-
   const towerEntities = getComponentEntities(Tower);
   const newTowers = [...towerEntities].map((key) => getComponentValue(Tower, key));
 
-  const { set_is_wave_running } = useElementStore((state) => state);
+  useEffect(() => {
+    const handleKeyPress = (event: any) => {
+      console.log(`Key pressed: ${event.key}`);
+      set_is_building(false);
+    };
+
+    // Add the event listener
+    window.addEventListener('keydown', handleKeyPress);
+
+    // Cleanup: remove the event listener when the component is unmounted
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
+
+  const [selectedTower, setSelectedTower] = useState<any>(undefined);
 
   return (
     <div style={{ position: 'relative' }}>
@@ -202,22 +194,35 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           }
         }}
         onPointerDown={(e) => {
-          if (hoveredTile!.x > 7 || hoveredTile!.y > 7 || hoveredTile!.x < 0 || hoveredTile!.y < 0) {
-            console.log('est out');
-            console.log(selectedTile);
-            // setSelectedTile(undefined);
-          } else {
-            console.log('hoveredTile', hoveredTile);
-            console.log('selectedTile', selectedTile);
-            if (selectedTile) {
-              const hoveredTileType = map[selectedTile.y][selectedTile.x];
+          const tileX = Math.round(e.nativeEvent.offsetX);
+          const tileY = Math.round(e.nativeEvent.offsetY);
+
+          const tileCoords = { x: tileX, y: tileY };
+          const tileGridCoords = to_grid_coordinate(tileCoords);
+
+          if (is_building) {
+            if (tileGridCoords.x > 7 || tileGridCoords.y > 7 || tileGridCoords.x < 0 || tileGridCoords.y < 0) {
+              console.log('est out');
+              console.log(selectedTile);
+              // setSelectedTile(undefined);
+            } else {
+              console.log('BUILD', tileGridCoords);
+              const hoveredTileType = map[tileGridCoords.y][tileGridCoords.x];
               console.log('hoveredTileType', hoveredTileType);
               if (hoveredTileType.type !== 'road') {
-                setIsBuying(true); // Assuming you have a state called 'isBuying' and a setter 'setIsBuying'
+                handleBuy(selectedType, tileGridCoords.x, tileGridCoords.y);
               }
-            }
 
-            setSelectedTile(hoveredTile ? hoveredTile : undefined);
+              setSelectedTile(hoveredTile ? hoveredTile : undefined);
+            }
+          } else {
+            // tower selection
+            console.log('SELECT', tileGridCoords);
+            const clickedIndex = coordinateToIndex(tileGridCoords);
+            const index = newTowers.findIndex((tower) => tower.index === clickedIndex);
+            if (index !== -1) {
+              setSelectedTower(newTowers[index]);
+            }
           }
         }}
       >
@@ -225,15 +230,8 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           <Container sortableChildren={true}>
             <>
               <Map />
-              <BottomMenu
-                x={870}
-                y={0}
-                selectedTile={selectedTile}
-                isBuying={isBuying}
-                onClose={() => setSelectedTile(undefined)}
-                onBuy={handleBuy}
-              />
-              <PlayerTowerMenu x={870} y={350} />
+              <BuyTowerMenu x={870} y={0} />
+              <PlayerTowerMenu x={870} y={350} tower={selectedTower} />
             </>
 
             <Wave wave={wave} x={10} y={50} />
@@ -253,26 +251,30 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             {newTowers.map((tower) => (
               <TowerBuilding
                 type={
-                  tower.category === TowerCategory.Barbarian
+                  tower.category === TowerCategory.BARBARIAN
                     ? 'barbarian'
-                    : tower.category === TowerCategory.Wizard
+                    : tower.category === TowerCategory.WIZARD
                     ? 'wizard'
                     : 'bowman'
                 }
                 targetPosition={indexToCoordinate(tower.index)}
-                isHovered={hoveredTile ? areCoordsEqual({ x: 1, y: 1 }, hoveredTile) : false}
+                isHovered={hoveredTile ? areCoordsEqual(indexToCoordinate(tower.index), hoveredTile) : false}
                 isHitter={false}
               />
             ))}
 
-            {selectedTile && currentAbsoluteTilePosition && (
+            {is_building && currentAbsoluteTilePosition && (
               <>
                 {range.map((r, index) => (
                   <>
                     {hoveredTile &&
                       to_grid_coordinate(currentAbsoluteTilePosition).x === hoveredTile.x &&
                       to_grid_coordinate(currentAbsoluteTilePosition).y === hoveredTile.y && (
-                        <TowerButton x={currentAbsoluteTilePosition.x} y={currentAbsoluteTilePosition.y + 33} />
+                        <TowerAsset
+                          type={selectedType}
+                          x={currentAbsoluteTilePosition.x}
+                          y={currentAbsoluteTilePosition.y}
+                        />
                       )}
                     <TileMarker key={index} x={r.x} y={r.y} color="cyan" />
                   </>

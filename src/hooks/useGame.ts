@@ -7,11 +7,11 @@ import { useDojo } from '../DojoContext';
 export const useGame = () => {
   const {
     setup: {
-      components: { Game, Mob, Tower },
+      components: { Game },
     },
   } = useDojo();
 
-  const { ip, set_is_wave_running } = useElementStore((state) => state);
+  const { ip, set_is_wave_running, set_total_gold } = useElementStore((state) => state);
 
   const entityId = ip as EntityIndex;
 
@@ -21,6 +21,7 @@ export const useGame = () => {
     if (game && (game.over || (game.mob_remaining === 0 && game.mob_alive === 0))) {
       set_is_wave_running(false);
     }
+    set_total_gold(game?.gold || 0);
   }, [game]);
 
   return {

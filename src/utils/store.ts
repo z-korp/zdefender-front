@@ -15,6 +15,10 @@ interface State {
   setSelectedType: (selectedType: DefenderType) => void;
   is_wave_running: boolean;
   set_is_wave_running: (is_wave_running: boolean) => void;
+  is_building: boolean;
+  set_is_building: (is_building: boolean) => void;
+  total_gold: number;
+  set_total_gold: (total_gold: number) => void;
 }
 
 export const useElementStore = create<State>((set) => ({
@@ -31,4 +35,8 @@ export const useElementStore = create<State>((set) => ({
   setSelectedType: (selectedType: DefenderType) => set(() => ({ selectedType })),
   is_wave_running: false,
   set_is_wave_running: (is_wave_running: boolean) => set(() => ({ is_wave_running })),
+  is_building: false,
+  set_is_building: (is_building: boolean) => set(() => ({ is_building })),
+  total_gold: 0,
+  set_total_gold: (total_gold: number) => set(() => ({ total_gold })),
 }));

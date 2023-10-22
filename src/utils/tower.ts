@@ -8,6 +8,7 @@ export type TowerCharacteristics = {
   basePrice: number;
   damage: number;
   speed: number;
+  range: number;
   scale: number;
 };
 
@@ -16,18 +17,21 @@ export const towerData: Record<TowerCategory, TowerCharacteristics> = {
     basePrice: 50,
     damage: 100,
     speed: 1,
+    range: 1,
     scale: 1.0,
   },
   [TowerCategory.BOWMAN]: {
     basePrice: 50,
     damage: 100,
     speed: 1,
+    range: 2,
     scale: 1.0,
   },
   [TowerCategory.WIZARD]: {
     basePrice: 50,
     damage: 100,
     speed: 1,
+    range: 2,
     scale: 1.0,
   },
 };

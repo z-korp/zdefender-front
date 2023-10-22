@@ -3,11 +3,10 @@ import { Sprite } from '@pixi/react';
 import * as PIXI from 'pixi.js';
 import tower from '../assets/tower.png';
 import { Coordinate } from '../types/GridElement';
-import Defender from './Defender';
-import { MobType } from './Mob';
+import Defender, { DefenderType } from './Defender';
 
 interface TowerProps {
-  type: MobType;
+  type: DefenderType;
   targetPosition: Coordinate;
   isHovered: boolean;
   isHitter: boolean;
