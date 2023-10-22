@@ -19,8 +19,8 @@ import {
   to_absolute_coordinate,
   to_grid_coordinate,
 } from '../utils/grid';
-import { useElementStore } from '../utils/store';
 import { BuyTowerMenu } from './BuyTowerMenu';
+import { HitEvent, useElementStore } from '../utils/store';
 import { DefenderType } from './Defender';
 import GameOverModal from './GameOverModal'; // importez le composant
 import Gold from './Gold';
@@ -51,9 +51,8 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     },
     account: { account },
   } = useDojo();
-  const { map, set_is_wave_running, is_building, set_ip, selectedType, set_is_building, total_gold } = useElementStore(
-    (state) => state
-  );
+  const { map, set_is_wave_running, is_building, set_ip, selectedType, set_is_building, hits, setHits } =
+    useElementStore((state) => state);
 
   const { id, tick, over, wave, mob_remaining, gold, health, towers } = useGame();
 
@@ -67,6 +66,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const [absolutePosition, setAbsolutePosition] = useState<Coordinate | undefined>(undefined);
 
   const [pseudo, setPseudo] = useState('');
+
   const { ip, loading, error } = useIp();
   useEffect(() => {
     if (!loading && ip) {
@@ -74,6 +74,35 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ip, loading]);
+
+  useEffect(() => {
+    if (hits.length > 0) {
+      // Process the first event
+      const event = hits[0];
+      // console;
+      // Start the attack animation on the tower at index event.from
+      // launchAttackAnimation(event.from);
+      // console.log('=============================');
+      // console.log('=============================');
+      // console.log('=============================');
+      // console.log('=============================');
+      // console.log('=============================');
+      // console.log('=============================');
+      console.log('HITS CHAAANNNGGGGGG');
+      // setHits([...hits, event]);
+      console.log('hittingTowers', hits);
+
+      // let hitIndex = hits.filter((x) => x.fromindex == tower.index)[0];
+      // console.log('hitIndex================================', hitIndex);
+      // let hitPosition = indexToCoordinate(event?.toindex ?? 0);
+      // Retirez la tour de la liste après que l'animation est terminée
+      // setTimeout(() => {
+      //   setHittingTowers((prev) => prev.filter((id) => id !== event));
+      // }, 1000); // 1000ms ou la durée de votre animation
+      // Remove the processed event from the array
+      // setHits(hits.slice(1));
+    }
+  }, [hits]);
 
   const generateNewGame = async () => {
     setScore(0);
@@ -146,6 +175,9 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     if (towers.length === 1) setSelectedTower(towers[0]);
   }, [towers]);
 
+  const towerEntities = getComponentEntities(Tower);
+  const newTowers = [...towerEntities].map((key) => getComponentValue(Tower, key));
+
   useEffect(() => {
     const handleKeyPress = (event: any) => {
       set_is_building(false);
@@ -202,12 +234,10 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           if (is_building) {
             if (tileGridCoords.x > 7 || tileGridCoords.y > 7 || tileGridCoords.x < 0 || tileGridCoords.y < 0) {
               console.log('est out');
-              console.log(selectedTile);
               // setSelectedTile(undefined);
             } else {
-              console.log('BUILD', tileGridCoords);
               const hoveredTileType = map[tileGridCoords.y][tileGridCoords.x];
-              console.log('hoveredTileType', hoveredTileType);
+
               if (hoveredTileType.type !== 'road') {
                 handleBuy(selectedType, tileGridCoords.x, tileGridCoords.y);
               }
@@ -256,20 +286,33 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                 health={mob.health}
               />
             ))}
-            {towers.map((tower) => (
-              <TowerBuilding
-                type={
-                  tower.category === TowerCategory.BARBARIAN
-                    ? 'barbarian'
-                    : tower.category === TowerCategory.WIZARD
-                    ? 'wizard'
-                    : 'bowman'
-                }
-                targetPosition={indexToCoordinate(tower.index)}
-                isHovered={hoveredTile ? areCoordsEqual(indexToCoordinate(tower.index), hoveredTile) : false}
-                isHitter={false}
-              />
-            ))}
+            {newTowers.map((tower) => {
+              // console.log('tower', tower);
+              let hitIndex = hits.filter((x) => x.fromid == tower.id)[0];
+              console.log('hitIndex================================', hitIndex);
+              // console.log('hitIndex================================', hits);
+
+              let hitPosition = indexToCoordinate(hitIndex?.toindex ?? 0);
+              console.log('hitPosition', hitPosition);
+              // console.log('test', hits.filter((x) => x.fromid == tower.id).length > 0);
+              return (
+                <TowerBuilding
+                  type={
+                    tower.category === TowerCategory.BARBARIAN
+                      ? 'barbarian'
+                      : tower.category === TowerCategory.WIZARD
+                      ? 'wizard'
+                      : 'bowman'
+                  }
+                  targetPosition={indexToCoordinate(tower.index)}
+                  isHovered={hoveredTile ? areCoordsEqual(indexToCoordinate(tower.index), hoveredTile) : false}
+                  isHitter={hits.filter((x) => x.fromid == tower.id).length > 0}
+                  hitPosition={hitPosition}
+                  // hitPosition={{ x: 1, y: 1 }}
+                  index={tower.index}
+                />
+              );
+            })}
 
             {/* display buying tower range */}
             {is_building && hoveredTile && (

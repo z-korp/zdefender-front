@@ -5,6 +5,7 @@ import { poseidonHashMany } from 'micro-starknet';
 import { Account, Call, Event, InvokeTransactionReceiptResponse, shortString } from 'starknet';
 import { ClientComponents } from './createClientComponents';
 import { SetupNetworkResult } from './setupNetwork';
+import { useElementStore } from '@/utils/store';
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -149,17 +150,17 @@ export function createSystemCalls(
 
       const tx = await execute(signer, calls);
 
-      console.log(tx);
+      // console.log(tx);
       const receipt = (await signer.waitForTransaction(tx.transaction_hash, {
         retryInterval: 100,
       })) as InvokeTransactionReceiptResponse;
-      console.log(receipt.events);
+      // console.log(receipt.events);
 
       const events = receipt.events;
 
       if (events) {
         const eventsTransformed = await setComponentsFromEvents(contractComponents, events);
-        // await executeEvents(eventsTransformed);
+        await executeEvents(eventsTransformed);
       }
     } catch (e) {
       console.log(e);
@@ -180,11 +181,11 @@ export function createSystemCalls(
 
       const tx = await execute(signer, calls);
 
-      console.log(tx);
+      // console.log(tx);
       const receipt = (await signer.waitForTransaction(tx.transaction_hash, {
         retryInterval: 100,
       })) as InvokeTransactionReceiptResponse;
-      console.log(receipt.events);
+      // console.log(receipt.events);
 
       const events = receipt.events;
 
@@ -296,9 +297,9 @@ function handleGameEvent(
     values.map((v) => Number(v));
   const over = overNumber === 1;
   const name = shortString.decodeShortString(values[0]);
-  console.log(
-    `[Game: KEYS: (key: ${key}) - VALUES: (id: ${id}, name: ${name}, seed: ${seed}, over: ${over}, tower_count: ${tower_count}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, mob_alive: ${mob_alive}, wave: ${wave}, gold: ${gold}, health: ${health}, tick: ${tick}, score: ${score})]`
-  );
+  // console.log(
+  //   `[Game: KEYS: (key: ${key}) - VALUES: (id: ${id}, name: ${name}, seed: ${seed}, over: ${over}, tower_count: ${tower_count}, mob_count: ${mob_count}, mob_remaining: ${mob_remaining}, mob_alive: ${mob_alive}, wave: ${wave}, gold: ${gold}, health: ${health}, tick: ${tick})]`
+  // );
   return {
     type: 'Game',
     key,
@@ -368,9 +369,9 @@ function handleMobEvent(
   const [game_id, key] = keys.map((k) => Number(k));
   const [id, index, category, health, speed, defence, reward, tick] = values.map((v) => Number(v));
 
-  console.log(
-    `[Mob: KEYS: (game_id: ${game_id}, key: ${key}) - VALUES: (id: ${id}, index: ${index}, category: ${category}, health: ${health}, speed: ${speed}, defence: ${defence}, reward: ${reward}, tick: ${tick})]`
-  );
+  // console.log(
+  //   `[Mob: KEYS: (game_id: ${game_id}, key: ${key}) - VALUES: (id: ${id}, index: ${index}, category: ${category}, health: ${health}, speed: ${speed}, defence: ${defence}, reward: ${reward}, tick: ${tick})]`
+  // );
   return {
     type: 'Mob',
     game_id,
@@ -448,8 +449,10 @@ export enum CustomEvents {
 interface HitEvent {
   gameId: number;
   tick: number;
-  from: number;
-  to: number;
+  fromid: number;
+  fromindex: number;
+  toindex: number;
+  toid: number;
   damage: number;
 }
 
@@ -468,18 +471,30 @@ export async function setComponentsFromEvents(components: Components, events: Ev
       // Custom event
       //console.log('custom event', event);
       const eventType = event.keys[0];
-      const [gameId, tick, from, to, damage] = event.data.map((v) => Number(v));
+      const [gameId, tick, fromid, fromindex, toid, toindex, damage] = event.data.map((v) => Number(v));
       switch (eventType) {
         case CustomEvents.Hit:
           transformedEvents.push({
             eventType: 'custom',
             gameId,
             tick,
-            from,
-            to,
+            fromid,
+            fromindex,
+            toid,
+            toindex,
             damage,
           });
-          console.log(`[Hit: VALUES: (gameId: ${gameId}, tick: ${tick}, from: ${from}, to: ${to}, damage: ${damage})]`);
+
+          useElementStore
+            .getState()
+            .setHits([
+              ...useElementStore.getState().hits,
+              { eventType: 'custom', gameId, tick, fromindex, fromid, toid, toindex, damage },
+            ]);
+
+          console.log(
+            `[Hit: VALUES: (gameId: ${gameId}, tick: ${tick}, from: ${fromid}, to: ${fromid}, damage: ${damage})]`
+          );
           break;
       }
     } else {
@@ -590,11 +605,26 @@ export function logTransformedEvent(event: TransformedEvent) {
       console.error('Component event without type:', event);
     }
   } else if (event.eventType === 'custom') {
-    if ('gameId' in event && 'tick' in event && 'from' in event && 'to' in event && 'damage' in event) {
+    if (
+      'gameId' in event &&
+      'tick' in event &&
+      'fromid' in event &&
+      'toid' in event &&
+      'damage' in event &&
+      'fromindex' in event &&
+      'toindex' in event
+    ) {
       logEvent(
         'Hit',
         { game_id: event.gameId },
-        { tick: event.tick, from: event.from, to: event.to, damage: event.damage }
+        {
+          tick: event.tick,
+          fromid: event.fromid,
+          fromindex: event.fromindex,
+          toid: event.toid,
+          toindex: event.toindex,
+          damage: event.damage,
+        }
       );
     } else {
       console.error('Unknown custom event structure:', event);
