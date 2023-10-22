@@ -28,8 +28,8 @@ export const towerData: Record<TowerCategory, TowerCharacteristics> = {
     range: 2,
   },
   [TowerCategory.WIZARD]: {
-    price: (lvl) => 50 * lvl,
-    damage: (lvl) => 100 * lvl,
+    price: (lvl) => 150 * lvl,
+    damage: (lvl) => 150 * lvl,
     speed: 1,
     cooldown: 1,
     range: 2,
