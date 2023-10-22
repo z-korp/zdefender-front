@@ -144,7 +144,6 @@ const Defender: React.FC<DefenderProps> = ({
 
       if (hitPosition !== undefined) {
         const new_orientation = hitPosition ? getDirection(targetPosition, hitPosition, orientation) : orientation;
-        console.log('new_orientation', new_orientation);
         setOrientation(new_orientation);
 
         if (type === 'knight' || type === 'barbarian') setAnimation(Animation.SwordAttack);

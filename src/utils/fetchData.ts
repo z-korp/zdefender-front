@@ -4,8 +4,6 @@ export const fetchData = async (graphSdk: any): Promise<{ stage: number; score: 
   try {
     const { data } = await graphSdk.getFinishedGames();
 
-    console.log('data', data);
-
     if (data && data.mapComponents && data.mapComponents.edges) {
       const gameComponentsWithKeys: any[] = [];
 
@@ -19,7 +17,7 @@ export const fetchData = async (graphSdk: any): Promise<{ stage: number; score: 
         }
       });
 
-      console.log('gameComponentsWithKeys', gameComponentsWithKeys);
+      //console.log('gameComponentsWithKeys', gameComponentsWithKeys);
       return gameComponentsWithKeys;
     } else {
       return []; // Return an empty array if the conditions are not met

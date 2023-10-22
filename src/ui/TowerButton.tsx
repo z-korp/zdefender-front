@@ -29,7 +29,7 @@ const TowerButton: React.FC<TowerButtonProps> = ({ onClick, x, y, category }) =>
   PIXI.Texture.from(image).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
   PIXI.Texture.from(tower).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
-  const { price, damage, range } = towerData[category];
+  const { price, damage, range, cooldown } = towerData[category];
 
   const [isBuying, setIsBuying] = React.useState(false);
 
@@ -50,6 +50,7 @@ const TowerButton: React.FC<TowerButtonProps> = ({ onClick, x, y, category }) =>
   return (
     <>
       <TowerAsset type={defenderTypes[category]} x={x - 5} y={y} />
+
       <Text
         text={category === TowerCategory.BARBARIAN ? 'BARBAR' : category === TowerCategory.BOWMAN ? 'BOWMAN' : 'WIZARD'}
         x={x + 70}
@@ -58,12 +59,35 @@ const TowerButton: React.FC<TowerButtonProps> = ({ onClick, x, y, category }) =>
           new PIXI.TextStyle({
             align: 'center',
             fontFamily: '"Press Start 2P", Helvetica, sans-serif',
-            fontSize: 20,
+            fontSize: 18,
             fontWeight: '400',
             fill: '#ffffff',
           })
         }
       />
+
+      <BuyButtonWithGold
+        x={x + 185}
+        y={y}
+        isDisabled={isBuying || total_gold < price(1)}
+        onClick={() => {
+          setIsBuying(true);
+          set_is_building(true);
+          onClick();
+        }}
+        price={price(1)}
+      />
+      {isBuying && (
+        <CancelButton
+          x={x + 185}
+          y={y}
+          onClick={() => {
+            setIsBuying(false);
+            set_is_building(false);
+          }}
+        />
+      )}
+
       <Text
         text={`Damage: ${damage(1)}`}
         x={x + 70}
@@ -93,27 +117,20 @@ const TowerButton: React.FC<TowerButtonProps> = ({ onClick, x, y, category }) =>
         }
       />
 
-      <BuyButtonWithGold
-        x={x + 200}
-        y={y}
-        isDisabled={isBuying || total_gold < price(1)}
-        onClick={() => {
-          setIsBuying(true);
-          set_is_building(true);
-          onClick();
-        }}
-        price={price(1)}
+      <Text
+        text={`Cooldown: ${cooldown}`}
+        x={x + 180}
+        y={y + 43}
+        style={
+          new PIXI.TextStyle({
+            align: 'center',
+            fontFamily: '"Press Start 2P", Helvetica, sans-serif',
+            fontSize: 10,
+            fontWeight: '400',
+            fill: '#ffffff',
+          })
+        }
       />
-      {isBuying && (
-        <CancelButton
-          x={x + 200}
-          y={y}
-          onClick={() => {
-            setIsBuying(false);
-            set_is_building(false);
-          }}
-        />
-      )}
     </>
   );
 };

@@ -259,7 +259,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           <Container sortableChildren={true}>
             <>
               <Map />
-              <BestiaryMenu x={15} y={202} />
+              <BestiaryMenu x={15} y={292} />
               <BuyTowerMenu x={870} y={0} />
               {selectedTower && (
                 <PlayerTowerMenu

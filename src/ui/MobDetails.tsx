@@ -1,15 +1,14 @@
 import { MobImages } from '@/assets/mobs/mobs';
+import { baseMobCharacteristic } from '@/utils/bestiary';
 import { SCALE } from '@/utils/grid';
+import { useElementStore } from '@/utils/store';
 import { MobCategory, MobType } from '@/utils/wave';
 import { Container, Sprite } from '@pixi/react';
-import { Text } from './base/Text';
-import { baseMobCharacteristic } from '@/utils/bestiary';
-import { utils } from 'pixi.js';
-import { useElementStore } from '@/utils/store';
+import * as PIXI from 'pixi.js';
 import armor from '../assets/armor.png';
 import boots from '../assets/boots.png';
 import hearth from '../assets/heart.png';
-import * as PIXI from 'pixi.js';
+import { Text } from './base/Text';
 
 interface MobDetailsProps {
   x: number;
@@ -25,6 +24,7 @@ const MobDetails: React.FC<MobDetailsProps> = ({ x, y, type, mob }) => {
   const armorIcon = armor;
   const bootsIcon = boots;
   PIXI.Texture.from(image).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+  PIXI.Texture.from(bootsIcon).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
   PIXI.Texture.from(armorIcon).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
   const healthText = mobData.health(wave).toString();
   const heartIconXPosition = mobData.health(wave) > 999 ? 10 : 15;
