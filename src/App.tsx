@@ -1,3 +1,5 @@
+import { sound } from '@pixi/sound';
+import 'font-awesome/css/font-awesome.min.css';
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import './App.css';
@@ -8,8 +10,6 @@ import LeaderBoardButton from './ui/LeaderBoardButton';
 import Leaderboard from './ui/Leaderboard';
 import RulesModal from './ui/RulesModal';
 import { useElementStore } from './utils/store';
-import 'font-awesome/css/font-awesome.min.css';
-import { sound } from '@pixi/sound';
 
 function App() {
   Modal.setAppElement('#root');

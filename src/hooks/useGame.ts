@@ -16,7 +16,7 @@ export const useGame = () => {
   const entityId = ip as EntityIndex;
 
   const game = useComponentValue(Game, entityId);
-  const { wave, tower_build } = game || {};
+  const { wave, tower_build, score } = game || {};
 
   useEffect(() => {
     if (game && (game.over || (game.mob_remaining === 0 && game.mob_alive === 0))) {
@@ -42,8 +42,6 @@ export const useGame = () => {
     const filteredTowers = updatedTowers.filter((tower) => tower.level > 0);
     setTowers(filteredTowers);
   }, [tower_build]);
-
-  //console.log('towers', towers);
 
   return {
     key: game?.key,

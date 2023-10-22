@@ -24,17 +24,53 @@ export const baseMobCharacteristic: Record<MobCategory, MobCharacteristics> = {
   },
 };
 
-export const bestiary: Record<MobType, { type: MobCategory; lvl: number }> = {
+export const bestiary: Record<MobType, { type: MobCategory }> = {
   [MobType.CHICKEN]: {
     type: MobCategory.NORMAL,
-    lvl: 1,
   },
   [MobType.BOAR]: {
     type: MobCategory.ELITE,
-    lvl: 1,
   },
   [MobType.MAMMOTH]: {
     type: MobCategory.BOSS,
-    lvl: 1,
+  },
+  [MobType.WENDIGO]: {
+    type: MobCategory.BOSS,
+  },
+  [MobType.YETI]: {
+    type: MobCategory.BOSS,
+  },
+  [MobType.SKELETON]: {
+    type: MobCategory.NORMAL,
+  },
+  [MobType.DEMON]: {
+    type: MobCategory.ELITE,
+  },
+  [MobType.DEVIL]: {
+    type: MobCategory.BOSS,
+  },
+  [MobType.NECRO]: {
+    type: MobCategory.BOSS,
+  },
+  [MobType.BORG]: {
+    type: MobCategory.BOSS,
+  },
+  [MobType.ORC]: {
+    type: MobCategory.NORMAL,
+  },
+  [MobType.GOBLIN]: {
+    type: MobCategory.ELITE,
+  },
+  [MobType.GRUM]: {
+    type: MobCategory.BOSS,
+  },
+  [MobType.KATAN]: {
+    type: MobCategory.BOSS,
+  },
+  [MobType.DRAGON]: {
+    type: MobCategory.BOSS,
+  },
+  [MobType.SHAMAN]: {
+    type: MobCategory.BOSS,
   },
 };

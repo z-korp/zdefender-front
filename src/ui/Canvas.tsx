@@ -56,7 +56,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const { map, set_is_wave_running, is_building, set_ip, selectedType, set_is_building, hits, setHits } =
     useElementStore((state) => state);
 
-  const { id, tick, over, wave, mob_remaining, gold, health, towers } = useGame();
+  const { id, tick, over, wave, mob_remaining, gold, health, towers, score } = useGame();
 
   useEffect(() => {
     sound.add('build', './assets/build-1.mp3');
@@ -66,7 +66,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   useEffect(() => {
     sound.play('gold');
   }, [gold]);
-  const [score, setScore] = useState<number>(0);
+
   const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(undefined);
   const [hoveredTileType, setHoveredTileType] = useState<string | undefined>(undefined);
   const [hoveredTileAbsolute, setHoveredTileAbsolute] = useState<Coordinate | undefined>(undefined);
@@ -86,7 +86,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   }, [ip, loading]);
 
   const generateNewGame = async () => {
-    setScore(0);
     const storedIsMusicPlaying = localStorage.getItem('isMusicPlaying');
     if (storedIsMusicPlaying === null) {
       setMusicPlaying(true);
@@ -249,6 +248,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                   tower={selectedTower}
                   onUpgrade={() => upgrade(account, ip.toString(), selectedTower.id)}
                   onSell={() => sell(account, ip.toString(), selectedTower.key)}
+                  towerComponent={Tower}
                 />
               )}
             </>
@@ -263,7 +263,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               <MobBuilding
                 key={mob.id}
                 id={mob.id}
-                type={waves[wave - 1][mob.category as MobCategory]}
+                type={waves[Math.min(wave - 1, 9)][mob.category as MobCategory]}
                 targetPosition={indexToCoordinate(mob.index)}
                 health={mob.health}
               />

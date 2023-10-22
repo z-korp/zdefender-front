@@ -1,6 +1,5 @@
-import { defenderTypes } from '@/utils/defender';
 import { useElementStore } from '@/utils/store';
-import { MobCategory, MobType } from '@/utils/wave';
+import waves, { MobCategory } from '@/utils/wave';
 import { Container, Graphics, Text } from '@pixi/react';
 import * as PIXI from 'pixi.js';
 import MobDetails from './MobDetails';
@@ -11,11 +10,9 @@ interface BestiaryMenuProps {
 }
 
 export const BestiaryMenu: React.FC<BestiaryMenuProps> = ({ x, y }) => {
-  const { setSelectedType } = useElementStore((state) => state);
+  const { wave } = useElementStore((state) => state);
 
-  const handleClick = (index: number) => {
-    setSelectedType(defenderTypes[index]);
-  };
+  if (wave === undefined) return null;
 
   return (
     <Container x={x} y={y}>
@@ -40,9 +37,10 @@ export const BestiaryMenu: React.FC<BestiaryMenuProps> = ({ x, y }) => {
           })
         }
       />
-      <MobDetails x={10} y={40} type={MobCategory.NORMAL} mob={MobType.CHICKEN} />
-      <MobDetails x={110} y={40} type={MobCategory.ELITE} mob={MobType.BOAR} />
-      <MobDetails x={210} y={40} type={MobCategory.BOSS} mob={MobType.MAMMOTH} />
+
+      <MobDetails x={10} y={40} type={MobCategory.NORMAL} mob={waves[Math.min(wave - 1, 9)][MobCategory.NORMAL]} />
+      <MobDetails x={110} y={40} type={MobCategory.ELITE} mob={waves[Math.min(wave - 1, 9)][MobCategory.ELITE]} />
+      <MobDetails x={210} y={40} type={MobCategory.BOSS} mob={waves[Math.min(wave - 1, 9)][MobCategory.BOSS]} />
     </Container>
   );
 };
