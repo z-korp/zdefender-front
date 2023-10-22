@@ -11,15 +11,15 @@ export enum MobType {
   WENDIGO = 'wendigo',
   YETI = 'yeti',
   BORG = 'borg',
-  RED_DEMON = 'reddemon',
-  RED_DEMON_ARMORED = 'reddemonarmored',
-  NECROMANCER = 'necromancer',
+  RED_DEMON = 'demon',
+  RED_DEMON_ARMORED = 'devil',
+  NECROMANCER = 'necro',
   ORC = 'orc',
-  SPEAR_GOBLIN = 'speargoblin',
-  ORC_SHAMAN = 'orcshaman',
+  SPEAR_GOBLIN = 'goblin',
+  ORC_SHAMAN = 'shaman',
   GRUM = 'grum',
   KATAN = 'katan',
-  SKELETON_SOLDIER = 'skeletonsoldier',
+  SKELETON_SOLDIER = 'skeleton',
   DRAGON = 'dragon',
 }
 
@@ -29,7 +29,7 @@ export interface WaveConfig {
   [MobCategory.BOSS]: MobType;
 }
 
-const waves: WaveConfig[] = [
+export const waves: WaveConfig[] = [
   {
     // WAVE 1
     [MobCategory.NORMAL]: MobType.CHICKEN,
