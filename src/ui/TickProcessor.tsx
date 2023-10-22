@@ -41,7 +41,6 @@ function TickProcessor() {
   }, [isIncrementing, speed]);
 
   useEffect(() => {
-    console.log('is_wave_running', is_wave_running);
     if (!is_wave_running) {
       setIsIncrementing(false);
     }

@@ -28,7 +28,6 @@ const Map: React.FC = () => {
           let isGround = groundArray.includes(tileId);
 
           if (layerIndex === 4) {
-            console.log(tileId, notGroundArrayLastLayer.includes(tileId));
             isGround = !notGroundArrayLastLayer.includes(tileId);
           }
           const type = isGround ? 'ground' : 'road';
@@ -71,9 +70,6 @@ const Map: React.FC = () => {
     // Cleanup: clear the interval when the component is unmounted
     return () => clearInterval(intervalId);
   }, []);
-
-  console.log(map_3D);
-  const map = map_3D[0];
 
   return (
     <>

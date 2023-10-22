@@ -133,7 +133,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
   useEffect(() => {
     const fetchAndProcessData = async () => {
-      console.log(graphSdk);
       const array = await fetchData(graphSdk);
       array.forEach((e: any) => add_to_leaderboard(e));
     };
