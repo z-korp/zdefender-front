@@ -15,7 +15,7 @@ interface UpgradeButtonWithGoldProps {
 export const UpgradeButtonWithGold: React.FC<UpgradeButtonWithGoldProps> = ({ x, y, price, isDisabled, onClick }) => {
   const handlePointerDown = () => {
     onClick();
-    sound.play('upgrade');
+    sound.play('upgrade', { volume: 0.66 });
   };
   useEffect(() => {
     sound.add('upgrade', './assets/upgrade.mp3');
