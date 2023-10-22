@@ -11,8 +11,8 @@ export enum MobType {
   WENDIGO = 'wendigo',
   YETI = 'yeti',
   BORG = 'borg',
-  DAEMON = 'demon',
-  DEVIL = 'devil',
+  REDDEMON = 'reddemon',
+  REDDEMONARMORED = 'reddemonarmored',
   NECROMANCER = 'necromancer',
   MINOTAUR = 'monitaur',
   ORC = 'orc',
@@ -51,19 +51,19 @@ const waves: WaveConfig[] = [
   {
     // WAVE 4
     [MobCategory.NORMAL]: MobType.BORG,
-    [MobCategory.ELITE]: MobType.DAEMON,
-    [MobCategory.BOSS]: MobType.DEVIL,
+    [MobCategory.ELITE]: MobType.REDDEMON,
+    [MobCategory.BOSS]: MobType.REDDEMONARMORED,
   },
   {
     // WAVE 5
     [MobCategory.NORMAL]: MobType.BORG,
-    [MobCategory.ELITE]: MobType.DAEMON,
+    [MobCategory.ELITE]: MobType.REDDEMON,
     [MobCategory.BOSS]: MobType.NECROMANCER,
   },
   {
     // WAVE 6
     [MobCategory.NORMAL]: MobType.BORG,
-    [MobCategory.ELITE]: MobType.DAEMON,
+    [MobCategory.ELITE]: MobType.REDDEMON,
     [MobCategory.BOSS]: MobType.MINOTAUR,
   },
   {
