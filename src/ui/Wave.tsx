@@ -14,7 +14,7 @@ const Wave: React.FC<WaveProps> = ({ wave, x, y }) => {
 
   return (
     <Text
-      text={`WAVE: ${wave}`}
+      text={`WAVE:  ${wave}`}
       x={x}
       y={y}
       style={

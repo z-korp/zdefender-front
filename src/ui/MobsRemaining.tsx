@@ -14,7 +14,7 @@ const MobsRemaining: React.FC<MobsRemainingProps> = ({ remaining, x, y }) => {
 
   return (
     <Text
-      text={`MOBS: ${remaining}`}
+      text={`MOBS:  ${remaining}`}
       x={x}
       y={y}
       style={
