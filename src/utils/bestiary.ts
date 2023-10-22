@@ -40,16 +40,16 @@ export const bestiary: Record<MobType, { type: MobCategory }> = {
   [MobType.YETI]: {
     type: MobCategory.BOSS,
   },
-  [MobType.SKELETON_SOLDIER]: {
+  [MobType.SKELETON]: {
     type: MobCategory.NORMAL,
   },
-  [MobType.RED_DEMON]: {
+  [MobType.DEMON]: {
     type: MobCategory.ELITE,
   },
-  [MobType.RED_DEMON_ARMORED]: {
+  [MobType.DEVIL]: {
     type: MobCategory.BOSS,
   },
-  [MobType.NECROMANCER]: {
+  [MobType.NECRO]: {
     type: MobCategory.BOSS,
   },
   [MobType.BORG]: {
@@ -58,7 +58,7 @@ export const bestiary: Record<MobType, { type: MobCategory }> = {
   [MobType.ORC]: {
     type: MobCategory.NORMAL,
   },
-  [MobType.SPEAR_GOBLIN]: {
+  [MobType.GOBLIN]: {
     type: MobCategory.ELITE,
   },
   [MobType.GRUM]: {
@@ -70,7 +70,7 @@ export const bestiary: Record<MobType, { type: MobCategory }> = {
   [MobType.DRAGON]: {
     type: MobCategory.BOSS,
   },
-  [MobType.ORC_SHAMAN]: {
+  [MobType.SHAMAN]: {
     type: MobCategory.BOSS,
   },
 };

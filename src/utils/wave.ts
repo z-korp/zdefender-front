@@ -11,15 +11,15 @@ export enum MobType {
   WENDIGO = 'wendigo',
   YETI = 'yeti',
   BORG = 'borg',
-  RED_DEMON = 'demon',
-  RED_DEMON_ARMORED = 'devil',
-  NECROMANCER = 'necro',
+  DEMON = 'demon',
+  DEVIL = 'devil',
+  NECRO = 'necro',
   ORC = 'orc',
-  SPEAR_GOBLIN = 'goblin',
-  ORC_SHAMAN = 'shaman',
+  GOBLIN = 'goblin',
+  SHAMAN = 'shaman',
   GRUM = 'grum',
   KATAN = 'katan',
-  SKELETON_SOLDIER = 'skeleton',
+  SKELETON = 'skeleton',
   DRAGON = 'dragon',
 }
 
@@ -50,38 +50,38 @@ export const waves: WaveConfig[] = [
   },
   {
     // WAVE 4
-    [MobCategory.NORMAL]: MobType.SKELETON_SOLDIER,
-    [MobCategory.ELITE]: MobType.RED_DEMON,
-    [MobCategory.BOSS]: MobType.RED_DEMON_ARMORED,
+    [MobCategory.NORMAL]: MobType.SKELETON,
+    [MobCategory.ELITE]: MobType.DEMON,
+    [MobCategory.BOSS]: MobType.DEVIL,
   },
   {
     // WAVE 5
-    [MobCategory.NORMAL]: MobType.SKELETON_SOLDIER,
-    [MobCategory.ELITE]: MobType.RED_DEMON,
-    [MobCategory.BOSS]: MobType.NECROMANCER,
+    [MobCategory.NORMAL]: MobType.SKELETON,
+    [MobCategory.ELITE]: MobType.DEMON,
+    [MobCategory.BOSS]: MobType.NECRO,
   },
   {
     // WAVE 6
-    [MobCategory.NORMAL]: MobType.SKELETON_SOLDIER,
-    [MobCategory.ELITE]: MobType.RED_DEMON,
+    [MobCategory.NORMAL]: MobType.SKELETON,
+    [MobCategory.ELITE]: MobType.DEMON,
     [MobCategory.BOSS]: MobType.BORG,
   },
   {
     // WAVE 7
     [MobCategory.NORMAL]: MobType.ORC,
-    [MobCategory.ELITE]: MobType.SPEAR_GOBLIN,
-    [MobCategory.BOSS]: MobType.ORC_SHAMAN,
+    [MobCategory.ELITE]: MobType.GOBLIN,
+    [MobCategory.BOSS]: MobType.SHAMAN,
   },
   {
     // WAVE 8
     [MobCategory.NORMAL]: MobType.ORC,
-    [MobCategory.ELITE]: MobType.SPEAR_GOBLIN,
+    [MobCategory.ELITE]: MobType.GOBLIN,
     [MobCategory.BOSS]: MobType.GRUM,
   },
   {
     // WAVE 9
     [MobCategory.NORMAL]: MobType.ORC,
-    [MobCategory.ELITE]: MobType.SPEAR_GOBLIN,
+    [MobCategory.ELITE]: MobType.GOBLIN,
     [MobCategory.BOSS]: MobType.KATAN,
   },
   {
