@@ -11,9 +11,11 @@ interface PlayerTowerMenuProps {
   x: number;
   y: number;
   tower: any;
+  onUpgrade: () => void;
+  onSell: () => void;
 }
 
-export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower }) => {
+export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower, onUpgrade, onSell }) => {
   const [type, setType] = useState<DefenderType | undefined>(undefined);
 
   useEffect(() => {
@@ -49,13 +51,8 @@ export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower })
         <>
           <TowerAsset x={x + 20} y={y + 70} type={type} />
           <Text text={`LVL ${tower.level}`} x={x + 120} y={y + 112} fontSize={12} />
-          <SellButtonWithGold x={x + 200} y={y + 70} price={16} onClick={() => console.log('sell')} />
-          <UpgradeButtonWithGold
-            x={x + 200}
-            y={y + 105}
-            price={data.price(tower.level)}
-            onClick={() => console.log('upgrade')}
-          />
+          <SellButtonWithGold x={x + 200} y={y + 70} price={16} onClick={onSell} />
+          <UpgradeButtonWithGold x={x + 200} y={y + 105} price={data.price(tower.level)} onClick={onUpgrade} />
         </>
       )}
     </Container>

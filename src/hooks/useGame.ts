@@ -1,13 +1,13 @@
 import { useElementStore } from '@/utils/store';
 import { useComponentValue } from '@dojoengine/react';
-import { EntityIndex } from '@latticexyz/recs';
-import { useEffect } from 'react';
+import { EntityIndex, getComponentEntities, getComponentValue } from '@latticexyz/recs';
+import { useEffect, useState } from 'react';
 import { useDojo } from '../DojoContext';
 
 export const useGame = () => {
   const {
     setup: {
-      components: { Game },
+      components: { Game, Tower },
     },
   } = useDojo();
 
@@ -16,7 +16,7 @@ export const useGame = () => {
   const entityId = ip as EntityIndex;
 
   const game = useComponentValue(Game, entityId);
-  const { wave } = game || {};
+  const { wave, tower_count } = game || {};
 
   useEffect(() => {
     if (game && (game.over || (game.mob_remaining === 0 && game.mob_alive === 0))) {
@@ -33,6 +33,14 @@ export const useGame = () => {
     set_wave(wave);
   }, [wave]);
 
+  const [towers, setTowers] = useState<any[]>([]);
+
+  useEffect(() => {
+    const towerEntities = getComponentEntities(Tower);
+    const updatedTowers = [...towerEntities].map((key) => getComponentValue(Tower, key));
+    setTowers(updatedTowers);
+  }, [tower_count]);
+
   return {
     key: game?.key,
     id: game?.id,
@@ -47,5 +55,7 @@ export const useGame = () => {
     health: game?.health,
     tick: game?.tick,
     score: game?.score,
+    // not in game anymore
+    towers: towers,
   };
 };

@@ -45,7 +45,7 @@ interface CanvasProps {
 const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const {
     setup: {
-      systemCalls: { create, build },
+      systemCalls: { create, build, upgrade, sell },
       network: { graphSdk },
       components: { Mob, Tower },
     },
@@ -55,7 +55,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     (state) => state
   );
 
-  const { id, tick, over, wave, mob_remaining, gold, health } = useGame();
+  const { id, tick, over, wave, mob_remaining, gold, health, towers } = useGame();
 
   const [score, setScore] = useState<number>(0);
   const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(undefined);
@@ -108,10 +108,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     if (hoveredTile) setHoveredTileAbsolute(to_absolute_coordinate(hoveredTile));
   }, [hoveredTile]);
 
-  const handleTileClick = (tile: Coordinate) => {
-    setSelectedTile(tile);
-  };
-
   const handleBuy = (type: DefenderType, x: number, y: number) => {
     const category =
       type === 'knight'
@@ -146,12 +142,12 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     setMobs(filteredMobs);
   }, [tick]);
 
-  const towerEntities = getComponentEntities(Tower);
-  const newTowers = [...towerEntities].map((key) => getComponentValue(Tower, key));
+  useEffect(() => {
+    if (towers.length === 1) setSelectedTower(towers[0]);
+  }, [towers]);
 
   useEffect(() => {
     const handleKeyPress = (event: any) => {
-      console.log(`Key pressed: ${event.key}`);
       set_is_building(false);
     };
 
@@ -222,9 +218,9 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             // tower selection
             console.log('SELECT', tileGridCoords);
             const clickedIndex = coordinateToIndex(tileGridCoords);
-            const index = newTowers.findIndex((tower) => tower.index === clickedIndex);
+            const index = towers.findIndex((tower) => tower.index === clickedIndex);
             if (index !== -1) {
-              setSelectedTower(newTowers[index]);
+              setSelectedTower(towers[index]);
             }
           }
         }}
@@ -234,7 +230,15 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
             <>
               <Map />
               <BuyTowerMenu x={870} y={0} />
-              {selectedTower && <PlayerTowerMenu x={870} y={350} tower={selectedTower} />}
+              {selectedTower && (
+                <PlayerTowerMenu
+                  x={870}
+                  y={350}
+                  tower={selectedTower}
+                  onUpgrade={() => upgrade(account, ip.toString(), selectedTower.id)}
+                  onSell={() => sell(account, ip.toString(), selectedTower.id)}
+                />
+              )}
             </>
 
             <Wave wave={wave} x={10} y={50} />
@@ -252,7 +256,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
                 health={mob.health}
               />
             ))}
-            {newTowers.map((tower) => (
+            {towers.map((tower) => (
               <TowerBuilding
                 type={
                   tower.category === TowerCategory.BARBARIAN
