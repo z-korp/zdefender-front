@@ -6,6 +6,7 @@ import { TowerCategory } from '@/utils/tower';
 import waves, { MobCategory } from '@/utils/wave';
 import { getComponentEntities, getComponentValue } from '@latticexyz/recs';
 import { Container, Stage, Text } from '@pixi/react';
+import { sound } from '@pixi/sound';
 import * as PIXI from 'pixi.js';
 import { useEffect, useState } from 'react';
 import { shortString } from 'starknet';
@@ -57,6 +58,14 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
   const { id, tick, over, wave, mob_remaining, gold, health, towers } = useGame();
 
+  useEffect(() => {
+    sound.add('build', './assets/build-1.mp3');
+    sound.add('gold', './assets/gold.mp3');
+  }, []);
+
+  useEffect(() => {
+    sound.play('gold');
+  }, [gold]);
   const [score, setScore] = useState<number>(0);
   const [hoveredTile, setHoveredTile] = useState<Coordinate | undefined>(undefined);
   const [hoveredTileType, setHoveredTileType] = useState<string | undefined>(undefined);
@@ -120,6 +129,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
         : TowerCategory.BARBARIAN;
     build(account, ip.toString(), x, y, category);
     set_is_building(false);
+    sound.play('build');
   };
 
   const [mobs, setMobs] = useState<any[]>([]);

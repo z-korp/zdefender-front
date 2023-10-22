@@ -72,7 +72,6 @@ export function createSystemCalls(
     } catch (e) {
       console.log(e);
     } finally {
-      console.log('BUY DONE');
     }
   };
 

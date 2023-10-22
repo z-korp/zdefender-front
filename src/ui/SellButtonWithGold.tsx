@@ -1,5 +1,7 @@
 import { Container, Graphics, Text } from '@pixi/react';
 import * as PIXI from 'pixi.js';
+import { sound } from '@pixi/sound';
+import { useEffect } from 'react';
 
 interface SellButtonWithGoldProps {
   x: number;
@@ -12,7 +14,11 @@ interface SellButtonWithGoldProps {
 export const SellButtonWithGold: React.FC<SellButtonWithGoldProps> = ({ x, y, price, isDisabled, onClick }) => {
   const handlePointerDown = () => {
     onClick();
+    sound.play('sell');
   };
+  useEffect(() => {
+    sound.add('sell', './assets/destroy.mp3');
+  }, []);
 
   return (
     <Container x={x} y={y}>

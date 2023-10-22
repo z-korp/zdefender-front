@@ -33,6 +33,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "ethers": "^5.7.2",
+    "font-awesome": "^4.7.0",
     "graphql": "^16.7.1",
     "graphql-request": "^6.1.0",
     "lucide-react": "^0.279.0",

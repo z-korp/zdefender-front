@@ -22,6 +22,7 @@ export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower, o
   const [type, setType] = useState<DefenderType | undefined>(undefined);
   const [nextLevelDmg, setNextLevelDmg] = useState<number | null>(null);
   const [nextLevelPrice, setNextLevelPrice] = useState<number | null>(null);
+
   useEffect(() => {
     if (tower && tower.category !== undefined) {
       const type =
