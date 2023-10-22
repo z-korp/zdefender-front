@@ -15,14 +15,14 @@ export type TowerCharacteristics = {
 export const towerData: Record<TowerCategory, TowerCharacteristics> = {
   [TowerCategory.BARBARIAN]: {
     price: (lvl) => 50 * lvl,
-    damage: (lvl) => 100 * lvl,
+    damage: (lvl) => 50 * lvl,
     speed: 1,
     cooldown: 2,
     range: 1,
   },
   [TowerCategory.BOWMAN]: {
     price: (lvl) => 50 * lvl,
-    damage: (lvl) => 200 * lvl,
+    damage: (lvl) => 100 * lvl,
     speed: 1,
     cooldown: 2,
     range: 2,
