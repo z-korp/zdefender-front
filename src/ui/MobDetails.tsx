@@ -1,7 +1,7 @@
+import { MobImages } from '@/assets/mobs/mobs';
+import { SCALE } from '@/utils/grid';
 import { MobCategory, MobType } from '@/utils/wave';
 import { Container, Sprite } from '@pixi/react';
-import * as PIXI from 'pixi.js';
-import barbarian_transparent from '../assets/barbarian_transparent.png';
 import { Text } from './base/Text';
 
 interface MobDetailsProps {
@@ -12,12 +12,12 @@ interface MobDetailsProps {
 }
 
 const MobDetails: React.FC<MobDetailsProps> = ({ x, y, type, mob }) => {
-  PIXI.Texture.from(barbarian_transparent).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+  const image = MobImages[mob];
 
   return (
     <Container x={x} y={y}>
-      <Sprite key={`mob`} image={barbarian_transparent} scale={0.75} x={0} y={0} />
-      <Text x={x + 10} y={y + 10} text="test" />
+      <Sprite anchor={0.5} key={`mob`} image={image} scale={SCALE} x={50} y={30} />
+      <Text anchor={0.5} x={50} y={80} text={mob.toUpperCase()} />
     </Container>
   );
 };

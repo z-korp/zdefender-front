@@ -21,7 +21,7 @@ import {
   to_grid_coordinate,
 } from '../utils/grid';
 import { useElementStore } from '../utils/store';
-import { BestiaryMeny } from './BestiaryMeny';
+import { BestiaryMenu } from './BestiaryMenu';
 import { BuyTowerMenu } from './BuyTowerMenu';
 import { DefenderType } from './Defender';
 import GameOverModal from './GameOverModal'; // importez le composant
@@ -240,7 +240,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           <Container sortableChildren={true}>
             <>
               <Map />
-              <BestiaryMeny x={15} y={202} />
+              <BestiaryMenu x={15} y={202} />
               <BuyTowerMenu x={870} y={0} />
               {selectedTower && (
                 <PlayerTowerMenu

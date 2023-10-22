@@ -5,12 +5,12 @@ import { Container, Graphics, Text } from '@pixi/react';
 import * as PIXI from 'pixi.js';
 import MobDetails from './MobDetails';
 
-interface BestiaryMenyProps {
+interface BestiaryMenuProps {
   x: number;
   y: number;
 }
 
-export const BestiaryMeny: React.FC<BestiaryMenyProps> = ({ x, y }) => {
+export const BestiaryMenu: React.FC<BestiaryMenuProps> = ({ x, y }) => {
   const { setSelectedType } = useElementStore((state) => state);
 
   const handleClick = (index: number) => {
@@ -41,8 +41,8 @@ export const BestiaryMeny: React.FC<BestiaryMenyProps> = ({ x, y }) => {
         }
       />
       <MobDetails x={10} y={40} type={MobCategory.NORMAL} mob={MobType.CHICKEN} />
-      <MobDetails x={10} y={80} type={MobCategory.NORMAL} mob={MobType.CHICKEN} />
-      <MobDetails x={10} y={120} type={MobCategory.NORMAL} mob={MobType.CHICKEN} />
+      <MobDetails x={110} y={40} type={MobCategory.ELITE} mob={MobType.BOAR} />
+      <MobDetails x={210} y={40} type={MobCategory.BOSS} mob={MobType.MAMMOTH} />
     </Container>
   );
 };

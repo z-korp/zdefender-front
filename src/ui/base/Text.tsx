@@ -5,16 +5,18 @@ interface TextProps {
   x: number;
   y: number;
   text: string;
+  anchor?: number;
   color?: string;
   fontSize?: number;
 }
 
-export const Text: React.FC<TextProps> = ({ x, y, text, color, fontSize }) => {
+export const Text: React.FC<TextProps> = ({ x, y, text, color, fontSize, anchor }) => {
   return (
     <TextPixi
       text={text}
       x={x}
       y={y}
+      anchor={anchor ? anchor : 0}
       style={
         new PIXI.TextStyle({
           align: 'center',
