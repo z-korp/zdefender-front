@@ -263,7 +263,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               <MobBuilding
                 key={mob.id}
                 id={mob.id}
-                type={waves[wave - 1][mob.category as MobCategory]}
+                type={waves[Math.max(wave - 1, 9)][mob.category as MobCategory]}
                 targetPosition={indexToCoordinate(mob.index)}
                 health={mob.health}
               />

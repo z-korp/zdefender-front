@@ -36,9 +36,9 @@ export const BestiaryMenu: React.FC<BestiaryMenuProps> = ({ x, y }) => {
         }
       />
 
-      <MobDetails x={10} y={40} type={MobCategory.NORMAL} mob={waves[wave - 1][MobCategory.NORMAL]} />
-      <MobDetails x={110} y={40} type={MobCategory.ELITE} mob={waves[wave - 1][MobCategory.ELITE]} />
-      <MobDetails x={210} y={40} type={MobCategory.BOSS} mob={waves[wave - 1][MobCategory.BOSS]} />
+      <MobDetails x={10} y={40} type={MobCategory.NORMAL} mob={waves[Math.max(wave - 1, 9)][MobCategory.NORMAL]} />
+      <MobDetails x={110} y={40} type={MobCategory.ELITE} mob={waves[Math.max(wave - 1, 9)][MobCategory.ELITE]} />
+      <MobDetails x={210} y={40} type={MobCategory.BOSS} mob={waves[Math.max(wave - 1, 9)][MobCategory.BOSS]} />
     </Container>
   );
 };
