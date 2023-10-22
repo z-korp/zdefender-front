@@ -31,7 +31,6 @@ import Map from './Map';
 import MobBuilding from './Mob';
 import MobsRemaining from './MobsRemaining';
 import NewGame from './NewGame';
-import NextWaveButton from './NextWaveButton';
 import { PlayerTowerMenu } from './PlayerTowerMenu';
 import Score from './Score';
 import TickProcessor from './TickProcessor';
@@ -53,8 +52,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     },
     account: { account },
   } = useDojo();
-  const { map, set_is_wave_running, is_building, set_ip, selectedType, set_is_building, hits, setHits } =
-    useElementStore((state) => state);
+  const { map, is_building, set_ip, selectedType, set_is_building, hits } = useElementStore((state) => state);
 
   const { id, tick, over, wave, mob_remaining, gold, health, towers, score } = useGame();
 
@@ -177,7 +175,7 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   return (
     <div style={{ position: 'relative' }}>
       {/* <EventProcessor2 /> */}
-      <TickProcessor />
+      {id !== undefined && <TickProcessor />}
       <Stage
         width={WIDTH}
         height={HEIGHT}
@@ -350,8 +348,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
           </Container>
         )}
       </Stage>
-      {id !== undefined && <NextWaveButton onClick={() => /*run(account, ip.toString())*/ set_is_wave_running(true)} />}
-
       {id === undefined && <NewGame onClick={generateNewGame} onPseudoChange={setPseudo} />}
 
       <GameOverModal score={score} isOpen={isGameOver} onClose={() => setIsGameOver(false)} />

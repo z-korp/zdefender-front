@@ -35,6 +35,10 @@ interface State {
   hits: HitEvent[];
   setHits: (hits: HitEvent[]) => void;
   removeFirstHit: () => void;
+  speed: number;
+  set_speed: (speed: number) => void;
+  increment_speed: () => void;
+  decrement_speed: () => void;
 }
 
 export const useElementStore = create<State>((set) => ({
@@ -60,4 +64,8 @@ export const useElementStore = create<State>((set) => ({
   hits: [],
   setHits: (newHits: HitEvent[]) => set(() => ({ hits: newHits })),
   removeFirstHit: () => set((state) => ({ hits: state.hits.slice(1) })),
+  speed: 1,
+  set_speed: (speed: number) => set(() => ({ speed })),
+  increment_speed: () => set((state) => ({ speed: Math.min(state.speed + 1, 3) })),
+  decrement_speed: () => set((state) => ({ speed: Math.max(state.speed - 1, 1) })),
 }));

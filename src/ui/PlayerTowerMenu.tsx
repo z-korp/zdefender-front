@@ -21,7 +21,6 @@ interface PlayerTowerMenuProps {
 
 export const PlayerTowerMenu: React.FC<PlayerTowerMenuProps> = ({ x, y, tower, onUpgrade, onSell, towerComponent }) => {
   const [type, setType] = useState<DefenderType | undefined>(undefined);
-  console.log('tower', tower);
 
   const { total_gold } = useElementStore((state) => state);
 

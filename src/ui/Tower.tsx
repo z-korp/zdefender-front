@@ -1,5 +1,4 @@
 import { H_OFFSET, SCALE, indexToCoordinate } from '@/utils/grid';
-import { SPEED } from '@/utils/speed';
 import { HitEvent, useElementStore } from '@/utils/store';
 import { Graphics, Sprite, Text } from '@pixi/react';
 import * as PIXI from 'pixi.js';
@@ -29,10 +28,7 @@ const Tower: React.FC<TowerProps> = ({
   index,
   level,
 }) => {
-  const { hits, removeFirstHit } = useElementStore((state) => ({
-    hits: state.hits,
-    removeFirstHit: state.removeFirstHit,
-  }));
+  const { hits, removeFirstHit, speed } = useElementStore((state) => state);
   const [hitPositions, setHitPositions] = useState<Coordinate[]>([]);
   const [currentHit, setCurrentHit] = useState<HitEvent | null>(null);
   PIXI.Texture.from(tower).baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
@@ -51,7 +47,7 @@ const Tower: React.FC<TowerProps> = ({
       setHitPositions((prev) => [...prev, indexToCoordinate(hitIndex?.toindex ?? 0)]);
 
       // Une fois l'animation terminée, retirez le hit actuel et passez au suivant
-      const animationDuration = 1000 / SPEED; // À ajuster selon la durée réelle de votre animation
+      const animationDuration = 1000 / speed; // À ajuster selon la durée réelle de votre animation
       setTimeout(() => {
         setCurrentHit(null);
         removeFirstHit(); // Supprimer le hit traité
