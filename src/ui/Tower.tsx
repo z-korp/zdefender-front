@@ -77,7 +77,7 @@ const Tower: React.FC<TowerProps> = ({
         knightPosition={knightPosition}
         hitPosition={hitPosition}
       />
-      {level && level > 1 && (
+      {level && (
         <>
           <Graphics
             draw={(g) => {
@@ -102,12 +102,12 @@ const Tower: React.FC<TowerProps> = ({
             style={
               new PIXI.TextStyle({
                 fontFamily: '"Press Start 2P", Helvetica, sans-serif',
-                fontSize: 14, // Smaller font size
+                fontSize: 10, // Smaller font size
                 fill: 'black',
               })
             }
-            x={H_OFFSET + targetPosition.x * 16 * SCALE + 2 * SCALE + 19} // adding a small offset for better
-            y={targetPosition.y * 16 * SCALE - 2 * SCALE + 40}
+            x={H_OFFSET + targetPosition.x * 16 * SCALE + 2 * SCALE + 20} // adding a small offset for better
+            y={targetPosition.y * 16 * SCALE - 2 * SCALE + 38}
           />
         </>
       )}
