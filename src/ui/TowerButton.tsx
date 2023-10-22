@@ -79,7 +79,7 @@ const TowerButton: React.FC<TowerButtonProps> = ({ onClick, x, y, category }) =>
       />
       {isBuying && (
         <CancelButton
-          x={x + 185}
+          x={x + 190}
           y={y}
           onClick={() => {
             setIsBuying(false);

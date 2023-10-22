@@ -49,9 +49,12 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
     },
     account: { account },
   } = useDojo();
-  const { map, is_building, set_ip, selectedType, set_is_building, hits, add_to_leaderboard } = useElementStore(
+  const { map_3D, is_building, set_ip, selectedType, set_is_building, hits, add_to_leaderboard } = useElementStore(
     (state) => state
   );
+
+  const baseLayerData = map_3D[0];
+  const overlayLayer = map_3D[4];
 
   const { id, tick, over, wave, mob_remaining, gold, health, towers, score, name } = useGame();
 
@@ -103,12 +106,12 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   const [range, setRange] = useState<Coordinate[]>([]);
   useEffect(() => {
     if (is_building && hoveredTile) {
-      const newRange = getRange(selectedType, hoveredTile, map);
+      const newRange = getRange(selectedType, hoveredTile, baseLayerData);
       setRange(newRange);
     } else {
       setRange([]); // clear range if no tile is hovered
     }
-  }, [is_building, hoveredTile, selectedType, map]);
+  }, [is_building, hoveredTile, selectedType, baseLayerData]);
 
   useEffect(() => {
     if (hoveredTile) setHoveredTileAbsolute(to_absolute_coordinate(hoveredTile));
@@ -195,10 +198,17 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
 
           const tileCoords = { x: tileX, y: tileY };
           const tileGridCoords = to_grid_coordinate(tileCoords);
-          if (map.length === 0) return;
+          if (baseLayerData === undefined) return;
+          if (baseLayerData.length === 0) return;
           if (hoveredTile === undefined || !areCoordsEqual(hoveredTile, tileGridCoords)) {
             if (tileGridCoords.x >= 0 && tileGridCoords.x <= 7 && tileGridCoords.y >= 0 && tileGridCoords.y <= 7) {
-              setHoveredTileType(map[tileGridCoords.y][tileGridCoords.x].type);
+              const hoveredTileType = baseLayerData[tileGridCoords.y][tileGridCoords.x].type;
+              const hoveredTileLastLayerType = overlayLayer[tileGridCoords.y][tileGridCoords.x].type;
+              if (hoveredTileType !== 'road' && hoveredTileLastLayerType !== 'road') {
+                setHoveredTileType('ground');
+              } else {
+                setHoveredTileType('road');
+              }
               setHoveredTile(tileGridCoords);
               setAbsolutePosition({
                 x: e.nativeEvent.offsetX,
@@ -223,9 +233,10 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
               console.log('est out');
               // setSelectedTile(undefined);
             } else {
-              const hoveredTileType = map[tileGridCoords.y][tileGridCoords.x];
+              const hoveredTileType = baseLayerData[tileGridCoords.y][tileGridCoords.x];
+              const hoveredTileLastLayerType = overlayLayer[tileGridCoords.y][tileGridCoords.x];
 
-              if (hoveredTileType.type !== 'road') {
+              if (hoveredTileType.type !== 'road' && hoveredTileLastLayerType.type !== 'road') {
                 handleBuy(selectedType, tileGridCoords.x, tileGridCoords.y);
               }
 

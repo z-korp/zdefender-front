@@ -1,6 +1,6 @@
 import { H_OFFSET, SCALE, indexToCoordinate } from '@/utils/grid';
 import { HitEvent, useElementStore } from '@/utils/store';
-import { Graphics, Sprite, Text } from '@pixi/react';
+import { Sprite, Text } from '@pixi/react';
 import * as PIXI from 'pixi.js';
 import { useEffect, useState } from 'react';
 import tower from '../assets/tower.png';
@@ -74,38 +74,19 @@ const Tower: React.FC<TowerProps> = ({
         hitPosition={hitPosition}
       />
       {level && (
-        <>
-          <Graphics
-            draw={(g) => {
-              const xPos = H_OFFSET + targetPosition.x * 16 * SCALE;
-              const yPos = targetPosition.y * 16 * SCALE - 4;
-              const width = 16 * SCALE;
-              const height = 16 * SCALE;
-
-              // Overlay color
-              g.beginFill(0xadd8e6, 0.7); // light blue with increased opacity
-              g.drawRect(xPos, yPos, width, height);
-              g.endFill();
-
-              // Border
-              g.lineStyle(2, 0x000000, 1); // 2px width, black, full opacity
-              g.drawRect(xPos, yPos, width, height);
-            }}
-          />
-          <Text
-            zIndex={1000}
-            text={`${level}`}
-            style={
-              new PIXI.TextStyle({
-                fontFamily: '"Press Start 2P", Helvetica, sans-serif',
-                fontSize: 10, // Smaller font size
-                fill: 'black',
-              })
-            }
-            x={H_OFFSET + targetPosition.x * 16 * SCALE + 2 * SCALE + 20} // adding a small offset for better
-            y={targetPosition.y * 16 * SCALE - 2 * SCALE + 38}
-          />
-        </>
+        <Text
+          zIndex={1000}
+          text={`${level}`}
+          style={
+            new PIXI.TextStyle({
+              fontFamily: '"Press Start 2P", Helvetica, sans-serif',
+              fontSize: 10, // Smaller font size
+              fill: 'black',
+            })
+          }
+          x={H_OFFSET + targetPosition.x * 16 * SCALE + 2 * SCALE + 20} // adding a small offset for better
+          y={targetPosition.y * 16 * SCALE - 2 * SCALE + 38}
+        />
       )}
     </>
   );
