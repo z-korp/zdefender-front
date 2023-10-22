@@ -23,7 +23,7 @@ export const BuyButtonWithGold: React.FC<BuyButtonWithGoldProps> = ({ x, y, pric
           graphics.clear();
           graphics.beginFill(isDisabled ? 0x99b3c2 : 0x0099ff); // Fill color
           graphics.lineStyle(1, !isDisabled ? '#ffffff' : '#f0f0f0'); // Border color
-          graphics.drawRect(0, 0, 80, 25); // Smaller rectangle dimensions
+          graphics.drawRect(0, 0, 100, 25); // Smaller rectangle dimensions
           graphics.endFill();
         }}
         pointerdown={handlePointerDown}
@@ -31,7 +31,7 @@ export const BuyButtonWithGold: React.FC<BuyButtonWithGoldProps> = ({ x, y, pric
       <Text
         text="BUY"
         anchor={0.5}
-        x={20} // Half of the button width to center the text
+        x={25} // Half of the button width to center the text
         y={12.5} // Half of the button height to center the text
         style={
           new PIXI.TextStyle({
@@ -43,7 +43,7 @@ export const BuyButtonWithGold: React.FC<BuyButtonWithGoldProps> = ({ x, y, pric
           })
         }
       />
-      <GoldSmall x={48} y={12} number={price} />
+      <GoldSmall x={55} y={12} number={price} />
     </Container>
   );
 };
