@@ -14,7 +14,7 @@ export enum MobType {
   RED_DEMON = 'reddemon',
   RED_DEMON_ARMORED = 'reddemonarmored',
   NECROMANCER = 'necromancer',
-  MINOTAUR = 'monitaur',
+  MINOTAUR = 'minotaur',
   ORC = 'orc',
   SPEAR_OGOBLIN = 'speargoblin',
   ORC_SHAMAN = 'orcshaman',
