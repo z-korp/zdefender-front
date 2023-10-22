@@ -38,7 +38,7 @@ export const getFramesFromType = (
     console.log('[', mob_name, ']', 'Idle Frame');
     filtered = frames.filter((e) => e.includes('idle'));
   } else if (type === Animation.Walk) {
-    console.log('[', mob_name, ']', 'Walk Frame');
+    // console.log('[', mob_name, ']', 'Walk Frame');
     filtered = frames.filter((e) => e.includes('walk'));
   } else if (type === Animation.Carry) {
     console.log('[', mob_name, ']', 'Carry Frame');

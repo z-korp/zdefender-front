@@ -2,6 +2,17 @@ import { GridElement } from '@/types/GridElement';
 import { DefenderType } from '@/ui/Defender';
 import { create } from 'zustand';
 
+export interface HitEvent {
+  eventType: string;
+  gameId: number;
+  tick: number;
+  fromindex: number;
+  toindex: number;
+  fromid: number;
+  toid: number;
+  damage: number;
+}
+
 interface State {
   ip: number | undefined;
   set_ip: (ip: number) => void;
@@ -21,6 +32,9 @@ interface State {
   set_total_gold: (total_gold: number) => void;
   wave: number;
   set_wave: (wave: number) => void;
+  hits: HitEvent[];
+  setHits: (hits: HitEvent[]) => void;
+  removeFirstHit: () => void;
 }
 
 export const useElementStore = create<State>((set) => ({
@@ -43,4 +57,7 @@ export const useElementStore = create<State>((set) => ({
   set_total_gold: (total_gold: number) => set(() => ({ total_gold })),
   wave: 0,
   set_wave: (wave: number) => set(() => ({ wave })),
+  hits: [],
+  setHits: (newHits: HitEvent[]) => set(() => ({ hits: newHits })),
+  removeFirstHit: () => set((state) => ({ hits: state.hits.slice(1) })),
 }));
