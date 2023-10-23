@@ -136,7 +136,6 @@ const Mob: React.FC<MobProps> = ({ type, targetPosition, health, id }) => {
     }
   });
 
-  //console.log('frames', frames);
   if (frames.length === 0) {
     return null;
   }
