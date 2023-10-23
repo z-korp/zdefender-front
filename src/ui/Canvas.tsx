@@ -155,7 +155,6 @@ const Canvas: React.FC<CanvasProps> = ({ setMusicPlaying }) => {
   useEffect(() => {
     const mobEntities = getComponentEntities(Mob);
     const newMobs = [...mobEntities].map((key) => getComponentValue(Mob, key));
-    //console.log('newMobs', newMobs);
 
     // Filter out duplicates by "id" and different "key"
     const uniqueIdentifiers = new Set();
