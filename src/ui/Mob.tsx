@@ -1,5 +1,4 @@
 import { baseMobCharacteristic, bestiary } from '@/utils/bestiary';
-import { SPEED } from '@/utils/speed';
 import { useElementStore } from '@/utils/store';
 import { MobType } from '@/utils/wave';
 import { AnimatedSprite, Graphics, Text, useTick } from '@pixi/react';
@@ -39,7 +38,7 @@ const getDirection = (start: Coordinate, end: Coordinate, orientation: Direction
 };
 
 const Mob: React.FC<MobProps> = ({ type, targetPosition, health, id }) => {
-  const { wave } = useElementStore((state) => state);
+  const { wave, speed } = useElementStore((state) => state);
 
   const [animation, setAnimation] = useState<Animation>(Animation.Idle);
   const [counterAnim, setCounterAnim] = useState(0);
@@ -96,7 +95,7 @@ const Mob: React.FC<MobProps> = ({ type, targetPosition, health, id }) => {
     // Calculate the velocity
     const dx = to_absolute_coordinate(targetPosition).x - absolutePosition.x;
     const dy = to_absolute_coordinate(targetPosition).y - absolutePosition.y;
-    setVelocity({ x: dx * SPEED, y: dy * SPEED });
+    setVelocity({ x: dx * speed, y: dy * speed });
   }, [targetPosition]);
 
   // Here we work only in absolute positions

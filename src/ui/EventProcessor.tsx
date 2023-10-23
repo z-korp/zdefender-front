@@ -1,10 +1,10 @@
 import { ComponentData, TransformedEvent, logTransformedEvent } from '@/dojo/createSystemCalls';
 import { useEventsStore } from '@/utils/eventsStore';
-import { SPEED } from '@/utils/speed';
 import { setComponent } from '@latticexyz/recs';
 import { useEffect, useState } from 'react';
 
 function EventProcessor() {
+  const SPEED = 2;
   const events = useEventsStore((state) => state.events);
   const setTick = useEventsStore((state) => state.setTick);
 

@@ -1,15 +1,23 @@
 import { useElementStore } from '@/utils/store';
-import waves, { MobCategory } from '@/utils/wave';
 import { Container, Graphics, Text } from '@pixi/react';
 import * as PIXI from 'pixi.js';
-import MobDetails from './MobDetails';
+import Gold from './Gold';
+import Life from './Life';
+import MobsRemaining from './MobsRemaining';
+import Score from './Score';
+import Wave from './Wave';
 
-interface BestiaryMenuProps {
+interface PlayerMenuProps {
   x: number;
   y: number;
+  name: string;
+  mob_remaining: number;
+  gold: number;
+  health: number;
+  score: number;
 }
 
-export const BestiaryMenu: React.FC<BestiaryMenuProps> = ({ x, y }) => {
+export const PlayerMenu: React.FC<PlayerMenuProps> = ({ x, y, name, mob_remaining, gold, health, score }) => {
   const { wave } = useElementStore((state) => state);
 
   if (wave === undefined) return null;
@@ -24,9 +32,10 @@ export const BestiaryMenu: React.FC<BestiaryMenuProps> = ({ x, y }) => {
         }}
       />
       <Text
-        text="MOBS"
-        x={120}
-        y={10}
+        text={name}
+        x={157}
+        y={30}
+        anchor={0.5}
         style={
           new PIXI.TextStyle({
             align: 'center',
@@ -38,9 +47,12 @@ export const BestiaryMenu: React.FC<BestiaryMenuProps> = ({ x, y }) => {
         }
       />
 
-      <MobDetails x={10} y={40} type={MobCategory.NORMAL} mob={waves[Math.min(wave - 1, 9)][MobCategory.NORMAL]} />
-      <MobDetails x={110} y={40} type={MobCategory.ELITE} mob={waves[Math.min(wave - 1, 9)][MobCategory.ELITE]} />
-      <MobDetails x={210} y={40} type={MobCategory.BOSS} mob={waves[Math.min(wave - 1, 9)][MobCategory.BOSS]} />
+      <Gold number={gold} x={40} y={70} />
+      <Life health={health} x={140} y={70} />
+
+      <Score score={score} x={30} y={100} />
+      <Wave wave={wave} x={30} y={130} />
+      <MobsRemaining remaining={mob_remaining} x={30} y={160} />
     </Container>
   );
 };

@@ -355,9 +355,12 @@ function handleTileEvent(
 ): Omit<TileEvent, 'component' | 'componentValues' | 'entityIndex'> {
   const [game_id, id] = keys.map((k) => Number(k));
   const [army, owner, dispatched] = values.map((v) => Number(v));
-  console.log(
-    `[Tile: KEYS: (game_id: ${game_id}, id: ${id}) - VALUES: (army: ${army}, owner: ${owner}, dispatched: ${dispatched})]`
-  );
+  if (import.meta.env.VITE_PUBLIC_DEBUG) {
+    console.log(
+      `[Tile: KEYS: (game_id: ${game_id}, id: ${id}) - VALUES: (army: ${army}, owner: ${owner}, dispatched: ${dispatched})]`
+    );
+  }
+
   return {
     type: 'Tile',
     game_id,
@@ -390,9 +393,11 @@ function handleMobEvent(
   const [game_id, key] = keys.map((k) => Number(k));
   const [id, index, category, health, speed, defence, reward, tick] = values.map((v) => Number(v));
 
-  console.log(
-    `[Mob: KEYS: (game_id: ${game_id}, key: ${key}) - VALUES: (id: ${id}, index: ${index}, category: ${category}, health: ${health}, speed: ${speed}, defence: ${defence}, reward: ${reward}, tick: ${tick})]`
-  );
+  if (import.meta.env.VITE_PUBLIC_DEBUG) {
+    console.log(
+      `[Mob: KEYS: (game_id: ${game_id}, key: ${key}) - VALUES: (id: ${id}, index: ${index}, category: ${category}, health: ${health}, speed: ${speed}, defence: ${defence}, reward: ${reward}, tick: ${tick})]`
+    );
+  }
   return {
     type: 'Mob',
     game_id,
@@ -431,9 +436,11 @@ function handleTowerEvent(
   const [game_id, key] = keys.map((k) => Number(k));
   const [id, index, category, cooldown, attack, range, level, cost, hit, tick] = values.map((v) => Number(v));
 
-  console.log(
-    `[Tower: KEYS: (game_id: ${game_id}, key: ${key}) - VALUES: (id: ${id}, index: ${index}, category: ${category}, cooldown: ${cooldown}, attack: ${attack}, range: ${range}, level: ${level}, cost: ${cost}, hit: ${hit}, tick: ${tick})]`
-  );
+  if (import.meta.env.VITE_PUBLIC_DEBUG) {
+    console.log(
+      `[Tower: KEYS: (game_id: ${game_id}, key: ${key}) - VALUES: (id: ${id}, index: ${index}, category: ${category}, cooldown: ${cooldown}, attack: ${attack}, range: ${range}, level: ${level}, cost: ${cost}, hit: ${hit}, tick: ${tick})]`
+    );
+  }
   return {
     type: 'Tower',
     game_id,
@@ -513,9 +520,11 @@ export async function setComponentsFromEvents(components: Components, events: Ev
               { eventType: 'custom', gameId, tick, fromindex, fromid, toid, toindex, damage },
             ]);
 
-          console.log(
-            `[Hit: VALUES: (gameId: ${gameId}, tick: ${tick}, fromindex: ${fromindex}, fromid: ${fromid}, toid: ${toid}, toindex: ${toindex}, damage: ${damage})]`
-          );
+          if (import.meta.env.VITE_PUBLIC_DEBUG) {
+            console.log(
+              `[Hit: VALUES: (gameId: ${gameId}, tick: ${tick}, fromindex: ${fromindex}, fromid: ${fromid}, toid: ${toid}, toindex: ${toindex}, damage: ${damage})]`
+            );
+          }
           break;
       }
     } else {
