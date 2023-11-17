@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import Modal from 'react-modal';
-import Credits from './Credits';
-import CreditsButton from './CreditsButton';
-import NewGameButton from './NewGameButton';
+import React, { useEffect, useState } from "react";
+import Modal from "react-modal";
+import Credits from "./Credits";
+import CreditsButton from "./CreditsButton";
+import NewGameButton from "./NewGameButton";
 
 interface NewGameProps {
   onClick: () => void;
@@ -10,9 +10,9 @@ interface NewGameProps {
 }
 
 const NewGame: React.FC<NewGameProps> = ({ onClick, onPseudoChange }) => {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setUsername(value);
@@ -23,16 +23,35 @@ const NewGame: React.FC<NewGameProps> = ({ onClick, onPseudoChange }) => {
     setIsModalOpen(!isModalOpen);
   };
 
+  useEffect(() => {
+    const prefersDarkMode = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    setIsDarkMode(prefersDarkMode);
+  }, []);
+
   return (
     <div
       className="w-full max-w-xs"
-      style={{ position: 'absolute', top: 100, left: 0, right: 0, bottom: 0, margin: 'auto' }}
+      style={{
+        position: "absolute",
+        top: 100,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        margin: "auto",
+      }}
     >
-      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="pseudo">
+      <label
+        className="block text-gray-700 text-sm font-bold mb-2"
+        htmlFor="pseudo"
+      >
         Username
       </label>
       <input
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        className={`shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline ${
+          isDarkMode ? "text-white" : "text-gray-700"
+        }`}
         id="pseudo"
         type="text"
         placeholder="Pseudo"
@@ -40,11 +59,22 @@ const NewGame: React.FC<NewGameProps> = ({ onClick, onPseudoChange }) => {
         onChange={handleInputChange}
         maxLength={18} // Limit the input to 30 characters
       />
-      <NewGameButton onClick={onClick} disabled={!username.trim()}></NewGameButton>
+      <NewGameButton
+        onClick={onClick}
+        disabled={!username.trim()}
+      ></NewGameButton>
       <CreditsButton onClick={toggleModal}></CreditsButton>
-      <Modal isOpen={isModalOpen} onRequestClose={toggleModal} className="modal-base modal-medium" ariaHideApp={false}>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={toggleModal}
+        className="modal-base modal-medium"
+        ariaHideApp={false}
+      >
         <div className="relative">
-          <button onClick={toggleModal} className="absolute top-[-10px] right-0 p-2">
+          <button
+            onClick={toggleModal}
+            className="absolute top-[-10px] right-0 p-2"
+          >
             <div className="relative w-6 h-6">
               <div className="absolute inset-0 w-1 h-full bg-black transform rotate-45 origin-center"></div>
               <div className="absolute inset-0 w-1 h-full bg-black transform -rotate-45 origin-center"></div>
