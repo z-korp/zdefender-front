@@ -1,7 +1,7 @@
 {
   "world": {
     "name": "world",
-    "address": "0x4e1fde3268e5fd9d18b89d6f08ce42a8ae7098e44af596bad689ceb50ad29ba",
+    "address": null,
     "class_hash": "0x5179c281a8d3cca6cfb820201fa7a81150b56f9db492405a29e9564222370b8",
     "abi": [
       {
@@ -857,13 +857,13 @@
   "contracts": [
     {
       "name": "actions",
-      "address": "0x3ac779eaa96b9b01ddee5e88a066437116be4d38f323cf5e542101c8da6aec2",
-      "class_hash": "0x2c37bea73021a11145a36dcd7443a4db46385b781a8190ce8bb1e92ce714c36",
+      "address": null,
+      "class_hash": "0x13c4e0a27591dc7b5acd51daaeab5d226bc682afc2835747d06a0003a2a2805",
       "abi": [
         {
           "type": "impl",
           "name": "Actions",
-          "interface_name": "zdefender::systems::player::IActions"
+          "interface_name": "zknight::systems::player::IActions"
         },
         {
           "type": "struct",
@@ -877,7 +877,7 @@
         },
         {
           "type": "interface",
-          "name": "zdefender::systems::player::IActions",
+          "name": "zknight::systems::player::IActions",
           "items": [
             {
               "type": "function",
@@ -888,7 +888,7 @@
                   "type": "dojo::world::IWorldDispatcher"
                 },
                 {
-                  "name": "account",
+                  "name": "player",
                   "type": "core::felt252"
                 },
                 {
@@ -902,12 +902,52 @@
               ],
               "outputs": [],
               "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "play",
+              "inputs": [
+                {
+                  "name": "world",
+                  "type": "dojo::world::IWorldDispatcher"
+                },
+                {
+                  "name": "player",
+                  "type": "core::felt252"
+                },
+                {
+                  "name": "x",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "y",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "spawn",
+              "inputs": [
+                {
+                  "name": "world",
+                  "type": "dojo::world::IWorldDispatcher"
+                },
+                {
+                  "name": "player",
+                  "type": "core::felt252"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "view"
             }
           ]
         },
         {
           "type": "event",
-          "name": "zdefender::systems::player::actions::Event",
+          "name": "zknight::systems::player::actions::Event",
           "kind": "enum",
           "variants": []
         }
@@ -919,23 +959,13 @@
       "name": "Game",
       "members": [
         {
-          "name": "key",
+          "name": "player",
           "type": "felt252",
           "key": true
         },
         {
-          "name": "id",
+          "name": "game_id",
           "type": "u32",
-          "key": false
-        },
-        {
-          "name": "name",
-          "type": "felt252",
-          "key": false
-        },
-        {
-          "name": "seed",
-          "type": "felt252",
           "key": false
         },
         {
@@ -944,32 +974,12 @@
           "key": false
         },
         {
-          "name": "tower_count",
-          "type": "u8",
-          "key": false
-        },
-        {
-          "name": "mob_count",
-          "type": "u16",
-          "key": false
-        },
-        {
-          "name": "mob_remaining",
-          "type": "u16",
-          "key": false
-        },
-        {
-          "name": "wave",
-          "type": "u8",
-          "key": false
-        },
-        {
-          "name": "gold",
-          "type": "u16",
+          "name": "seed",
+          "type": "felt252",
           "key": false
         }
       ],
-      "class_hash": "0x1c6cb40c473a04fa241976bf91ac247e17b30bcf68a514c50834b959f089a93",
+      "class_hash": "0x6706d7befc53ffb42b5f449f191f5d766023b5e1b8f2065fc44c2b449b1252f",
       "abi": [
         {
           "type": "function",
@@ -1126,14 +1136,14 @@
         },
         {
           "type": "event",
-          "name": "zdefender::models::game::game::Event",
+          "name": "zknight::components::game::game::Event",
           "kind": "enum",
           "variants": []
         }
       ]
     },
     {
-      "name": "Mob",
+      "name": "Map",
       "members": [
         {
           "name": "game_id",
@@ -1141,32 +1151,37 @@
           "key": true
         },
         {
-          "name": "id",
-          "type": "u32",
-          "key": true
-        },
-        {
-          "name": "index",
+          "name": "level",
           "type": "u32",
           "key": false
         },
         {
-          "name": "health",
+          "name": "size",
           "type": "u32",
           "key": false
         },
         {
-          "name": "speed",
-          "type": "u32",
+          "name": "spawn",
+          "type": "bool",
           "key": false
         },
         {
-          "name": "defence",
-          "type": "u32",
+          "name": "score",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "over",
+          "type": "bool",
+          "key": false
+        },
+        {
+          "name": "name",
+          "type": "felt252",
           "key": false
         }
       ],
-      "class_hash": "0x2ebadc124e18cf7b7e94b25d64695362796a702f512610c6fb874ff752de150",
+      "class_hash": "0x13aa129e82ca4ad6a2f06ecb3f529771dc30142b41d46de68295e7661251f5a",
       "abi": [
         {
           "type": "function",
@@ -1323,7 +1338,7 @@
         },
         {
           "type": "event",
-          "name": "zdefender::models::mob::mob::Event",
+          "name": "zknight::components::map::map::Event",
           "kind": "enum",
           "variants": []
         }
@@ -1338,17 +1353,32 @@
           "key": true
         },
         {
+          "name": "level",
+          "type": "u32",
+          "key": true
+        },
+        {
           "name": "index",
           "type": "u32",
           "key": true
         },
         {
-          "name": "category",
+          "name": "_type",
           "type": "u8",
+          "key": false
+        },
+        {
+          "name": "x",
+          "type": "u32",
+          "key": false
+        },
+        {
+          "name": "y",
+          "type": "u32",
           "key": false
         }
       ],
-      "class_hash": "0x33348b2e425766489009ee4c8806187376ce40087e5037d25fcc9805771040d",
+      "class_hash": "0x5c9833207cbde14b497a728effebe99f710d4d0800f99df337bfe200828ec45",
       "abi": [
         {
           "type": "function",
@@ -1505,7 +1535,204 @@
         },
         {
           "type": "event",
-          "name": "zdefender::models::tile::tile::Event",
+          "name": "zknight::components::tile::tile::Event",
+          "kind": "enum",
+          "variants": []
+        }
+      ]
+    },
+    {
+      "name": "Character",
+      "members": [
+        {
+          "name": "game_id",
+          "type": "u32",
+          "key": true
+        },
+        {
+          "name": "_type",
+          "type": "u8",
+          "key": true
+        },
+        {
+          "name": "health",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "index",
+          "type": "u32",
+          "key": false
+        },
+        {
+          "name": "hitter",
+          "type": "u8",
+          "key": false
+        },
+        {
+          "name": "hit",
+          "type": "u8",
+          "key": false
+        }
+      ],
+      "class_hash": "0x51ee5e53e963c83b08e9e03a168c09e6e0b94fff9a0728b608455f768ec22c4",
+      "abi": [
+        {
+          "type": "function",
+          "name": "name",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::felt252"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "unpacked_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "packed_size",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::integer::u32"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u8>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u8>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "layout",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::array::Span::<core::integer::u8>"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::felt252>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::felt252>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::schema::Struct",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "dojo::database::schema::Enum",
+          "members": [
+            {
+              "name": "name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "attrs",
+              "type": "core::array::Span::<core::felt252>"
+            },
+            {
+              "name": "children",
+              "type": "core::array::Span::<(core::felt252, core::array::Span::<core::felt252>)>"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "dojo::database::schema::Ty",
+          "variants": [
+            {
+              "name": "Primitive",
+              "type": "core::felt252"
+            },
+            {
+              "name": "Struct",
+              "type": "dojo::database::schema::Struct"
+            },
+            {
+              "name": "Enum",
+              "type": "dojo::database::schema::Enum"
+            },
+            {
+              "name": "Tuple",
+              "type": "core::array::Span::<core::array::Span::<core::felt252>>"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "schema",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "dojo::database::schema::Ty"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "event",
+          "name": "zknight::components::character::character::Event",
           "kind": "enum",
           "variants": []
         }

@@ -12,10 +12,10 @@
     "create-components": "bunx @dojoengine/core src/dojo/manifest.json src/dojo/contractComponents.ts"
   },
   "dependencies": {
-    "@dojoengine/core": "0.1.23",
-    "@dojoengine/create-burner": "^0.1.2",
-    "@dojoengine/react": "^0.0.3",
-    "@dojoengine/utils": "^0.1.2",
+    "@dojoengine/core": "0.1.30",
+    "@dojoengine/create-burner": "0.1.30",
+    "@dojoengine/react": "0.0.3",
+    "@dojoengine/utils": "0.1.2",
     "@hookform/resolvers": "^3.3.1",
     "@latticexyz/react": "^2.0.0-next.9",
     "@latticexyz/recs": "^2.0.0-next.9",
@@ -48,7 +48,7 @@
     "react-modal": "^3.16.1",
     "react-share": "^4.4.1",
     "rxjs": "^7.8.1",
-    "starknet": "^5.17.0",
+    "starknet": "^5.17.1",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.2",
